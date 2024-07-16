@@ -1,4 +1,6 @@
 {
   "extends": "astro/tsconfigs/strictest",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "jsx": "preserve"
+  }
 }

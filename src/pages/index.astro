@@ -2,6 +2,7 @@
 import Main from '../layouts/Main.astro';
 import Cards from '../components/Cards.astro';
 import { Image } from 'astro:assets';
+import BriefText from '../components/BriefText.vue';
 
 const blogs = await Astro.glob<{
   title: string;
@@ -10,11 +11,11 @@ const blogs = await Astro.glob<{
 }>('../pages/blogs/*.md');
 ---
 
-<Main title="Ibrahim Elkamali">
+<Main title="Ginlon">
   <div class="flex items-center flex-wrap pb-8 md:space-x-8 animate">
     <Image
       class="object-cover rounded-full w-[124px] h-[124px] max-md:w-24 max-md:h-24"
-      src="/images/cat.avif"
+      src="https://avatars.githubusercontent.com/u/41514616?v=4"
       alt="Avatar"
       width={124}
       height={124}
@@ -25,17 +26,17 @@ const blogs = await Astro.glob<{
       <h1
         class="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 ml-4"
       >
-        Ibrahim Elkamali
+        I'm Ginlon
       </h1>
       <h2
-        class="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 mt-2 ml-4"
+        class="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 mt-2 ml-4 h-4"
       >
-        Your Astro Front-End Developer
+        <BriefText client:load />
       </h2>
       <p
         class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-4 ml-4 text-wrap"
       >
-        I'm here to help you build your fast and scalable web applications.
+        The only way to know for sure is to try.
       </p>
     </div>
   </div>
@@ -43,12 +44,6 @@ const blogs = await Astro.glob<{
   <div transition:name="cards">
     <Cards
       cards={[
-        {
-          title: 'Technology I possess',
-          gradientFrom: '#818cf8',
-          gradientTo: '#d8b4fe',
-          to: '/techStack',
-        },
         {
           title: 'Projects I Have Worked On',
           gradientFrom: '#fde68a',
@@ -60,6 +55,12 @@ const blogs = await Astro.glob<{
           gradientFrom: '#6ee7b7',
           gradientTo: '#9333ea',
           to: '/aboutMe',
+        },
+        {
+          title: 'Technology I possess',
+          gradientFrom: '#818cf8',
+          gradientTo: '#d8b4fe',
+          to: '/techStack',
         },
       ]}
     />

@@ -1,5 +1,5 @@
 ---
-// import ThemeToggler from '../components/ThemeToggler.astro';
+import ThemeToggler from '../components/ThemeToggler.astro';
 
 const links = [{ href: '/', label: 'Home' }];
 
@@ -16,8 +16,10 @@ const isActive = (href: string) =>
           <a
             href={href}
             class={[
-              isActive(href) ? 'active-link' : '',
-              'px-4 py-2 rounded-lg no-underline text-grey-400 hover:text-grey-900',
+              isActive(href)
+                ? 'active-link'
+                : 'hover:text-rose hover:border-rose transition-all duration-300',
+              `px-4 py-2 rounded-lg no-underline text-grey-400 border border-transparent`,
             ].join(' ')}
           >
             {label}
@@ -26,7 +28,7 @@ const isActive = (href: string) =>
       ))
     }
   </ul>
-  <!-- <ThemeToggler /> -->
+  <ThemeToggler />
 </nav>
 
 <!-- NAV WITH LINKS -->

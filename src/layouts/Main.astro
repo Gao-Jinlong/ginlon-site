@@ -11,7 +11,7 @@ type Props = {
 const { title } = Astro.props;
 ---
 
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -19,7 +19,7 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <meta
       name="description"
-      content="Ibrahim Elkamali's Portfolio Website - showcasing skills, projects, and experience in front-end web development."
+      content="Ginlon's Portfolio Website - showcasing skills, and experience in front-end web development."
     />
     <title>{title}</title>
     <ViewTransitions />
@@ -32,33 +32,46 @@ const { title } = Astro.props;
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.ibrahimelkamali.com/" />
-    <meta property="og:title" content="Ibrahim Elkamali's Portfolio" />
+    <meta property="og:title" content="Ginlon's Portfolio" />
     <meta
       property="og:description"
       content="Showcasing my skills, projects, and experience in front-end web development."
     />
     <meta
       property="og:image"
-      content="https://www.ibrahimelkamali.com/images/portfolio-preview.jpg"
+      content="https://avatars.githubusercontent.com/u/41514616?v=4"
     />
 
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://www.ibrahimelkamali.com/" />
-    <meta property="twitter:title" content="Ibrahim Elkamali's Portfolio" />
+    <meta property="twitter:title" content="Ginlon's Portfolio" />
     <meta
       property="twitter:description"
       content="Showcasing my skills, projects, and experience in front-end web development."
     />
     <meta
       property="twitter:image"
-      content="https://www.ibrahimelkamali.com/images/portfolio-preview.jpg"
+      content="https://avatars.githubusercontent.com/u/41514616?v=4"
     />
 
-    <meta name="author" content="Ibrahim Elkamali" />
+    <meta name="author" content="Ginlon" />
     <meta
       name="keywords"
-      content="Ibrahim Elkamali, Portfolio, Front-End Developer, Web Development, JavaScript, React, Astro, Svelte, TypeScript, Three.js, Tailwind CSS"
+      content="Ginlon, ginlon, Portfolio, Front-End Developer, Web Development, JavaScript, React, Astro, TypeScript"
     />
+    <script>
+      // FIXME: 黑色主题闪烁加载页面时闪烁
+      const DARK_THEME_CLASS = 'dark';
+      const COLOUR_MODE = 'COLOUR_MODE';
+      const DARK_THEME = 'DARK';
+      const theme = window.localStorage.getItem(COLOUR_MODE);
+
+      if (theme === DARK_THEME) {
+        document.documentElement.classList.add(DARK_THEME_CLASS);
+      } else {
+        document.documentElement.classList.remove(DARK_THEME_CLASS);
+      }
+    </script>
   </head>
 
   <body class="overflow-x-hidden">

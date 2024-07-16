@@ -28,7 +28,11 @@ export default {
           '--grey-400': theme('colors.grey-400-light'),
           '--grey-600': theme('colors.grey-600-light'),
           '--grey-900': theme('colors.grey-900-light'),
-          '--clr-rose': theme('colors.rose'), // Add the rose color variable for light mode
+          '--clr-rose': theme('colors.rose'), // Add the rose color variable for dark mode
+
+          '--active-link-bg': theme('colors.grey-200-dark'),
+          '--active-link-color': theme('colors.grey-900-light'),
+          '--active-link-hover-bg': theme('colors.grey-200-light'),
         },
         '.dark': {
           '--background': theme('colors.background-dark'),
@@ -37,6 +41,10 @@ export default {
           '--grey-600': theme('colors.grey-600-dark'),
           '--grey-900': theme('colors.grey-900-dark'),
           '--clr-rose': theme('colors.rose'), // Add the rose color variable for dark mode
+
+          '--active-link-bg': theme('colors.grey-900-light'),
+          '--active-link-color': theme('colors.grey-200-dark'),
+          '--active-link-hover-bg': theme('colors.grey-900-dark'),
         },
         body: {
           fontFamily: "'Inter', sans-serif",
@@ -71,8 +79,12 @@ export default {
     function ({ addComponents, theme }) {
       addComponents({
         '.active-link': {
-          backgroundColor: theme('colors.grey-600-light'),
-          color: theme('colors.background-light'),
+          backgroundColor: 'var(--active-link-bg)',
+          color: 'var(--active-link-color)',
+          transition: 'all 0.3s ease',
+          boxSizing: 'border-box',
+          borderWidth: '1px',
+          borderColor: 'transparent',
         },
       });
     },
