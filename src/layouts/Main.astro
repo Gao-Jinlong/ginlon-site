@@ -59,19 +59,6 @@ const { title } = Astro.props;
       name="keywords"
       content="Ginlon, ginlon, Portfolio, Front-End Developer, Web Development, JavaScript, React, Astro, TypeScript"
     />
-    <script>
-      // FIXME: 黑色主题闪烁加载页面时闪烁
-      const DARK_THEME_CLASS = 'dark';
-      const COLOUR_MODE = 'COLOUR_MODE';
-      const DARK_THEME = 'DARK';
-      const theme = window.localStorage.getItem(COLOUR_MODE);
-
-      if (theme === DARK_THEME) {
-        document.documentElement.classList.add(DARK_THEME_CLASS);
-      } else {
-        document.documentElement.classList.remove(DARK_THEME_CLASS);
-      }
-    </script>
   </head>
 
   <body class="overflow-x-hidden">

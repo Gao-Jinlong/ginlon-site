@@ -49,10 +49,12 @@
           : LIGHT_THEME;
 
         window.localStorage.setItem(COLOUR_MODE, colourMode);
-      });
 
-    applyStoredTheme();
+        applyStoredTheme();
+      });
   });
+
+  document.addEventListener('astro:after-swap', applyStoredTheme);
 
   applyStoredTheme();
 </script>
