@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import useTypewriter from '../composables/useTypeWriter';
-
-const briefs = ['A Frontend Engineer', 'Coding Enthusiast', 'A Learner'];
+const props = defineProps<{
+  briefs: string[];
+}>();
 
 const { text, blink } = useTypewriter({
-  content: briefs,
+  content: props.briefs,
   speed: 60,
   hold: 2500,
   loop: true,
@@ -12,7 +13,7 @@ const { text, blink } = useTypewriter({
 </script>
 
 <template>
-  <div>{{ text }}</div>
+  <div>{{ text }}{{ blink ? '|' : '' }}</div>
 </template>
 
 <style lang="scss" scoped></style>

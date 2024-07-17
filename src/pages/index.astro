@@ -1,8 +1,10 @@
 ---
 import Main from '../layouts/Main.astro';
-import Cards from '../components/Cards.astro';
-import { Image } from 'astro:assets';
+import SectionNavigation from '../components/SectionNavigation.astro';
 import BriefText from '../components/BriefText.vue';
+
+import { Image } from 'astro:assets';
+import { t } from 'astro-i18n';
 
 const blogs = await Astro.glob<{
   title: string;
@@ -26,45 +28,30 @@ const blogs = await Astro.glob<{
       <h1
         class="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 ml-4"
       >
-        I'm Ginlon
+        {t('homepage.hello')}
+        {}
       </h1>
       <h2
         class="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 mt-2 ml-4 h-4"
       >
-        <BriefText client:load />
+        <BriefText
+          briefs={[
+            t('homepage.briefs.0'),
+            t('homepage.briefs.1'),
+            t('homepage.briefs.2'),
+          ]}
+          client:load
+        />
       </h2>
       <p
         class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-4 ml-4 text-wrap"
       >
-        The only way to know for sure is to try.
+        {t('homepage.slogan')}
       </p>
     </div>
   </div>
 
-  <div transition:name="cards">
-    <Cards
-      cards={[
-        {
-          title: 'Projects I Have Worked On',
-          gradientFrom: '#fde68a',
-          gradientTo: '#fca5a5',
-          to: '/projects',
-        },
-        {
-          title: 'Learn More About Me',
-          gradientFrom: '#6ee7b7',
-          gradientTo: '#9333ea',
-          to: '/aboutMe',
-        },
-        {
-          title: 'Technology I possess',
-          gradientFrom: '#818cf8',
-          gradientTo: '#d8b4fe',
-          to: '/techStack',
-        },
-      ]}
-    />
-  </div>
+  <SectionNavigation />
   <div class="mt-12 animate">
     <h3 class="text-3xl text-gray-900 dark:text-gray-100 mb-4">
       Featured Blogs

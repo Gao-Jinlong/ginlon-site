@@ -5,15 +5,18 @@ import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
 
 // https://astro.build/config
-export default defineConfig(
-  {
-    integrations: [
-      tailwind(),
-      mdx({
-        syntaxHighlight: 'shiki',
-      }),
-      vue({ appEntrypoint: '/src/pages/_app' }),
-    ],
-  }, // your configuration options here...
-  // https://docs.astro.build/en/reference/configuration-reference/
-);
+// https://docs.astro.build/en/reference/configuration-reference/
+export default defineConfig({
+  integrations: [
+    tailwind(),
+    mdx({
+      syntaxHighlight: 'shiki',
+    }),
+    vue({ appEntrypoint: '/src/pages/_app' }),
+  ],
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['en', 'zh'],
+    routing: {},
+  },
+});

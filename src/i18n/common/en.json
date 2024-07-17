@@ -1,0 +1,17 @@
+{
+  "homepage": {
+    "hello": "Hello, I'm Ginlon",
+    "briefs": [
+      "A Frontend Engineer",
+      "Coding Enthusiast",
+      "Continuous Learner"
+    ],
+    "slogan": "The only way to know for sure is to try."
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact"
+  }
+}

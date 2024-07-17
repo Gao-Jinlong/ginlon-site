@@ -1,0 +1,29 @@
+---
+import Cards from './Cards.astro';
+import { astroI18n } from 'astro-i18n';
+---
+
+<div transition:name="cards">
+  <Cards
+    cards={[
+      {
+        title: 'Projects I Have Worked On',
+        gradientFrom: '#fde68a',
+        gradientTo: '#fca5a5',
+        to: `/${astroI18n.locale}/projects`,
+      },
+      {
+        title: 'Learn More About Me',
+        gradientFrom: '#6ee7b7',
+        gradientTo: '#9333ea',
+        to: `/${astroI18n.locale}/aboutMe`,
+      },
+      {
+        title: 'Technology I possess',
+        gradientFrom: '#818cf8',
+        gradientTo: '#d8b4fe',
+        to: `/${astroI18n.locale}/techStack`,
+      },
+    ]}
+  />
+</div>
