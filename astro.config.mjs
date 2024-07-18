@@ -14,9 +14,4 @@ export default defineConfig({
     }),
     vue({ appEntrypoint: '/src/pages/_app' }),
   ],
-  i18n: {
-    defaultLocale: 'zh',
-    locales: ['en', 'zh'],
-    routing: {},
-  },
 });
