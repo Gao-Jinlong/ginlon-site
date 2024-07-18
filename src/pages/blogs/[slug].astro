@@ -1,0 +1,39 @@
+---
+import { astroI18n, createGetStaticPaths } from 'astro-i18n';
+import { getCollection } from 'astro:content';
+
+// export const getStaticPaths = createStaticPaths(
+//   async ({ langCode }) => {
+//     const articles = await getCollection('blogs', ({ data }) => {
+//       return data.lang === langCode;
+//     });
+//     return articles.map(article => ({
+//       params: { slug: article.data.permalink },
+//       props: { article },
+//     }));
+//   },
+//   import.meta.url,
+// );
+
+export const getStaticPaths = createGetStaticPaths(async props => {
+  console.log('🚀 ~ getStaticPaths ~ props:', props);
+  const blogs = await getCollection('blogs', ({ data }) => {
+    return data.lang === astroI18n.locale && !data.draft;
+  });
+  return blogs.map(blog => ({
+    params: { slug: blog.data.permalink },
+    props: { article: blog },
+  }));
+});
+
+const { article } = Astro.props;
+const { Content, headings } = await article.render();
+console.log('🚀 ~ Content:', Content);
+---
+
+<div>
+  <Content />
+</div>
+<!-- <BaseLayout pageTitle={article.data.title}>
+  <EditorialContent content={article} />
+</BaseLayout> -->

@@ -1,0 +1,43 @@
+---
+import { l, t, astroI18n } from 'astro-i18n';
+// New astro content collections
+import { getCollection } from 'astro:content';
+
+// import BaseLayout from '../../layouts/BaseLayout.astro';
+// import ListCards from '../../components/ListCards.astro';
+
+const localizedPost = await getCollection('blogs', ({ data }) => {
+  return data.lang === astroI18n.locale && !data.draft;
+});
+
+// const pageTitle = t('index.blogs.pageName');
+---
+
+<div>
+  blogs index
+
+  {
+    localizedPost.map(post => (
+      <div>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.description}</p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .flow h2 + :global(*) {
+    margin-block-start: var(--space-m-l);
+  }
+  h1 {
+    text-transform: capitalize;
+  }
+  h1,
+  h2 {
+    padding-inline-start: var(--space-xs-s);
+  }
+  h2 {
+    color: var(--color-brique);
+  }
+</style>

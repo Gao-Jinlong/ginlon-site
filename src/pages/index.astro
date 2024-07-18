@@ -1,16 +1,19 @@
 ---
+import { l, t, astroI18n } from 'astro-i18n';
 import Main from '../layouts/Main.astro';
 import SectionNavigation from '../components/SectionNavigation.astro';
 import BriefText from '../components/BriefText.vue';
 
 import { Image } from 'astro:assets';
-import { t } from 'astro-i18n';
+import { getCollection } from 'astro:content';
+const localizedBlogs = await getCollection('blogs', ({ data }) => {
+  return data.lang === astroI18n.locale && !data.draft;
+});
+const sortedBlogs = localizedBlogs.sort(
+  (a, b) => b.data.createdAt - a.data.createdAt,
+);
 
-const blogs = await Astro.glob<{
-  title: string;
-  poster: string;
-  subtitle: string;
-}>('../pages/blogs/*.md');
+const routeName = t('blogs.titre');
 ---
 
 <Main title="Ginlon">
@@ -50,7 +53,6 @@ const blogs = await Astro.glob<{
       </p>
     </div>
   </div>
-
   <SectionNavigation />
   <div class="mt-12 animate">
     <h3 class="text-3xl text-gray-900 dark:text-gray-100 mb-4">
@@ -64,13 +66,13 @@ const blogs = await Astro.glob<{
 
   <ol class="space-y-4 animate">
     {
-      blogs.map(blog => (
+      sortedBlogs.map(blog => (
         <li class="border-b border-gray-200 dark:border-gray-700">
           <a
             class="block py-4 text-gray-900 dark:text-gray-100 transition-opacity duration-200 ease-in-out hover:opacity-70"
-            href={blog.url}
+            href={l(`/${routeName}/${blog.data.permalink}`)}
           >
-            {blog.frontmatter.title}
+            {blog.data.title} {l(`/${routeName}/${blog.data.permalink}`)}
           </a>
         </li>
       ))

@@ -1,4 +1,7 @@
 {
+  "blogs": {
+    "titre": "blogs"
+  },
   "homepage": {
     "hello": "Hello, I'm Ginlon",
     "briefs": [

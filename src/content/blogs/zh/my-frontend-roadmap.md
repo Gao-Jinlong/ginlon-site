@@ -1,8 +1,11 @@
 ---
-layout: ../../layouts/Blog.astro
+lang: zh
+layout: ../../../layouts/Blog.astro
 title: 'My Front-End Roadmap'
 subtitle: 'take a look at my front-end roadmap'
 poster: '/images/astro.jpg'
+permalink: 'my-frontend-roadmap'
+createdAt: '2024-07-18T16:32:10.752Z'
 ---
 
 # My Front-End Roadmap

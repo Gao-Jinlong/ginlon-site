@@ -1,8 +1,11 @@
 ---
+lang: zh
 layout: ../../layouts/Blog.astro
 title: 'Why You Should Pick Astro as Your First Framework'
 subtitle: 'Astro makes web development a breeze, here’s why:'
 poster: '/images/astro.jpg'
+permalink: 'why-astro'
+createdAt: '2024-07-18T16:32:10.752Z'
 ---
 
 # Why You Should Pick Astro as Your First Framework

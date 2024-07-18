@@ -1,8 +1,11 @@
 ---
+lang: zh
 layout: ../../layouts/Blog.astro
 title: 'Checkout all my technologies stack'
 subtitle: 'Front-End Web Development'
 poster: '/images/roadmap.jpg'
+permalink: 'technologies-stack'
+createdAt: '2024-07-18T16:32:10.752Z'
 ---
 
 # Technologies and Libraries I’ve Worked With
