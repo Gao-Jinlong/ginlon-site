@@ -10,15 +10,9 @@ type Props = MarkdownLayoutProps<{
 }>;
 
 const { title, subtitle, poster } = Astro.props.frontmatter;
-
-// const recentPosts = [
-//   { href: '#', label: 'Post 1', date: '2024-07-01' },
-//   { href: '#', label: 'Post 2', date: '2024-06-25' },
-//   { href: '#', label: 'Post 3' }, // No date provided
-// ];
 ---
 
-<Main title="Ginlon | Blog">
+<Main title=`Ginlon | ${title}`>
   <header
     class="relative w-full h-64 bg-gray-800 flex items-center justify-center mb-12"
   >

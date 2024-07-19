@@ -6,9 +6,9 @@
 type PrimaryLocale = "zh"
 type SecondaryLocale = "en"
 type Locale = PrimaryLocale | SecondaryLocale
-type RouteParameters = {"/aboutMe":undefined;"/":undefined;"/projects":undefined;"/techStack":undefined;"/blogs/[slug]":{"slug":unknown;};}
+type RouteParameters = {"/aboutMe":undefined;"/":undefined;"/projects":undefined;"/techStack":undefined;"/blogs/[slug]":{"slug":unknown;};"/blogs":undefined;}
 type Route = keyof RouteParameters
-type TranslationVariables = {"blogs.titre":object|undefined;"homepage.hello":object|undefined;"homepage.briefs.0":object|undefined;"homepage.briefs.1":object|undefined;"homepage.briefs.2":object|undefined;"homepage.slogan":object|undefined;"navigation.home":object|undefined;"navigation.about":object|undefined;"navigation.projects":object|undefined;"navigation.contact":object|undefined;}
+type TranslationVariables = {"pageName":object|undefined;"subtitle":object|undefined;"blogs.titre":object|undefined;"homepage.hello":object|undefined;"homepage.briefs.0":object|undefined;"homepage.briefs.1":object|undefined;"homepage.briefs.2":object|undefined;"homepage.slogan":object|undefined;"navigation.home":object|undefined;"navigation.about":object|undefined;"navigation.projects":object|undefined;"navigation.contact":object|undefined;}
 type Translation = keyof TranslationVariables
 type Environment = "none"|"node"|"browser"
 declare module "astro-i18n" {
