@@ -1,11 +1,16 @@
 {
   "blogs": {
-    "titre": "blogs"
+    "titre": "blogs",
+    "recentPosts": "最近文章"
   },
   "homepage": {
     "hello": "你好, 我是 Ginlon",
     "briefs": ["一名前端工程师", "编程爱好者", "持续学习者"],
-    "slogan": "绝知此事，定要躬行"
+    "slogan": "绝知此事，定要躬行",
+    "featuredBlogs": {
+      "title": "我的栏目",
+      "brief": "这里以时间倒序的顺序展示了我的博客栏目，也是我成长过程中留下的痕迹。"
+    }
   },
   "navigation": {
     "home": "首页",

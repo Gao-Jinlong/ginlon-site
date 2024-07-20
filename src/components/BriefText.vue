@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useTypewriter from '../composables/useTypeWriter';
+import useTypewriter from '../utils/useTypeWriter';
 const props = defineProps<{
   briefs: string[];
 }>();

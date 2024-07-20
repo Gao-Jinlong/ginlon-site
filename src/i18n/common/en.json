@@ -1,6 +1,7 @@
 {
   "blogs": {
-    "titre": "blogs"
+    "titre": "blogs",
+    "recentPosts": "Recent Posts"
   },
   "homepage": {
     "hello": "Hello, I'm Ginlon",
@@ -9,7 +10,11 @@
       "Coding Enthusiast",
       "Continuous Learner"
     ],
-    "slogan": "The only way to know for sure is to try."
+    "slogan": "The only way to know for sure is to try.",
+    "featuredBlogs": {
+      "title": "my blogs",
+      "brief": "Here, in reverse chronological order, is my blog column, which is also a trace of my growing up."
+    }
   },
   "navigation": {
     "home": "Home",

@@ -7,6 +7,8 @@ export default {
       colors: {
         'background-light': '#f8fafc',
         'background-dark': '#27272a',
+        'grey-100-light': '#1e1e1e',
+        'grey-100-dark': '#f5f5f5',
         'grey-200-light': '#222222',
         'grey-200-dark': '#eaeaea',
         'grey-400-light': '#444444',
@@ -20,10 +22,12 @@ export default {
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     function ({ addBase, theme }) {
       addBase({
         ':root': {
           '--background': theme('colors.background-light'),
+          '--bg-grey-100': theme('colors.grey-100-dark'),
           '--grey-200': theme('colors.grey-200-light'),
           '--grey-400': theme('colors.grey-400-light'),
           '--grey-600': theme('colors.grey-600-light'),
@@ -36,6 +40,7 @@ export default {
         },
         '.dark': {
           '--background': theme('colors.background-dark'),
+          '--bg-grey-100': theme('colors.grey-100-light'),
           '--grey-200': theme('colors.grey-200-dark'),
           '--grey-400': theme('colors.grey-400-dark'),
           '--grey-600': theme('colors.grey-600-dark'),
@@ -58,7 +63,6 @@ export default {
         },
         'h1 + h2': {
           fontSize: '1.1rem',
-          marginTop: '-1.4rem',
           opacity: '0.9',
           fontWeight: '400',
         },
@@ -73,6 +77,13 @@ export default {
         },
         li: {
           margin: '1rem 0',
+        },
+        a: {
+          color: 'var(--grey-900)',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            color: 'var(--clr-rose)',
+          },
         },
       });
     },

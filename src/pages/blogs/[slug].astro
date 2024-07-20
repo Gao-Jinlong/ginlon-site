@@ -1,26 +1,12 @@
 ---
-import { astroI18n, createGetStaticPaths } from 'astro-i18n';
+import { createGetStaticPaths } from 'astro-i18n';
 import { getCollection } from 'astro:content';
-
-// export const getStaticPaths = createStaticPaths(
-//   async ({ langCode }) => {
-//     const articles = await getCollection('blogs', ({ data }) => {
-//       return data.lang === langCode;
-//     });
-//     return articles.map(article => ({
-//       params: { slug: article.data.permalink },
-//       props: { article },
-//     }));
-//   },
-//   import.meta.url,
-// );
+import { getBlogs } from '../../utils/getBlogs';
 
 type Blogs = Awaited<ReturnType<typeof getCollection>>;
 
-export const getStaticPaths = createGetStaticPaths(async props => {
-  const blogs = await getCollection('blogs', ({ data }) => {
-    return data.lang === astroI18n.locale && !data.draft;
-  });
+export const getStaticPaths = createGetStaticPaths(async () => {
+  const blogs = await getBlogs();
 
   return blogs.map(blog => ({
     params: { slug: blog.data.permalink },
@@ -31,12 +17,9 @@ export const getStaticPaths = createGetStaticPaths(async props => {
 const { article } = Astro.props as {
   article: Blogs[number];
 };
-const { Content, headings } = await article.render();
+const { Content } = await article.render();
 ---
 
 <div>
   <Content />
 </div>
-<!-- <BaseLayout pageTitle={article.data.title}>
-  <EditorialContent content={article} />
-</BaseLayout> -->

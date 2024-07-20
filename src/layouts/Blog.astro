@@ -2,6 +2,8 @@
 import Main from './Main.astro';
 import { Image } from 'astro:assets';
 import type { MarkdownLayoutProps } from 'astro';
+import { getBlogs } from '../utils/getBlogs';
+import { t } from 'astro-i18n';
 
 type Props = MarkdownLayoutProps<{
   title: string;
@@ -10,6 +12,11 @@ type Props = MarkdownLayoutProps<{
 }>;
 
 const { title, subtitle, poster } = Astro.props.frontmatter;
+
+const blogs = await getBlogs();
+const otherBlogs = blogs.filter(({ data }) => {
+  return title !== data.title;
+});
 ---
 
 <Main title=`Ginlon | ${title}`>
@@ -24,41 +31,42 @@ const { title, subtitle, poster } = Astro.props.frontmatter;
       class="absolute inset-0 w-full h-full object-cover opacity-50"
     />
     <div class="relative z-10 text-center">
-      <h1 class="text-4xl mb-8 font-bold text-white dark:text-grey-900">
+      <h1 class="text-4xl font-bold text-white dark:text-grey-900">
         {title}
       </h1>
-      <h2 class="text-2xl text-gray-300 dark:text-grey-600">{subtitle}</h2>
+      {
+        subtitle && (
+          <h2 class="text-2xl text-gray-300 dark:text-grey-600">{subtitle}</h2>
+        )
+      }
     </div>
   </header>
 
   <div class="container mx-auto px-4 lg:px-8">
-    <article>
+    <article class="prose">
       <slot />
     </article>
   </div>
 
-  <!-- <aside
-    class="w-full bg-gray-900 dark:bg-grey-900 p-4 rounded-lg shadow-md mt-12"
-  >
-    <h3 class="text-2xl font-semibold mb-4 dark:text-grey-400">Recent Posts</h3>
+  <aside class="w-full bg-[--bg-grey-100] p-4 mt-12">
+    <h3 class="text-2xl font-semibold mb-4 dark:text-grey-400">
+      {t('blogs.recentPosts')}
+    </h3>
     <ul class="list-none p-0">
       {
-        recentPosts.map(({ href, label, date }) => (
+        otherBlogs.map(({ data: { permalink, title, createdAt } }) => (
           <li class="mb-2">
-            <a
-              href={href}
-              class="text-blue-500 hover:underline dark:text-blue-400"
-            >
-              {label}
+            <a href={permalink} class="">
+              {title}
             </a>
-            {date && (
+            {createdAt && (
               <span class="block text-sm text-gray-500 dark:text-grey-600 mt-1">
-                {new Date(date).toLocaleDateString()}
+                {new Date(createdAt).toLocaleDateString()}
               </span>
             )}
           </li>
         ))
       }
     </ul>
-  </aside> -->
+  </aside>
 </Main>
