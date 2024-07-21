@@ -5,8 +5,11 @@ import { t } from 'astro-i18n';
 const links = [{ href: '/', label: t('navigation.home') }];
 
 const { pathname } = Astro.url;
-const isActive = (href: string) =>
-  href === pathname || href === pathname.replace(/\/$/, '');
+const isActive = (href: string) => {
+  const url = `${import.meta.env.BASE_URL}/${href}`.replace(/\/*$/, '');
+
+  return url === pathname || url === pathname.replace(/\/*$/, '');
+};
 ---
 
 <nav
