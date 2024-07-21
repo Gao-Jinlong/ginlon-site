@@ -1,0 +1,34 @@
+---
+import { t } from 'astro-i18n';
+import type { getCollection } from 'astro:content';
+
+export interface Blogs extends Awaited<ReturnType<typeof getCollection>> {}
+
+const { blogs } = Astro.props as {
+  blogs: Blogs;
+};
+---
+
+<aside
+  class="animate w-full bg-[--bg-grey-100] p-4 mt-12 shadow-xl hover:shadow-2xl transition-[box-shadow] duration-300"
+>
+  <h3 class="text-2xl font-semibold mb-4 dark:text-grey-400">
+    {t('blogs.recentPosts')}
+  </h3>
+  <ul class="list-none p-0">
+    {
+      blogs.map(({ data: { permalink, title, createdAt } }) => (
+        <li class="mb-2">
+          <a href={permalink} class="">
+            {title}
+          </a>
+          {createdAt && (
+            <span class="block text-sm text-gray-500 dark:text-grey-600 mt-1">
+              {new Date(createdAt).toLocaleDateString()}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</aside>

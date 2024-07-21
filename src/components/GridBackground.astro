@@ -1,0 +1,30 @@
+<div class="grid-bg fixed"></div>
+<style>
+  .grid-bg {
+    --sl-color-white: hsl(224, 10%, 10%);
+
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+
+    background-image: linear-gradient(
+        to right,
+        var(--sl-color-white) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--sl-color-white) 1px, transparent 1px);
+    background-position: right -1px;
+    background-size: 23px 23px;
+    -webkit-mask-image: radial-gradient(
+      circle at 100% 0%,
+      white,
+      transparent 65%
+    );
+
+    mask-image: radial-gradient(circle at 100% 0%, white, transparent 65%);
+    opacity: 0.05;
+  }
+  :global(.dark) .grid-bg {
+    --sl-color-white: hsl(224, 10%, 90%);
+  }
+</style>

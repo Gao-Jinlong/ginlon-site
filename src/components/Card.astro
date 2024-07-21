@@ -9,20 +9,13 @@ export type Props = {
 const { to, title, gradientFrom, gradientTo } = Astro.props;
 ---
 
+<!-- TODO: cart style for mobile -->
 <a
   href={to}
-  class={`card relative p-1 rounded-md transition-transform duration-200 ease-in-out hover:scale-90 overflow-hidden`}
+  class={`card relative p-1 rounded-md transition-transform duration-200 ease-in-out  overflow-hidden`}
 >
   <div
-    class="absolute -z-10 w-[500px] h-[500px] rounded-full -left-1/2 -top-1/2"
-    style={{
-      backgroundImage: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-      animation: 'rotate 5s linear infinite',
-    }}
-  >
-  </div>
-  <div
-    class="card-inner bg-white dark:bg-[#18181b] p-6 rounded-md flex flex-col"
+    class="card-inner bg-slate-100 dark:bg-[#18181b] p-6 rounded-md flex flex-col"
   >
     <div
       class="card-title text-gray-900 dark:text-gray-100 font-medium text-lg leading-7"
@@ -36,6 +29,7 @@ const { to, title, gradientFrom, gradientTo } = Astro.props;
     </div>
   </div>
 </a>
+
 <style>
   @keyframes rotate {
     0% {

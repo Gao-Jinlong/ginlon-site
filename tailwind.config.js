@@ -7,8 +7,8 @@ export default {
       colors: {
         'background-light': '#f8fafc',
         'background-dark': '#27272a',
-        'grey-100-light': '#1e1e1e',
-        'grey-100-dark': '#f5f5f5',
+        'grey-100-light': '#f9f9f9',
+        'grey-100-dark': '#1c1c1c',
         'grey-200-light': '#222222',
         'grey-200-dark': '#eaeaea',
         'grey-400-light': '#444444',
@@ -27,7 +27,7 @@ export default {
       addBase({
         ':root': {
           '--background': theme('colors.background-light'),
-          '--bg-grey-100': theme('colors.grey-100-dark'),
+          '--bg-grey-100': theme('colors.grey-100-light'),
           '--grey-200': theme('colors.grey-200-light'),
           '--grey-400': theme('colors.grey-400-light'),
           '--grey-600': theme('colors.grey-600-light'),
@@ -40,7 +40,7 @@ export default {
         },
         '.dark': {
           '--background': theme('colors.background-dark'),
-          '--bg-grey-100': theme('colors.grey-100-light'),
+          '--bg-grey-100': theme('colors.grey-100-dark'),
           '--grey-200': theme('colors.grey-200-dark'),
           '--grey-400': theme('colors.grey-400-dark'),
           '--grey-600': theme('colors.grey-600-dark'),

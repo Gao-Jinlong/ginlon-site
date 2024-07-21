@@ -1,15 +1,8 @@
 ---
+import RecentPosts from '../components/RecentPosts.astro';
 import Main from './Main.astro';
 import { Image } from 'astro:assets';
-import type { MarkdownLayoutProps } from 'astro';
 import { getBlogs } from '../utils/getBlogs';
-import { t } from 'astro-i18n';
-
-type Props = MarkdownLayoutProps<{
-  title: string;
-  subtitle: string;
-  poster: string;
-}>;
 
 const { title, subtitle, poster } = Astro.props.frontmatter;
 
@@ -19,9 +12,9 @@ const otherBlogs = blogs.filter(({ data }) => {
 });
 ---
 
-<Main title=`Ginlon | ${title}`>
+<Main pageTitle={title}>
   <header
-    class="relative w-full h-64 bg-gray-800 flex items-center justify-center mb-12"
+    class="animate relative w-full h-64 bg-gray-800 flex items-center justify-center mb-4"
   >
     <Image
       src={poster}
@@ -42,31 +35,11 @@ const otherBlogs = blogs.filter(({ data }) => {
     </div>
   </header>
 
-  <div class="container mx-auto px-4 lg:px-8">
-    <article class="prose">
+  <div class="animate container mx-auto px-4 lg:px-8">
+    <article class="prose dark:prose-invert">
       <slot />
     </article>
   </div>
 
-  <aside class="w-full bg-[--bg-grey-100] p-4 mt-12">
-    <h3 class="text-2xl font-semibold mb-4 dark:text-grey-400">
-      {t('blogs.recentPosts')}
-    </h3>
-    <ul class="list-none p-0">
-      {
-        otherBlogs.map(({ data: { permalink, title, createdAt } }) => (
-          <li class="mb-2">
-            <a href={permalink} class="">
-              {title}
-            </a>
-            {createdAt && (
-              <span class="block text-sm text-gray-500 dark:text-grey-600 mt-1">
-                {new Date(createdAt).toLocaleDateString()}
-              </span>
-            )}
-          </li>
-        ))
-      }
-    </ul>
-  </aside>
+  <RecentPosts blogs={otherBlogs} />
 </Main>

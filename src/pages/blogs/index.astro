@@ -1,5 +1,5 @@
 ---
-import { l, t, astroI18n } from 'astro-i18n';
+import { astroI18n } from 'astro-i18n';
 // New astro content collections
 import { getCollection } from 'astro:content';
 
@@ -26,18 +26,4 @@ const localizedPost = await getCollection('blogs', ({ data }) => {
   }
 </div>
 
-<style>
-  .flow h2 + :global(*) {
-    margin-block-start: var(--space-m-l);
-  }
-  h1 {
-    text-transform: capitalize;
-  }
-  h1,
-  h2 {
-    padding-inline-start: var(--space-xs-s);
-  }
-  h2 {
-    color: var(--color-brique);
-  }
-</style>
+<style></style>

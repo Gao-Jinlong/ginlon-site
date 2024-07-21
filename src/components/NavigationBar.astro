@@ -9,7 +9,10 @@ const isActive = (href: string) =>
   href === pathname || href === pathname.replace(/\/$/, '');
 ---
 
-<nav class="flex py-4 px-4 justify-between items-center">
+<nav
+  class="nav relative sticky top-0 z-10 flex py-4 px-4 justify-between items-center"
+>
+  <div class="nav-bg"></div>
   <ul class="flex flex-wrap p-0 m-0">
     {
       links.map(({ href, label }) => (
@@ -32,48 +35,63 @@ const isActive = (href: string) =>
   <ThemeToggler />
 </nav>
 
-<!-- NAV WITH LINKS -->
-
-<!-- 
----
-import ThemeToggler from '../components/ThemeToggler.astro';
-
-const links = [
-  { href: '/', label: 'Home' },
-  { href: '/techStack', label: 'Tech Stack' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/aboutMe', label: 'About Me' },
-];
-
-const { pathname } = Astro.url;
-const isActive = (href: string) =>
-  href === pathname || href === pathname.replace(/\/$/, '');
----
-
-<nav class="flex py-4 px-4 justify-between items-center">
-  <ul class="flex flex-wrap p-0 m-0">
-    {
-      links.map(({ href, label }) => (
-        <li class="opacity-80 list-none text-[0.95rem]">
-          <a
-            href={href}
-            class={[
-              isActive(href) ? 'active-link' : '',
-              'px-4 py-2 rounded-lg no-underline text-grey-400 hover:text-grey-900',
-            ].join(' ')}
-          >
-            {label}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-  <ThemeToggler />
-</nav>
-
 <style>
-  .active-link {
-    background-color: var(--grey-900);
-    color: var(--background);
+  .nav-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    --progress: 0;
+    background-image: linear-gradient(
+      to bottom,
+      var(--bg-grey-100),
+      var(--bg-grey-100)
+    );
+    mask-image: linear-gradient(
+      90deg,
+      white 0%,
+      rgba(255, 255, 255, 1) calc(100% * var(--progress)),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      white 0%,
+      rgba(255, 255, 255, var(--progress)) calc(100% * var(--progress)),
+      transparent 100%
+    );
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* @apply shadow-xl; */
   }
-</style> -->
+  .nav {
+    --progress: 0;
+
+    box-shadow:
+      0 20px 25px -5px rgb(0 0 0 / calc(0.1 * var(--progress))),
+      0 8px 10px -6px rgb(0 0 0 / calc(0.1 * var(--progress)));
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/all';
+
+  document.addEventListener('astro:page-load', () => {
+    const nav = document.querySelector('.nav');
+    const navBackground = document.querySelector('.nav-bg');
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      trigger: 'body',
+      start: `+=10`,
+      end: `+=${navBackground?.clientHeight ?? 90}`,
+      onUpdate: self => {
+        const { progress } = self;
+        if (navBackground instanceof HTMLElement) {
+          navBackground.style.setProperty('--progress', String(progress));
+        }
+        if (nav instanceof HTMLElement) {
+          nav.style.setProperty('--progress', String(progress));
+        }
+      },
+    });
+  });
+</script>

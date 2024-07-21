@@ -12,7 +12,7 @@ const sortedBlogs = await getBlogs();
 const routeName = t('blogs.titre');
 ---
 
-<Main title="Ginlon">
+<Main pageTitle="Home">
   <div class="flex items-center flex-wrap pb-8 md:space-x-8 animate">
     <Image
       class="object-cover rounded-full w-[124px] h-[124px] max-md:w-24 max-md:h-24"
@@ -74,20 +74,6 @@ const routeName = t('blogs.titre');
     }
   </ol>
 </Main>
-
-<script>
-  import gsap from 'gsap';
-
-  document.addEventListener('astro:page-load', () => {
-    gsap.from('.animate', {
-      opacity: 0,
-      y: 20,
-      duration: 1,
-      stagger: 0.2,
-      ease: 'power2.out',
-    });
-  });
-</script>
 
 <style>
   .floating-span {

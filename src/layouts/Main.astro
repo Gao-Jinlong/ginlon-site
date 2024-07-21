@@ -2,67 +2,37 @@
 import '../styles/styles.css';
 import Footer from '../components/Footer.astro';
 import NavigationBar from '../components/NavigationBar.astro';
-import { ViewTransitions } from 'astro:transitions';
+import GridBackground from '../components/GridBackground.astro';
+import Head from '../components/Head.astro';
+// import { ViewTransitions } from 'astro:transitions';
 
 type Props = {
-  title: string;
+  pageTitle: string;
 };
 
-const { title } = Astro.props;
+const { pageTitle } = Astro.props;
 ---
 
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Ginlon's Portfolio Website - showcasing skills, and experience in front-end web development."
-    />
-    <title>{title}</title>
-    <ViewTransitions />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.ginlon.site/" />
-    <meta property="og:title" content="Ginlon's Portfolio" />
-    <meta
-      property="og:description"
-      content="Showcasing my skills, projects, and experience in front-end web development."
-    />
-    <meta
-      property="og:image"
-      content="https://avatars.githubusercontent.com/u/41514616?v=4"
-    />
-
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://www.ginlon.site/" />
-    <meta property="twitter:title" content="Ginlon's Portfolio" />
-    <meta
-      property="twitter:description"
-      content="Showcasing my skills, projects, and experience in front-end web development."
-    />
-    <meta
-      property="twitter:image"
-      content="https://avatars.githubusercontent.com/u/41514616?v=4"
-    />
-
-    <meta name="author" content="Ginlon" />
-    <meta
-      name="keywords"
-      content="Ginlon, ginlon, Portfolio, Front-End Developer, Web Development, JavaScript, React, Astro, TypeScript"
-    />
-  </head>
+  <Head pageTitle={pageTitle} />
 
   <body class="overflow-x-hidden">
-    <main>
+    <script>
+      import gsap from 'gsap';
+
+      document.addEventListener('astro:page-load', () => {
+        gsap.from('.animate', {
+          opacity: 0,
+          y: 20,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'power2.out',
+        });
+      });
+    </script>
+    <GridBackground />
+
+    <main class="pb-12">
       <NavigationBar />
       <slot />
       <Footer />
