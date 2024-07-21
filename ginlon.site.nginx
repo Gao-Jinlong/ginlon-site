@@ -1,0 +1,37 @@
+# nginx 配置文件主要分两种，主配置文件放在 /etc/nginx/nginx.conf 中，子配置文件放在 etc/nginx/conf.d 目录下
+server {
+    listen       8080;
+    listen  [::]:8080;
+
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 1k;
+    gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+    gzip_vary on;
+
+    server_name www.ginlon.site;
+
+    # path 根据前缀匹配，只要 url 以 / 开头，都会匹配这个路由
+    location /index.html {
+        alias /var/www/blog.com/index.html;
+        # 禁用缓存
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+    #location ~*.(css|js|png|jpg|jpeg|gif|gz|svg|mp4|ogg|ogv|webm|htc|xml|woff)$ {
+    #   # 关闭访问日志
+#       access_log off;
+        # 缓存 30 天
+#       add_header Cache-Control "public, max-age=30*24*3600";
+
+    #}
+    location / {
+        alias /var/www/blog.com/;
+
+        index index.html index.htm;
+
+        # 条件匹配
+        if ($request_filename ~* ^.*?\.(jpg|png|jpeg)$){
+                add_header Cache-Control "public, max-age=30*24*3600";
+        }
+    }
+}
