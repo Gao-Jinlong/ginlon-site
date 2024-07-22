@@ -57,29 +57,11 @@ export default {
           color: 'var(--grey-600)',
           backgroundColor: 'var(--background)',
         },
-        h1: {
-          fontSize: '3rem',
-          lineHeight: '1',
-        },
-        'h1 + h2': {
-          fontSize: '1.1rem',
-          opacity: '0.9',
-          fontWeight: '400',
-        },
         main: {
           maxWidth: '40rem',
           margin: '0 auto',
         },
-        'p, li': {
-          fontSize: '1rem',
-          color: 'var(--grey-400)',
-          opacity: '0.8',
-        },
-        li: {
-          margin: '1rem 0',
-        },
         a: {
-          color: 'var(--grey-900)',
           transition: 'all 0.3s ease',
           '&:hover': {
             color: 'var(--clr-rose)',

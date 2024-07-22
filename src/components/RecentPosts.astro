@@ -17,7 +17,7 @@ const { blogs } = Astro.props as {
   </h3>
   <ul class="list-none p-0">
     {
-      blogs.map(({ data: { permalink, title, createdAt } }) => (
+      blogs.slice(0, 5).map(({ data: { permalink, title, createdAt } }) => (
         <li class="mb-2">
           <a href={permalink} class="">
             {title}

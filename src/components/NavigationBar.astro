@@ -2,7 +2,7 @@
 import ThemeToggler from '../components/ThemeToggler.astro';
 import { t } from 'astro-i18n';
 
-const links = [{ href: '/', label: t('navigation.home') }];
+const links = [{ href: '', label: t('navigation.home') }];
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {

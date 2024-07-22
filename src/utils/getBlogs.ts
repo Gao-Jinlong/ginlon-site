@@ -1,5 +1,6 @@
 import { astroI18n } from 'astro-i18n';
 import { getCollection } from 'astro:content';
+import dayjs from 'dayjs';
 
 export async function getBlogs() {
   const localizedBlogs = await getCollection('blogs', ({ data }) => {
@@ -32,8 +33,8 @@ export async function getBlogs() {
   });
 
   const finalBlogs = Array.from(finalBlogMap.values());
-  const sortedBlogs = finalBlogs.sort(
-    (a, b) => b.data.createdAt - a.data.createdAt,
+  const sortedBlogs = finalBlogs.sort((a, b) =>
+    dayjs(b.data.createdAt).diff(dayjs(a.data.createdAt)),
   );
 
   return sortedBlogs;

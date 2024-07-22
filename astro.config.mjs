@@ -16,4 +16,11 @@ export default defineConfig({
     }),
     vue({ appEntrypoint: '/src/pages/_app' }),
   ],
+  image: {
+    service: {
+      config: {
+        limitInputPixels: false,
+      },
+    },
+  },
 });

@@ -5,16 +5,26 @@ import SectionNavigation from '../components/SectionNavigation.astro';
 
 <Main pageTitle="About Me">
   <SectionNavigation />
-  <div class="relative mt-8 animate-text opacity-0 translate-y-5">
+  <div
+    class="prose dark:prose-invert relative mt-8 animate-text opacity-0 translate-y-5"
+  >
+    <!-- TODO -->
     <p class="text-lg max-md:text-md mt-4">
-      我叫 Ginlon 是一名<span class="text-rose-custom font-bold"
-        >前端工程师</span
+      我叫 Ginlon 是一名
+      <span
+        class="bg-rose dark:bg-transparent px-1 transition-all duration-300"
       >
-      <br />
-      I'm available for all kinds of work you might need. <span
+        <span
+          class="bg-gradient-to-tl to-lime-400 from-lime-50 dark:border dark:border-solid dark:border-rose bg-clip-text text-transparent font-bold"
+          >前端工程师</span
+        >
+      </span>
+    </p>
+    <p>
+      这个人太懒了，还没写完简介！😅 <span
         class="bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent font-bold"
       >
-        Feel free to contact me!
+        欢迎直接联系我！
       </span>
     </p>
   </div>

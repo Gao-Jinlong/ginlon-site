@@ -7,13 +7,16 @@ import SectionNavigation from '../components/SectionNavigation.astro';
 <Main pageTitle="My Projects">
   <SectionNavigation />
 
-  <section class="text-center container mx-auto py-8 animate-on-load">
+  <section
+    class="prose dark:prose-invert text-center container mx-auto py-8 animate-on-load"
+  >
+    <!-- TODO -->
+    <p class="text-rose text-4xl">演示数据</p>
     <p>
       Discover my top three highlighted projects, each showcasing different
       technologies.
     </p>
     <p class="text-nowrap max-sm:text-wrap">
-      <br />
       This portfolio is built with
       <span class="font-bold uppercase text-orange-500 floating-span"
         >Astro</span
@@ -26,7 +29,6 @@ import SectionNavigation from '../components/SectionNavigation.astro';
       >
       <span class="font-bold uppercase text-green-600 floating-span">GSAP</span>
     </p>
-    <br />
     <div class="flex flex-col animate-on-load mt-4">
       <ProjectCard
         title="Apple Iphone 15"

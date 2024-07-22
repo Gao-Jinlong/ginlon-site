@@ -1,29 +1,30 @@
 ---
-import { astroI18n } from 'astro-i18n';
-// New astro content collections
-import { getCollection } from 'astro:content';
+import { t, l } from 'astro-i18n';
+import Main from '../../layouts/Main.astro';
+import { getBlogs } from '../../utils/getBlogs';
 
-// import BaseLayout from '../../layouts/BaseLayout.astro';
-// import ListCards from '../../components/ListCards.astro';
+const sortedBlogs = await getBlogs();
 
-const localizedPost = await getCollection('blogs', ({ data }) => {
-  return data.lang === astroI18n.locale && !data.draft;
-});
-
-// const pageTitle = t('index.blogs.pageName');
+const routeName = t('blogs.titre');
 ---
 
-<div>
-  blogs index
-
-  {
-    localizedPost.map(post => (
-      <div>
-        <h2>{post.data.title}</h2>
-        <p>{post.data.description}</p>
-      </div>
-    ))
-  }
-</div>
+<Main pageTitle="blogs">
+  <ol class="space-y-4 animate">
+    {
+      sortedBlogs.map(blog => (
+        <li class="border-b border-gray-200 dark:border-gray-700">
+          <a
+            class="block py-4 text-gray-900 dark:text-gray-100 transition-opacity duration-200 ease-in-out hover:opacity-70"
+            href={l(
+              `${import.meta.env.BASE_URL}/${routeName}/${blog.data.permalink}`,
+            )}
+          >
+            {blog.data.title}
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</Main>
 
 <style></style>
