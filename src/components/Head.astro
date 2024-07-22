@@ -5,26 +5,18 @@ const { pageTitle } = Astro.props;
 ---
 
 <head>
+  <!-- site meta -->
   <meta charset="utf-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ginlon | {pageTitle}</title>
-  <meta name="description" content={t('seo.meta.description')} />
-  <meta name="robots" content="index,follow." />
-  <meta name="author" content="Nicolas Arduin" />
-  <meta name="subject" content="Développement de sites web, accessibilité." />
-  <meta name="view-transition" content="same-origin" />
-
-  <meta charset="utf-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href={`${import.meta.env.BASE_URL}/favicon.svg`}
+  />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content={Astro.generator} />
-  <meta
-    name="description"
-    content="Ginlon's Portfolio Website - showcasing skills, and experience in front-end web development."
-  />
-  <title>{pageTitle}</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
   <ViewTransitions />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,35 +25,24 @@ const { pageTitle } = Astro.props;
     rel="stylesheet"
   />
 
+  <!-- open graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.ginlon.site/" />
-  <meta property="og:title" content="Ginlon's Portfolio" />
-  <meta
-    property="og:description"
-    content="Showcasing my skills, projects, and experience in front-end web development."
-  />
-  <meta
-    property="og:image"
-    content="https://avatars.githubusercontent.com/u/41514616?v=4"
-  />
+  <meta property="og:url" content={t('og.url')} />
+  <meta property="og:title" content={t('og.title')} />
+  <meta property="og:description" content={t('og.description')} />
+  <meta property="og:image" content={t('og.image')} />
 
+  <!-- twitter -->
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://www.ginlon.site/" />
-  <meta property="twitter:title" content="Ginlon's Portfolio" />
-  <meta
-    property="twitter:description"
-    content="Showcasing my skills, projects, and experience in front-end web development."
-  />
-  <meta
-    property="twitter:image"
-    content="https://avatars.githubusercontent.com/u/41514616?v=4"
-  />
+  <meta property="twitter:url" content={t('og.url')} />
+  <meta property="twitter:title" content={t('og.title')} />
+  <meta property="twitter:description" content={t('og.description')} />
+  <meta property="twitter:image" content={t('og.image')} />
 
+  <!-- seo -->
   <meta name="author" content="Ginlon" />
-  <meta
-    name="keywords"
-    content="Ginlon, ginlon, Portfolio, Front-End Developer, Web Development, JavaScript, React, Astro, TypeScript"
-  />
+  <meta name="description" content={t('seo.description')} />
+  <meta name="keywords" content={t('seo.keywords')} />
 
   <!-- clarity -->
   <script is:inline type="text/javascript">

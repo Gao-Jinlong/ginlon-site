@@ -17,5 +17,15 @@
     "about": "关于",
     "projects": "项目",
     "contact": "联系"
+  },
+  "seo": {
+    "keywords": "Ginlon, 前端, 程序员, 前端工程师, vue",
+    "description": "Ginlon 的个人网站 - 展示前端开发技能和经验。"
+  },
+  "og": {
+    "url": "https://gao-jinlong.github.io/ginlon-site/",
+    "title": "Ginlon 的个人网站",
+    "description": "Ginlon 的个人网站 - 展示前端开发技能和经验。",
+    "image": "https://avatars.githubusercontent.com/u/41514616?v=4"
   }
 }

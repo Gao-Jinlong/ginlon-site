@@ -21,5 +21,13 @@
     "about": "About",
     "projects": "Projects",
     "contact": "Contact"
+  },
+  "seo": {
+    "keywords": "Ginlon, Frontend, Programmer, Frontend Engineer, vue",
+    "description": "Ginlon's Portfolio Website - showcasing skills, and experience in front-end web development."
+  },
+  "og": {
+    "title": "Ginlon's Portfolio",
+    "description": "Ginlon's Portfolio Website - showcasing skills, and experience in front-end web development."
   }
 }
