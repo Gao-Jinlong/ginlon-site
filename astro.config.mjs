@@ -7,8 +7,9 @@ import vue from '@astrojs/vue';
 // https://astro.build/config
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  site: 'https://www.ginlon.site',
-  base: './',
+  site: 'http://www.ginlon.site',
+  base: '/',
+  trailingSlash: 'never',
   integrations: [
     tailwind(),
     mdx({

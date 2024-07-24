@@ -6,7 +6,7 @@ const links = [{ href: '', label: t('navigation.home') }];
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
-  const url = `${import.meta.env.BASE_URL}/${href}`.replace(/\/*$/, '');
+  const url = `${import.meta.env.BASE_URL}${href}`.replace(/\/*$/, '');
 
   return url === pathname || url === pathname.replace(/\/*$/, '');
 };
@@ -21,7 +21,7 @@ const isActive = (href: string) => {
       links.map(({ href, label }) => (
         <li class="opacity-80 list-none text-[0.95rem]">
           <a
-            href={`${import.meta.env.BASE_URL}/${href}`}
+            href={`${import.meta.env.BASE_URL}${href}`}
             class={[
               isActive(href)
                 ? 'active-link'

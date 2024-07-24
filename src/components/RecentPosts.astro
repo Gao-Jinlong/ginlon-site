@@ -21,7 +21,7 @@ const routeName = t('blogs.titre');
       blogs.slice(0, 5).map(({ data: { permalink, title, createdAt } }) => (
         <li class="mb-2">
           <a
-            href={`${import.meta.env.BASE_URL}/${routeName}/${permalink}`}
+            href={`${import.meta.env.BASE_URL}${routeName}/${permalink}`}
             class=""
           >
             {title}

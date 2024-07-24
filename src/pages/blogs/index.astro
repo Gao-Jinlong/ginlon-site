@@ -16,7 +16,7 @@ const routeName = t('blogs.titre');
           <a
             class="block py-4 text-gray-900 dark:text-gray-100 transition-opacity duration-200 ease-in-out hover:opacity-70"
             href={l(
-              `${import.meta.env.BASE_URL}/${routeName}/${blog.data.permalink}`,
+              `${import.meta.env.BASE_URL}${routeName}/${blog.data.permalink}`,
             )}
           >
             {blog.data.title}
