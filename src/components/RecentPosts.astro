@@ -7,6 +7,7 @@ export interface Blogs extends Awaited<ReturnType<typeof getCollection>> {}
 const { blogs } = Astro.props as {
   blogs: Blogs;
 };
+const routeName = t('blogs.titre');
 ---
 
 <aside
@@ -19,7 +20,10 @@ const { blogs } = Astro.props as {
     {
       blogs.slice(0, 5).map(({ data: { permalink, title, createdAt } }) => (
         <li class="mb-2">
-          <a href={permalink} class="">
+          <a
+            href={`${import.meta.env.BASE_URL}/${routeName}/${permalink}`}
+            class=""
+          >
             {title}
           </a>
           {createdAt && (
