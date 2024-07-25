@@ -19,7 +19,7 @@ const { pageTitle } = Astro.props;
   <body class="overflow-x-hidden">
     <GridBackground />
 
-    <main class="pb-12" id="main">
+    <main class="pb-12">
       <NavigationBar />
       <slot />
       <Footer />
@@ -27,7 +27,6 @@ const { pageTitle } = Astro.props;
 
     <script>
       import gsap from 'gsap';
-      // import { useImageViewer } from './useImageViewer';
 
       document.addEventListener('astro:page-load', () => {
         gsap.from('.animate', {
@@ -38,14 +37,15 @@ const { pageTitle } = Astro.props;
           ease: 'power2.out',
         });
       });
+    </script>
 
-      // setTimeout(() => {
-      //   const mainDom = document.getElementById('main')!;
-      //   console.log('🚀 ~ mainDom:', mainDom);
-      //   useImageViewer({
-      //     element: mainDom,
-      //   });
-      // }, 3000);
+    <script>
+      import { useImageViewer } from './useImageViewer';
+
+      useImageViewer({
+        element: document.querySelector('body')!,
+        options: {},
+      });
     </script>
   </body>
 </html>
