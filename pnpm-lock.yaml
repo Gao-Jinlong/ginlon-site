@@ -44,6 +44,9 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.5.3
+      viewerjs:
+        specifier: ^1.11.6
+        version: 1.11.6
       vue:
         specifier: ^3.4.31
         version: 3.4.31(typescript@5.5.3)
@@ -2541,6 +2544,9 @@ packages:
 
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
+
+  viewerjs@1.11.6:
+    resolution: {integrity: sha512-TlhdSp2oEOLFXvEp4psKaeTjR5zBjTRcM/sHUN8PkV1UWuY8HKC8n7GaVdW5Xqnwdr/F1OmzLik1QwDjI4w/nw==}
 
   vite-hot-client@0.2.3:
     resolution: {integrity: sha512-rOGAV7rUlUHX89fP2p2v0A2WWvV3QMX2UYq0fRqsWSvFvev4atHWqjwGoKaZT1VTKyLGk533ecu3eyd0o59CAg==}
@@ -5747,6 +5753,8 @@ snapshots:
       '@types/unist': 3.0.2
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
+
+  viewerjs@1.11.6: {}
 
   vite-hot-client@0.2.3(vite@5.3.3):
     dependencies:
