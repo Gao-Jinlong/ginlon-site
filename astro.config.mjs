@@ -24,4 +24,9 @@ export default defineConfig({
       },
     },
   },
+  vite: {
+    ssr: {
+      noExternal: ['viewerjs'],
+    },
+  },
 });

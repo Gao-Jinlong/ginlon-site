@@ -1,5 +1,4 @@
 import Viewer from 'viewerjs';
-import 'viewerjs/dist/viewer.css';
 export interface UseImageViewerProps {
   options?: Viewer.Options;
 }
@@ -9,7 +8,6 @@ export function useImageViewer(props: UseImageViewerProps) {
   document.addEventListener('astro:page-load', () => {
     const images = document.querySelectorAll('img');
     gallery.destroy();
-
     gallery = new Viewer(document.querySelector('body')!, options);
 
     images.forEach((img, index) => {
