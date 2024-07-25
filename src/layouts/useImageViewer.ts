@@ -1,20 +1,21 @@
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
 export interface UseImageViewerProps {
-  element: HTMLElement;
   options?: Viewer.Options;
 }
 export function useImageViewer(props: UseImageViewerProps) {
-  const { element, options } = props;
+  const { options } = props;
+  let gallery = new Viewer(document.querySelector('body')!, options);
   document.addEventListener('astro:page-load', () => {
     const images = document.querySelectorAll('img');
+    gallery.destroy();
 
-    const gallery = new Viewer(element, options);
+    gallery = new Viewer(document.querySelector('body')!, options);
 
     images.forEach((img, index) => {
       img.style.cursor = 'pointer';
       img.addEventListener('click', () => {
-        gallery.view(index);
+        gallery?.view(index);
       });
     });
   });
