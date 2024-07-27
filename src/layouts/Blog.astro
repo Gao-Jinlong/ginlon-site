@@ -3,8 +3,10 @@ import RecentPosts from '../components/RecentPosts.astro';
 import Main from './Main.astro';
 import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
+import { t } from 'astro-i18n';
+import dayjs from 'dayjs';
 
-const { title, subtitle, poster } = Astro.props.frontmatter;
+const { title, subtitle, poster, createdAt } = Astro.props.frontmatter;
 
 const blogs = await getBlogs();
 const otherBlogs = blogs.filter(({ data }) => {
@@ -32,6 +34,13 @@ const otherBlogs = blogs.filter(({ data }) => {
           <h2 class="text-2xl text-gray-300 dark:text-grey-600">{subtitle}</h2>
         )
       }
+    </div>
+    <div class="flex absolute w-full bottom-0 text-gray-300 text-sm px-2 py-1">
+      <div class="flex-1"></div>
+      <div class="w-auto">
+        {t('blogs.createdAt')}:
+        {dayjs(createdAt).format('YYYY-MM-DD HH:mm')}
+      </div>
     </div>
   </header>
 
