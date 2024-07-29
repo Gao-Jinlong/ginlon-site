@@ -142,3 +142,175 @@ type Person = {
 typescript 在某些情况下，当确定访问属性不为空时可以使用 `!` 断言
 
 ### 类型缩小（Narrowing）
+
+typescript 的类型分析叠加在 javascript 的运行时控制流结构之上，可以通过控制流语句来缩小类型范围。
+
+#### `typeof` 类型守卫
+
+常见的类型守卫有 `typeof`, `instanceof`, `in`, `==`, `===`, '&&', '||', '?:' 等
+
+大部分情况下 `typeof` 都可以按照正常的预期的来缩小类型范围
+
+但是，需要注意的是在 javascript 中有一个历史遗留的问题 `typeof null === 'object'`，好在 typescript 也对这种情况进行了兼容依然可以正确的识别出可能为 `null` 的情况
+
+```ts
+function printAll(strs: string[] | null) {
+  if (typeof strs === 'object') {
+    for (const s of strs) {
+      // Error: strs is possibly 'null'.
+      console.log(s);
+    }
+  } else if (typeof strs === 'string') {
+    console.log(strs);
+  } else {
+    const _: never = strs; // 只有 never 类型可以赋值给 never 类型
+  }
+}
+```
+
+#### 类型谓词 （predicates）
+
+类型守卫可以完成大部分的类型缩小，但是有时候我们需要更直接的控制类型的缩小，这时候就需要使用类型谓词
+
+```ts
+function isFish(pet: Fish | Brid): pet is Fish {
+  return (pet as Fish).swim !== undefined;
+}
+
+const pet = getSmallPet();
+if (isFish(pet)) {
+  pet.swim();
+} else {
+  pet.fly();
+}
+```
+
+`this` 类型守卫
+
+当类的方法返回 `this` 类型时，所有继承该类的子类的实例方法都会返回 `this`，而接受 `this` 类型只能接受他所指向的类的实例，而不能接受其他类的实例包括父类
+
+```ts
+class Box {
+  content: string = '';
+  sameAs(other: this) {
+    return other.content === this.content;
+  }
+}
+
+class DerivedBox extends Box {
+  otherContent: string = '?';
+}
+
+const base = new Box();
+const derived = new DerivedBox();
+derived.sameAs(base);
+// Argument of type 'Box' is not assignable to parameter of type 'DerivedBox'.
+// Property 'otherContent' is missing in type 'Box' but required in type 'DerivedBox'.
+```
+
+同样 `this` 作为方法中隐含的参数也可以用作类型谓词
+
+```ts
+class FileSystemObject {
+  isFile(): this is FileRep {
+    return this instanceof FileRep;
+  }
+  isDirectory(): this is Directory {
+    return this instanceof Directory;
+  }
+  isNetworked(): this is Networked & this {
+    return this.networked;
+  }
+  constructor(
+    public path: string,
+    private networked: boolean,
+  ) {}
+}
+
+class FileRep extends FileSystemObject {
+  constructor(
+    path: string,
+    public content: string,
+  ) {
+    super(path, false);
+  }
+}
+
+class Directory extends FileSystemObject {
+  children: FileSystemObject[];
+}
+
+interface Networked {
+  host: string;
+}
+
+const fso: FileSystemObject = new FileRep('foo/bar.txt', 'foo');
+
+if (fso.isFile()) {
+  fso.content;
+
+  const fso: FileRep;
+} else if (fso.isDirectory()) {
+  fso.children;
+
+  const fso: Directory;
+} else if (fso.isNetworked()) {
+  fso.host;
+
+  const fso: Networked & FileSystemObject;
+}
+```
+
+#### 区分联合（Discriminated unions）
+
+当联合类型中的每个类型都包含相同的具有字面量类型的属性时，typescript 会认为这个联合是可区分的，并且可以缩小联合的成员范围
+
+```ts
+interface Circle {
+  kind: 'circle';
+  radius: number;
+}
+
+interface Square {
+  kind: 'square';
+  sideLength: number;
+}
+
+type Shape = Circle | Square;
+
+function getArea(shape: Shape) {
+  switch (shape.kind) {
+    case 'circle':
+      return Math.PI * shape.radius ** 2;
+    case 'square':
+      return shape.sideLength ** 2;
+  }
+}
+```
+
+详尽性检查
+
+可以利用只有 never 类型能给分配给 never 类型的特性，确保 switch 语句的完整性
+
+当我们扩充联合类型时，typescript 会给出错误提示
+
+```ts
+interface Triangle {
+  kind: 'triangle';
+  sideLength: number;
+}
+
+type Shape = Circle | Square | Triangle;
+
+function getArea(shape: Shape): number {
+  switch (shape.kind) {
+    case 'circle':
+      return Math.PI * shape.radius ** 2;
+    case 'square':
+      return shape.sideLength ** 2;
+    default:
+      const _: never = shape; // Type 'Triangle' is not assignable to type 'never'.
+      return _;
+  }
+}
+```
