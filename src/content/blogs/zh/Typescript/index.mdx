@@ -314,3 +314,98 @@ function getArea(shape: Shape): number {
   }
 }
 ```
+
+### 函数
+
+#### 调用签名（Call Signatures）
+
+在 javascript 中，函数除了可以调用外还可以具有属性，带有属性的类型签名写法
+
+```ts
+type DescribableFunction = {
+  description: string;
+  (someArg: number): boolean;
+};
+function doSomething(fn: DescribableFunction) {
+  console.log(fn.description + ' returned ' + fn(6));
+}
+
+function myFunc(someArg: number) {
+  return someArg > 0;
+}
+myFunc.description = 'takes a number and returns a boolean';
+doSomething(myFunc);
+```
+
+#### 构造函数签名（Construct Signatures）
+
+使用 `new` 关键字调用的函数称为构造函数，构造函数签名的写法
+
+```ts
+interface ClockConstructor {
+  new (hour: number, minute: number): ClockInterface;
+}
+```
+
+#### 类型约束（Constraints）
+
+typescript 中的泛型可以约束类型，比如约束一个泛型类型必须具有 `length` 属性
+
+```ts
+function longest<Type extends { length: number }>(a: Type, b: Type) {
+  if (a.length >= b.length) {
+    return a;
+  } else {
+    return b;
+  }
+}
+
+const longerArray = longest([1, 2], [1, 2, 3]);
+const longerString = longest('alice', 'bob');
+const notOK = longest(10, 100); // Argument of type 'number' is not assignable to parameter of type '{ length: number; }'.
+```
+
+#### 编写良好通用函数指南
+
+##### 类型参数（泛型）
+
+泛型实际上是一种类型参数，通常是用来关联多个值的，当一个泛型没有关联多个值时它通常是不必要的
+
+```ts
+function greet<Str extends string>(s: Str) {
+  console.log('Hello, ' + s);
+}
+```
+
+这里创建的泛型 `Str` 仅在参数中出现了一次，没有关联多个值，所以是不必要存在的
+
+```ts
+function greet(s: string) {
+  console.log('Hello, ' + s);
+}
+```
+
+##### 下推类型（Push Type Parameters Down）
+
+**类型参数**（泛型）应该用在更具体的位置，而不是在更高的层次上过度泛化
+
+```ts
+function firstElement1<Type>(arr: Type[]) {
+  return arr[0];
+}
+
+function firstElement2<Type extends any[]>(arr: Type[]) {
+  return arr[0];
+}
+
+// a:number (good)
+const a = firstElement1([1, 2, 3]);
+// b:any (bad)
+const b = firstElement2([1, 2, 3]);
+```
+
+`firstElement2` 中的类型约束 `Type extends any[]` 使得 typescript 必须使用约束类型解析返回值，而不是等待元素调用时再解析。
+
+#### 可选参数（Optional Parameters）
+
+TODO...
