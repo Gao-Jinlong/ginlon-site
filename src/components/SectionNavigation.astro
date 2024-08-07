@@ -2,24 +2,24 @@
 import Cards from './Cards.astro';
 ---
 
-<div transition:name="cards">
+<div transition:name="cards" class="flex w-full">
   <Cards
     cards={[
       {
-        title: 'Projects I Have Worked On',
+        title: '项目',
         gradientFrom: '#fde68a',
         gradientTo: '#fca5a5',
         // to: `/${astroI18n.locale}/projects`,
         to: `projects`,
       },
       {
-        title: 'Learn More About Me',
+        title: '个人简介',
         gradientFrom: '#6ee7b7',
         gradientTo: '#9333ea',
         to: `aboutMe`,
       },
       {
-        title: 'Technology I possess',
+        title: '技术栈',
         gradientFrom: '#818cf8',
         gradientTo: '#d8b4fe',
         to: `techStack`,

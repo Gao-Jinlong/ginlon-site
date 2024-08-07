@@ -9,10 +9,9 @@ export type Props = {
 const { to, title } = Astro.props;
 ---
 
-<!-- TODO: cart style for mobile -->
 <a
   href={`${import.meta.env.BASE_URL}${to}`}
-  class={`card relative p-1 rounded-md transition-transform duration-200 ease-in-out  overflow-hidden`}
+  class={`card relative p-1 rounded-md transition-transform duration-200 ease-in-out  overflow-hidden flex-1`}
 >
   <div
     class="card-inner bg-slate-100 dark:bg-[#18181b] p-6 rounded-md flex flex-col"
