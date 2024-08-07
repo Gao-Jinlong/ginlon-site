@@ -365,7 +365,7 @@ const longerString = longest('alice', 'bob');
 const notOK = longest(10, 100); // Argument of type 'number' is not assignable to parameter of type '{ length: number; }'.
 ```
 
-#### 编写良好通用函数指南
+#### 编写良好的泛型
 
 ##### 类型参数（泛型）
 
@@ -428,3 +428,32 @@ const d3 = makeDate(1, 3); // No overload expects 2 arguments, but overloads do 
 ```
 
 这里的 `d3` 的调用方式虽然符合实现签名的类型定义，但依然会得到错误。
+
+#### 编写好的函数重载
+
+优先考虑联合类型能否满足需求，不能时再考虑函数重载
+
+```ts
+function len(s: string): number;
+function len(arr: any[]): number;
+function len(x: any) {
+  return x.length;
+}
+
+len(Math.random() > 0.5 ? 'hello' : [0, 1, 2]);
+// No overload matches this call.
+//   Overload 1 of 2, '(s: string): number', gave the following error.
+//     Argument of type '"hello" | number[]' is not assignable to parameter of type 'string'.
+//       Type 'number[]' is not assignable to type 'string'.
+//   Overload 2 of 2, '(arr: any[]): number', gave the following error.
+//     Argument of type '"hello" | number[]' is not assignable to parameter of type 'any[]'.
+//       Type 'string' is not assignable to type 'any[]'.(2769)
+```
+
+`len` 函数的多个重载具有相同的参数数量和相同的返回类型，所以可以使用联合类型来替代
+
+```ts
+function len(s: string | any[]): number {
+  return s.length;
+}
+```
