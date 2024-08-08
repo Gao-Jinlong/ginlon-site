@@ -457,3 +457,54 @@ function len(s: string | any[]): number {
   return s.length;
 }
 ```
+
+#### 声明 this
+
+javascript 不允许函数使用 `this` 作为函数的参数名，因此 typescript 利用了这个语法使用 `this` 参数来声明函数体中 `this` 的类型，编译后会移除 `this` 参数，`this` 在 typescript 中必须是第一个参数
+
+```ts
+function fancyDate(this: Date) {
+  return `${this.getDate()}/${this.getMonth()}/${this.getFullYear()}`;
+}
+```
+
+需要注意箭头函数的特殊性
+
+```ts
+interface DB {
+  filterUsers(filter: (this: User) => boolean): User[];
+}
+
+const db = getDB();
+
+// bad case
+const admins = db.filterUsers(() => this.admin); // The containing arrow function captures the global value of 'this'.
+// good case
+const admins = db.filterUsers(function (this: User) {
+  return this.admin;
+});
+```
+
+#### 函数的可分配性
+
+函数返回 `void` 类型，理解为函数可以返回任意类型，但会被忽略
+
+这使得以下这种情况是合法的
+
+```ts
+const src = [1, 2, 3];
+const dst = [0];
+
+src.forEach(el => dst.push(el));
+```
+
+虽然 `push` 会返回一个 `number` 类型，但是会被忽略
+
+需要额外注意的是，字面量函数声明的返回类型为 `void` 时，函数必须不返回任何值，否则会报错
+
+```ts
+function foo(): void {
+  // @ts-expect-error
+  return true;
+}
+```
