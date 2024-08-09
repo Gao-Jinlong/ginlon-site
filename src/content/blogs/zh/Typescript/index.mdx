@@ -508,3 +508,56 @@ function foo(): void {
   return true;
 }
 ```
+
+### 对象类型 `object`
+
+#### 修饰符
+
+可选属性
+
+```ts
+interface PaintOptions {
+  shape: Shape;
+  xPos?: number;
+  yPos?: number;
+}
+```
+
+只读属性
+
+```ts
+interface SomeType {
+  readonly prop: string;
+}
+```
+
+映射修饰符（mapping modifiers） 可以删除或者添加修饰符，省略时默认为添加
+
+```ts
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+type Readonly<T> = {
+  +readonly [P in keyof T]: T[P]; // 这里的 + 可以省略
+};
+
+type Required<T> = {
+  [P in keyof T]-?: T[P];
+};
+type Partial<T> = {
+  [P in keyof T]+?: T[P];
+};
+```
+
+#### 索引类型
+
+可以将索引签名设置为只读，来防止添加新属性
+
+```ts
+interface ReadonlyStringArray {
+  readonly [index: number]: string;
+}
+
+let myArray: ReadonlyStringArray = ['Alice', 'Bob'];
+myArray[2] = 'Mallory'; // Index signature in type 'ReadonlyStringArray' only permits reading.
+```
