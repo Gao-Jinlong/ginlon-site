@@ -561,3 +561,45 @@ interface ReadonlyStringArray {
 let myArray: ReadonlyStringArray = ['Alice', 'Bob'];
 myArray[2] = 'Mallory'; // Index signature in type 'ReadonlyStringArray' only permits reading.
 ```
+
+#### 多余属性检查
+
+typescript 会对对象字面量中的属性进行检查，检查对象字面量中是否包含了接口中不存在的属性，如果包含则会报错
+
+```ts
+interface SquareConfig {
+  color?: string;
+  width?: number;
+}
+
+function createSquare(config: SquareConfig): { color: string; area: number } {
+  return {
+    color: config.color || 'red',
+    area: config.width ? config.width * config.width : 20,
+  };
+}
+
+let mySquare = createSquare({ colour: 'red', width: 100 }); // Error: Property 'colour' does not exist on type '{ color: string; area: number; }'.(2339)
+```
+
+绕过这个检查的方法最简单的是使用类型断言 `as`
+
+```ts
+let mySquare = createSquare({ width: 100, opacity: 0.5 } as SquareConfig);
+```
+
+还有一种绕过检查的方式，将对象分配给一个变量，由于分配的变量不会进行多余属性检查，所以不会报错
+
+```ts
+let squareOptions = { colour: 'red', width: 100 } as SquareConfig;
+let mySquare = createSquare(squareOptions);
+```
+
+如果没有任何公共对象属性，这也会报错
+
+```ts
+let squareOptions = { colour: 'red' };
+let mySquare = createSquare(squareOptions); // Type '{ colour: string; }' has no properties in common with type 'SquareConfig'.
+```
+
+这些绕过检查的动作都是不推荐的，应该尽可能通过修改相关类型的声明来修复这个错误。
