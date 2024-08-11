@@ -603,3 +603,46 @@ let mySquare = createSquare(squareOptions); // Type '{ colour: string; }' has no
 ```
 
 这些绕过检查的动作都是不推荐的，应该尽可能通过修改相关类型的声明来修复这个错误。
+
+### 类型操作
+
+#### 泛型（类型参数）
+
+```ts
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+```
+
+typscript 可以根据参数推断出泛型参数的具体类型
+
+```ts
+const output /* string */ = identity('myString');
+```
+
+#### 泛型约束
+
+可以使用 `extends` 关键字来约束泛型的实现
+
+```ts
+interface Lengthwise {
+  length: number;
+}
+
+function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
+  console.log(arg.length);
+  return arg;
+}
+
+loggingIdentity([1, 2, 3]);
+```
+
+#### 在类型约束中使用泛型（类型参数）
+
+可以将一个泛型作为另一个泛型的约束
+
+```ts
+function getProperty<Type, Key extends keyof Type>(obj: Type, key: Key) {
+  return obj[key];
+}
+```
