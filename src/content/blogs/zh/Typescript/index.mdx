@@ -478,7 +478,8 @@ interface DB {
 const db = getDB();
 
 // bad case
-const admins = db.filterUsers(() => this.admin); // The containing arrow function captures the global value of 'this'.
+// @ts-expect-error The containing arrow function captures the global value of 'this'.
+const admins = db.filterUsers(() => this.admin);
 // good case
 const admins = db.filterUsers(function (this: User) {
   return this.admin;
@@ -559,7 +560,8 @@ interface ReadonlyStringArray {
 }
 
 let myArray: ReadonlyStringArray = ['Alice', 'Bob'];
-myArray[2] = 'Mallory'; // Index signature in type 'ReadonlyStringArray' only permits reading.
+// @ts-expect-error Index signature in type 'ReadonlyStringArray' only permits reading.
+myArray[2] = 'Mallory';
 ```
 
 #### 多余属性检查
@@ -579,7 +581,8 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
   };
 }
 
-let mySquare = createSquare({ colour: 'red', width: 100 }); // Error: Property 'colour' does not exist on type '{ color: string; area: number; }'.(2339)
+// @ts-expect-error Property 'colour' does not exist on type '{ color: string; area: number; }'.(2339)
+let mySquare = createSquare({ colour: 'red', width: 100 });
 ```
 
 绕过这个检查的方法最简单的是使用类型断言 `as`
@@ -599,7 +602,8 @@ let mySquare = createSquare(squareOptions);
 
 ```ts
 let squareOptions = { colour: 'red' };
-let mySquare = createSquare(squareOptions); // Type '{ colour: string; }' has no properties in common with type 'SquareConfig'.
+// @ts-expect-error Type '{ colour: string; }' has no properties in common with type 'SquareConfig'.
+let mySquare = createSquare(squareOptions);
 ```
 
 这些绕过检查的动作都是不推荐的，应该尽可能通过修改相关类型的声明来修复这个错误。
@@ -639,10 +643,32 @@ loggingIdentity([1, 2, 3]);
 
 #### 在类型约束中使用泛型（类型参数）
 
-可以将一个泛型作为另一个泛型的约束
+可以将一个泛型作（类型参数）为另一个泛型（类型参数）的约束
+
+下面这个例子从对象中获取一个属性，通过在两个泛型之间建立约束关系，可以确保传入的 `key` 参数名存在于对象中
 
 ```ts
 function getProperty<Type, Key extends keyof Type>(obj: Type, key: Key) {
   return obj[key];
 }
 ```
+
+类型约束也可用于约束传入泛型的具体实现
+
+```ts
+interface Lengthwise {
+  length: number;
+}
+
+function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
+  console.log(arg.length); // 通过约束确保了 arg 有 length 属性
+  return arg;
+}
+
+loggingIdentity([1, 2, 3]);
+
+// @ts-expect-error Argument of type 'number[]' is not assignable to parameter of type 'Lengthwise'.
+loggingIdentity(3);
+```
+
+#### 在泛型中使用 Class
