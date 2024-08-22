@@ -10,3 +10,37 @@ draft: true
 ---
 
 ## 初始化仓库
+
+## 维护参考手册
+
+### approvedPackagesPolicy 审查 npm 依赖项
+
+该配置用于审查记录仓库中 npm 依赖的使用情况，例如需要对外部代码进行法律或安全审查时。
+
+通常会有多个不同要求的的审查类别（例如：交付产品、内部项目、内部 library）我们可以配置不同的审查类别。
+
+在 rush.json 中添加配置
+
+```json
+{
+  "approvedPackagesPolicy": {
+    "reviewCategories": ["production", "internal-project", "internal-library"] // 自定了三个审查类别
+  }
+}
+```
+
+这样每个依赖只需要在第一次被某个审查类别引用时进行审查，后续的相同审查类别的项目对这个依赖的引用则无需再次审查。
+
+在运行 `rush install` 后会在 `common/config/rush/browser-approved-packages.json` 中生成一个记录文件，记录了每个依赖的审查类别。
+
+```json
+{
+  "name": "@nestjs/cli",
+  "allowedCategories": ["production"]
+}
+```
+
+例如该记录表示 `@nestjs/cli` 被 `production` 审查类别引用。  
+只需要将该文件提交到 git 仓库中就会形成一个依赖变更记录，当 PR 审查时，审查人员可以通过 diff 查看这个文件来了解依赖的变更情况，也可以通过该文件的变更触发一个特殊审批流程。
+
+当有新的依赖变化时，rush 会增量更新这些记录。
