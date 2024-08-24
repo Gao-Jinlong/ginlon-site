@@ -6,10 +6,12 @@ subtitle: ''
 poster: '/images/astro.jpg'
 permalink: 'Rush'
 createdAt: '2024-08-21 23:28:10'
-draft: true
 ---
 
 ## 初始化仓库
+
+- [ ] rush 仓库基础模板各文件作用说明
+- [ ] rush 仓库初始化
 
 ## 维护参考手册
 
@@ -44,3 +46,102 @@ draft: true
 只需要将该文件提交到 git 仓库中就会形成一个依赖变更记录，当 PR 审查时，审查人员可以通过 diff 查看这个文件来了解依赖的变更情况，也可以通过该文件的变更触发一个特殊审批流程。
 
 当有新的依赖变化时，rush 会增量更新这些记录。
+
+### Prettier 和 Eslint
+
+Ellint 的规则是高度可定制的，对于不同的项目可能会需要不同的规则，因此建议每个项目单独引入并配置 Eslint。
+
+Prettier 不鼓励定制，整个仓库使用一套规则就足够了，因此建议对整个存储仓库全局配置 Prettier。
+
+为了确保所有提交到仓库的代码都经过了 Prettier 格式化，我们可以设置一个 git hook 来自动执行 Prettier。
+
+在 git hook 调用 Prettier 之前我们需要确保 Prettier 及相关的插件都正确的安装  
+显然我们不能寄希望于每个开发者在提交代码前运行 `rush install` 来安装依赖，此时我们可以使用 rush 提供的 **autoinstaller** 功能
+
+#### 启用 git hook
+
+使用 `rush init-autoinstaller` 创建 autoinstaller ：
+
+```bash
+# 将会创建 common/autoinstallers/rush-prettier/package.json 文件:
+rush init-autoinstaller --name rush-prettier
+```
+
+安装依赖并创建 pnpm-lock.yaml 文件：
+
+```bash
+cd common/autoinstallers/rush-prettier
+
+# 您可以手动编辑
+# package.json 文件中的“依赖项”
+pnpm install prettier
+pnpm install pretty-quick # 用于识别暂存区的文件，只是对暂存区的文件进行格式化
+
+# (如果需要其他插件，在这里一起安装)
+
+# 完成后，运行此命令更新
+# common/autoinstallers/rush-prettier/pnpm-lock.yaml 文件
+rush update-autoinstaller --name rush-prettier
+```
+
+将 `common/autoinstallers/rush-prettier` 文件夹中的两个文件（package.json 和 pnpm-lock.yaml）提交到的 git 仓库中。
+
+创建一个 `rush prettier` 命令来调用 `prettier-quick` 格式化文件
+
+在 `common/config/rush/command-line.json` 的 `commands` 中添加命令：
+
+```json
+{
+  "commands": [
+    {
+      "name": "prettier",
+      "commandKind": "global",
+      "summary": "pre-commit 钩子使用。调用 prettier-quick 格式化暂存区的文件",
+      "safeForSimultaneousRushProcesses": true,
+
+      "autoinstallerName": "rush-prettier", // 配置 autoinstaller 的名称
+
+      // This will invoke common/autoinstallers/rush-prettier/node_modules/.bin/pretty-quick
+      "shellCommand": "pretty-quick --staged"
+    }
+  ]
+}
+```
+
+此时就可以通过 `rush prettier` 命令来格式化暂存区文件，并且 rush 会自动下载所需的依赖
+
+添加 git hook
+
+在 `common/git-hooks/pre-commit` 文件中添加如下脚本：
+
+```shell
+#!/bin/sh
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+
+# 每当提交文件时，调用“rush prettier”自定义命令来重新格式化文件。该命令在 common/config/rush/command-line.json 中定义，并使用“rush-prettier”自动安装程序。
+node common/scripts/install-run-rush.js prettier || exit $?
+```
+
+修改文件权限为可执行文件
+
+```bash
+chmod +x pre-commit
+```
+
+运行 `rush install` 安装该钩子
+
+安装 Prettier 插件只需要在前面的 `comon/autoinstallers/rush-prettier/package.json` 中添加相关插件，然后 `rush update-autoinstaller --name rush-prettier` 更新 autoinstaller 即可。  
+需要注意在 Prettier 的配置文件中需要填写文件夹的完整路径以便 Prettier 能够正确找到插件。
+
+```js
+module.exports = {
+  // ... your other configuration goes here ...
+  // ,
+
+  plugins: [
+    './common/autoinstallers/rush-prettier/node_modules/prettier-plugin-packagejson',
+  ],
+};
+```

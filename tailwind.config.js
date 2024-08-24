@@ -58,7 +58,7 @@ export default {
           backgroundColor: 'var(--background)',
         },
         main: {
-          maxWidth: '40rem',
+          maxWidth: '65ch',
           margin: '0 auto',
         },
         a: {
