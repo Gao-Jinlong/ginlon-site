@@ -10,6 +10,13 @@ createdAt: '2024-07-27 23:40:10'
 
 最近使用 ts 时大部分精力都放在了怎么写完整的类型上，反而基础知识框架有些遗忘现象，导致项目搭建时遇到了一些问题，写这篇文章来重新梳理下我的 typescript 知识框架，也是通过实践来巩固理论知识。
 
+目标：
+
+- [ ] `extends` `Excluede` `infer` 联合类型 用法及用例
+- [ ] [`satisfies` Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html)
+- [ ] `namespace` `declare` `module` 模块化
+- [ ] 类型体操
+
 ## 知识结构
 
 ### 基础（The Basics）
@@ -679,4 +686,26 @@ loggingIdentity(3);
 function crate<Type>(c: { new (): Type }): Type {
   return new c();
 }
+```
+
+#### 条件类型
+
+条件类型有助于描述输入和输出类型之间的关系
+
+在 typescript 中，条件类型的形式为 `type Result = Type1 extends Type2 ? TrueType : FalseType`
+
+和 js 中的三元运算符相似，如果 `Type1` 能够分配给 `Type2` 时，会返回 `TrueType` 类型，否则会返回 `FalseType`
+
+```ts
+interface Animal {
+  live(): void;
+}
+interface Dog extends Animal {
+  woof(): void;
+}
+
+// number
+type Example1 = Dog extends Animal ? number : string;
+// string
+type Example2 = RegExp extends Animal ? number : string;
 ```
