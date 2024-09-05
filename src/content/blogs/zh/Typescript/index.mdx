@@ -12,6 +12,8 @@ createdAt: '2024-07-27 23:40:10'
 
 目标：
 
+- [ ] 逆变（Contravariance）和协变（Covariant）
+- [ ] [联合分配率](https://juejin.cn/post/7089343822794227748)
 - [ ] `extends` `Excluede` `infer` 联合类型 用法及用例
 - [ ] [`satisfies` Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html)
 - [ ] `namespace` `declare` `module` 模块化
@@ -709,3 +711,141 @@ type Example1 = Dog extends Animal ? number : string;
 // string
 type Example2 = RegExp extends Animal ? number : string;
 ```
+
+### 逆变（Contravariance）和协变（Covariant）
+
+#### 1.为什么需要逆变和协变？
+
+typescript 的类型系统支持**子类型化（subtyping）**，子类型化指一个类型可以被另一个类型所替代，而不改变程序的正确性。
+
+比如 `Dog` 是 `Animal` 的子类型，所以所有可以传入 `Animal` 类型的地方都可以传入 `Dog` 类型，而不改变程序的正确性。
+
+```ts
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  woof(): void;
+}
+
+function printAnimal(animal: Animal) {
+  console.log(animal.name);
+}
+
+printAnimal(new Dog());
+```
+
+如果类型是不可变的，那么 `Animal` 和 `Dog` 是两个完全不同的类型，上面代码中 `printAnimal` 函数只能接受 `Animal` 类型的参数，而不能接受 `Dog` 类型的参数。
+
+这显然是不符合直觉的，且会使编程变得更加复杂，所以 typescript 类型系统是可变的，然而实际使用中的类型往往会比我们这里的例子要复杂的多，一个类型经常会有多个部分构成
+
+比如，`() => Animal` 这个类型，它由两部分构成，`() => T` 和 `Animal`，`() => T` 表示这是一个函数类型，`Animal` 表示这个函数返回 `Animal` 类型  
+或者 `Animal[]` 这个类型，它由 `Animal` 和 `T[]` 两部分构成，`T[]` 表示这是一个数组类型，`Animal` 表示这个数组中的元素是 `Animal` 类型
+
+> 上面例子中的 `T` 表示一个**类型参数**（即泛型），而 `Animal` 则是填补到这个参数 `T` 中的具体类型
+
+为了描述这种[复杂类型]的**子类型化** 与[构成它们的类型]的**子类型化**之间的关系，引入了**协变**和**逆变**的概念
+
+> 举例来说，类型 `() => Animal` 子类型化为 `() => Dog` 与它的构成部分 `Animal` 子类型化为 `Dog` 之间的关系，被称为**协变**
+
+#### 2.什么是协变，什么是逆变？
+
+协变：指的是，如果类型 B 是类型 A 的子类型（比如 Dog 是 Animal 的子类型），那么 T\<B\> 应该也是 T\<A\> 的子类型。换句话说，协变允许我们在上下文中替换为更具体的类型。  
+逆变：指的是，如果类型 B 是类型 A 的子类型（比如 Dog 是 Animal 的子类型），那么 T\<A\> 应该也是 T\<B\> 的子类型。换句话说，逆变允许我们在上下文中替换为更泛型的类型。
+
+从实际的例子分析，假设我们有两个类型，以及两个工厂函数：
+
+```ts
+class Animal {
+  public name: string = '';
+}
+
+class Dog extends Animal {
+  public woof() {
+    console.log('woof');
+  }
+}
+
+function makeAnimal(): Animal {
+  return new Animal();
+}
+
+function makeDog(): Dog {
+  return new Dog();
+}
+```
+
+假设我们有一个函数，接受工厂函数作为参数，并使用这个工厂函数创建一个动物并返回动物的名字
+
+```ts
+function createAnimal(factory: () => Animal): string {
+  return factory().name;
+}
+
+createAnimal(makeAnimal);
+createAnimal(makeDog); // 合法类型
+```
+
+虽然这里接受的参数是返回 `Animal` 类型的工厂函数，但是我们依然可以传入 `makeDog`  
+这是因为函数返回值的类型在**子类型化**时遵循**协变**的规则，即与构成它的类型具有相同的子类型化关系
+
+再看一个逆变的例子，假设我们有一个 forEach 函数，接受一个回调函数作为参数，并且会将动物列表中的每个实例作为参数传递给回调函数
+
+```ts
+function forEachAnimals(callback: (animal: Animal) => void) {
+  const animals: Animal[] = [new Animal(), new Animal(), new Dog()];
+
+  for (const animal of animals) {
+    callback(animal);
+  }
+}
+
+forEachAnimals((animal: Animal) => {
+  console.log(animal.name);
+});
+// @ts-expect-error Argument of type '(dogs: Dog) => void' is not assignable to parameter of type '(animal: Animal) => void'.
+// Types of parameters 'dogs' and 'animal' are incompatible.
+// Property 'woof' is missing in type 'Animal' but required in type 'Dog'.(2345)
+forEachAnimals((dogs: Dog) => {
+  dogs.woof();
+});
+```
+
+这里的我们给 `forEachAnimals` 函数传递了一个 `(dog: Dog) => void` 类型的回调函数，结果导致了类型错误，就是因为函数参数的类型在**子类型化**时遵循**逆变**的规则，即与构成它的类型具有相反的子类型化关系
+
+将两个例子简化放到一起对比
+
+```ts
+// 第一个例子中
+type A = () => Animal;
+type B = () => Dog;
+let a: A = () => new Animal();
+let b: B = () => new Dog();
+
+a = b; // 合法类型，此处类型中的 Dog 可以替换 Animal，因为函数返回值的类型在**子类型化**时遵循**协变**的规则
+
+// 第二个例子中
+type C = (animal: Animal) => void;
+type D = (dog: Dog) => void;
+let c: C = (animal: Animal) => {};
+let d: D = (dog: Dog) => {};
+// @ts-expect-error 类型“D”不能赋值给类型“C”。
+c = d; // 不合法，此处类型中的 Dog 不能替换 Animal，因为函数参数的类型在**子类型化**时遵循**逆变**的规则
+```
+
+#### 3.应用
+
+联合类型转交叉类型
+
+```ts
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer P,
+) => void
+  ? P
+  : never;
+
+type T0 = UnionToIntersection<{ a: number } | { b: number }>; // { a: number } & { b: number }
+```
+
+- [ ] 拆解 `UnionToIntersection`
