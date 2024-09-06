@@ -12,7 +12,7 @@ createdAt: '2024-07-27 23:40:10'
 
 目标：
 
-- [ ] 逆变（Contravariance）和协变（Covariant）
+- [ ] 逆变（contra-variant）和协变（co-variant）
 - [ ] [联合分配率](https://juejin.cn/post/7089343822794227748)
 - [ ] `extends` `Excluede` `infer` 联合类型 用法及用例
 - [ ] [`satisfies` Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html)
@@ -712,7 +712,7 @@ type Example1 = Dog extends Animal ? number : string;
 type Example2 = RegExp extends Animal ? number : string;
 ```
 
-### 逆变（Contravariance）和协变（Covariant）
+### 逆变（contra-variant）和协变（co-variant）
 
 #### 1.为什么需要逆变和协变？
 
@@ -848,4 +848,42 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type T0 = UnionToIntersection<{ a: number } | { b: number }>; // { a: number } & { b: number }
 ```
 
-- [ ] 拆解 `UnionToIntersection`
+逐段解析这个类型的变化过程
+
+第一部分 `U extends any ? (k: U) => void : never`  
+这里的条件类型必然成立，所以会返回 `(k: U) => void` 类型，而这个返回的类型将 `U` 放到了函数参数的位置
+
+再来看传入的参数 `U`，这里 `U` 是一个联合类型，所以会遍历 `U` 中的每一项，将每一项作为参数类型传入到 `(k: U) => void` 中获得最新的类型，并重新组成一个新的联合类型  
+于是得到 `(k: { a: number }) => void | (k: { b: number }) => void` 类型
+
+将前面的结果带入第二部分  
+`(((k: { a: number }) => void) | ((k: { b: number }) => void)) extends (k: infer P) => void ? P : never` 类型  
+同样联合类型会遍历每个组成项，并重新组成一个新的联合类型  
+这里需要注意的一个点是[同一类型变量的多个候选类型会被推断为交集类型](https://github.com/Microsoft/TypeScript/pull/21496)  
+利用这点，`P` 的类型最终会被推断为 `{ a: number } & { b: number }` 于是完成了转换
+
+> 下面这个例子展示了在协变位置上，同一类型变量的多个候选类型会被推断为联合类型：
+>
+> ```ts
+> type Foo<T> = T extends { a: infer U; b: infer U } ? U : never;
+> type T10 = Foo<{ a: string; b: string }>; // string
+> type T11 = Foo<{ a: string; b: number }>; // string | number
+> ```
+>
+> 同样的，逆变位置中同一类型变量的多个候选类型会被推断为交集类型：
+>
+> ```ts
+> type Bar<T> = T extends { a: (x: infer U) => void; b: (x: infer U) => void }
+>   ? U
+>   : never;
+> type T20 = Bar<{ a: (x: string) => void; b: (x: string) => void }>; // string
+> type T21 = Bar<{ a: (x: string) => void; b: (x: number) => void }>; // string & number
+> ```
+
+### 参考
+
+[深入理解 TypeScript](https://jkchao.github.io/typescript-book-chinese/tips/infer.html#%E4%B8%80%E4%BA%9B%E7%94%A8%E4%BE%8B)
+
+[Distributive conditional types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types)
+
+[Type inference in conditional types #21496](https://github.com/Microsoft/TypeScript/pull/21496)
