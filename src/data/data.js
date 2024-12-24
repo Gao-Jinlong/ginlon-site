@@ -59,4 +59,8 @@ export const techCardsData = [
     url: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg',
     alt: 'Rust',
   },
+  {
+    url: 'https://pixijs.com/images/logo.svg',
+    alt: 'Pixijs',
+  },
 ];
