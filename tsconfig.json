@@ -1,8 +1,10 @@
 {
   "extends": "astro/tsconfigs/strictest",
   "compilerOptions": {
-    "jsx": "preserve",
-    "target": "ESNext",
-    "experimentalDecorators": true
-  },
+    "target": "ES6", // 或更高版本
+    "experimentalDecorators": true, // 启用装饰器支持
+    "emitDecoratorMetadata": true, // 启用元数据反射
+    "moduleResolution": "node", // 确保模块解析方式为 node
+    "module": "ESNext" // 使用 ESNext 模块
+  }
 }
