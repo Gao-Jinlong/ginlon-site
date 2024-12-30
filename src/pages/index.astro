@@ -13,9 +13,9 @@ const routeName = t('blogs.titre');
 ---
 
 <Main pageTitle="Home">
-  <div class="flex items-center flex-wrap pb-8 md:space-x-8 animate">
+  <div class="animate flex flex-wrap items-center pb-8 md:space-x-8">
     <Image
-      class="object-cover rounded-full w-[124px] h-[124px] max-md:w-24 max-md:h-24"
+      class="h-[124px] w-[124px] rounded-full object-cover max-md:h-24 max-md:w-24"
       src="https://avatars.githubusercontent.com/u/41514616?v=4"
       alt="Avatar"
       width={124}
@@ -23,15 +23,15 @@ const routeName = t('blogs.titre');
       loading="eager"
     />
 
-    <div class="flex-1 min-w-[300px] md:ml-4 max-[410px]:mt-4">
+    <div class="min-w-[300px] flex-1 max-[410px]:mt-4 md:ml-4">
       <h1
-        class="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 ml-4"
+        class="ml-4 text-2xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl"
       >
         {t('homepage.hello')}
         {}
       </h1>
       <h2
-        class="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 mt-2 ml-4 h-4"
+        class="ml-4 mt-2 h-4 text-xl text-gray-700 dark:text-gray-300 sm:text-2xl"
       >
         <BriefText
           briefs={[
@@ -43,32 +43,32 @@ const routeName = t('blogs.titre');
         />
       </h2>
       <p
-        class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-4 ml-4 text-wrap"
+        class="ml-4 mt-4 text-wrap text-sm text-gray-600 dark:text-gray-400 sm:text-base"
       >
         {t('homepage.slogan')}
       </p>
     </div>
   </div>
   <SectionNavigation />
-  <div class="mt-12 animate">
-    <h3 class="text-3xl text-gray-900 dark:text-gray-100 mb-4">
+  <div class="animate mt-12">
+    <h3 class="mb-4 text-3xl text-gray-900 dark:text-gray-100">
       {t('homepage.featuredBlogs.title')}
     </h3>
 
-    <p class="text-gray-600 dark:text-gray-400 mb-8">
+    <p class="mb-8 text-gray-600 dark:text-gray-400">
       {t('homepage.featuredBlogs.brief')}
     </p>
   </div>
 
-  <div class="text-gray-400 animate w-full text-right">
+  <div class="animate w-full text-right text-gray-400">
     <a href={`${import.meta.env.BASE_URL}blogs`}>查看更多</a>
   </div>
-  <ol class="space-y-4 animate">
+  <ol class="animate space-y-4">
     {
       sortedBlogs.slice(0, 3).map(blog => (
         <li class="border-b border-gray-200 dark:border-gray-700">
           <a
-            class="block py-4 text-gray-900 dark:text-gray-100 transition-opacity duration-200 ease-in-out hover:opacity-70"
+            class="block py-4 text-gray-900 transition-opacity duration-200 ease-in-out hover:opacity-70 dark:text-gray-100"
             href={l(
               `${import.meta.env.BASE_URL}${routeName}/${blog.data.permalink}`,
             )}

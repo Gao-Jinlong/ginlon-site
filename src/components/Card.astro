@@ -11,19 +11,17 @@ const { to, title } = Astro.props;
 
 <a
   href={`${import.meta.env.BASE_URL}${to}`}
-  class={`card relative p-1 rounded-md transition-transform duration-200 ease-in-out  overflow-hidden flex-1`}
+  class={`card rounded-md transition-transform duration-200 ease-in-out bg-gray-100 `}
 >
-  <div class="card-inner bg-red dark:bg-[#18181b] p-6 rounded-md flex flex-col">
-    <div
-      class="card-title text-gray-900 dark:text-gray-100 font-medium text-lg leading-7"
-    >
+  <div class="card-inner bg-red flex flex-col rounded-md p-6 dark:bg-[#18181b]">
+    <div class="card-title text-lg font-medium leading-7 dark:text-gray-100">
       {title}
     </div>
-    <div class="flex items-center justify-between mt-4">
+    <!-- <div class="flex items-center justify-between mt-4">
       <div class="card-footer text-gray-900 dark:text-gray-100 text-sm">
         &rarr;
       </div>
-    </div>
+    </div> -->
   </div>
 </a>
 
