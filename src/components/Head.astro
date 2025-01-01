@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import { t } from 'astro-i18n';
 const { pageTitle } = Astro.props;
 ---
@@ -17,7 +17,7 @@ const { pageTitle } = Astro.props;
   <meta name="generator" content={Astro.generator} />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <ViewTransitions />
+  <ClientRouter />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link

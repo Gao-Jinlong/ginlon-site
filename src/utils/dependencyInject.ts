@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import 'reflect-metadata';
 
 // TODO 实现依赖注入，参考 nestjs
@@ -40,6 +42,7 @@ class ConsoleLogger implements ILogger {
   }
 }
 
+// @ts-ignore
 class FileLogger implements ILogger {
   log(message: string): void {
     console.log(`[FileLogger]: ${message} (pretend this is written to a file)`);

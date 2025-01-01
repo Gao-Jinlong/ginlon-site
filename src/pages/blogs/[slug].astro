@@ -17,6 +17,7 @@ export const getStaticPaths = createGetStaticPaths(async () => {
 const { article } = Astro.props as {
   article: Blogs[number];
 };
+// @ts-ignore
 const { Content } = await article.render();
 ---
 
