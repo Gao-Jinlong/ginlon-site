@@ -12,7 +12,7 @@ createdAt: '2024-07-27 23:40:10'
 
 目标：
 
-- [ ] 逆变（contra-variant）和协变（co-variant）
+- [x] 逆变（contra-variant）和协变（co-variant）
 - [ ] [联合分配率](https://juejin.cn/post/7089343822794227748)
 - [ ] `extends` `Excluede` `infer` 联合类型 用法及用例
 - [ ] [`satisfies` Operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html)
@@ -879,6 +879,41 @@ type T0 = UnionToIntersection<{ a: number } | { b: number }>; // { a: number } &
 > type T20 = Bar<{ a: (x: string) => void; b: (x: string) => void }>; // string
 > type T21 = Bar<{ a: (x: string) => void; b: (x: number) => void }>; // string & number
 > ```
+
+### 模块化
+
+当一个文件中包含 `import` 或 `export` 时，typescript 会将文件解析为模块，其中定义的类型都只能在模块作用域内访问
+
+相反，不包含 `import` 和 `export` 时会解析为全局类型，其内部类型可被直接访问
+
+如果我们想要在一个模块文件中定义全局作用域的类型则需要通过 `declare global` 的形式扩大类型的作用域
+
+```ts
+// types.ts
+
+declare global {
+  // 扩大为全局作用域
+  interface SomeInterface {
+    someValue: string;
+  }
+}
+
+export {}; // 使文件被解析为模块
+```
+
+等价于
+
+```ts
+// types.ts
+
+interface SomeInterface {
+  someValue: string;
+}
+```
+
+注：不管是哪种方式定义的类型文件，都需要被引入后才会被 typescript 解析
+
+TODO: `typeAcquisition` 配置
 
 ### 参考
 
