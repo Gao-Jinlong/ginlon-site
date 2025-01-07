@@ -3,89 +3,159 @@ import { l, t } from 'astro-i18n';
 import Main from '../layouts/Main.astro';
 import SectionNavigation from '../components/SectionNavigation.astro';
 import BriefText from '../components/BriefText.vue';
-
 import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
+import dayjs from 'dayjs';
 
 const sortedBlogs = await getBlogs();
-
 const routeName = t('blogs.titre');
 ---
 
 <Main pageTitle="Home">
-  <div class="animate flex flex-wrap items-center pb-8 md:space-x-8">
-    <Image
-      class="h-[124px] w-[124px] rounded-full object-cover max-md:h-24 max-md:w-24"
-      src="https://avatars.githubusercontent.com/u/41514616?v=4"
-      alt="Avatar"
-      width={124}
-      height={124}
-      loading="eager"
-    />
+  <div class="profile-section">
+    <div class="profile-card">
+      <Image
+        class="profile-avatar"
+        src="https://avatars.githubusercontent.com/u/41514616?v=4"
+        alt="Avatar"
+        width={124}
+        height={124}
+        loading="eager"
+      />
 
-    <div class="min-w-[300px] flex-1 max-[410px]:mt-4 md:ml-4">
-      <h1
-        class="ml-4 text-2xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl"
-      >
-        {t('homepage.hello')}
-        {}
-      </h1>
-      <h2
-        class="ml-4 mt-2 h-4 text-xl text-gray-700 dark:text-gray-300 sm:text-2xl"
-      >
-        <BriefText
-          briefs={[
-            t('homepage.briefs.0'),
-            t('homepage.briefs.1'),
-            t('homepage.briefs.2'),
-          ]}
-          client:load
-        />
-      </h2>
-      <p
-        class="ml-4 mt-4 text-wrap text-sm text-gray-600 dark:text-gray-400 sm:text-base"
-      >
-        {t('homepage.slogan')}
-      </p>
+      <div class="profile-info">
+        <h1 class="profile-title">
+          {t('homepage.hello')}
+        </h1>
+        <h2 class="profile-subtitle">
+          <BriefText
+            briefs={[
+              t('homepage.briefs.0'),
+              t('homepage.briefs.1'),
+              t('homepage.briefs.2'),
+            ]}
+            client:load
+          />
+        </h2>
+        <p class="profile-slogan">
+          {t('homepage.slogan')}
+        </p>
+      </div>
     </div>
   </div>
+
   <SectionNavigation />
-  <div class="animate mt-12">
-    <h3 class="mb-4 text-3xl text-gray-900 dark:text-gray-100">
-      {t('homepage.featuredBlogs.title')}
-    </h3>
 
-    <p class="mb-8 text-gray-600 dark:text-gray-400">
-      {t('homepage.featuredBlogs.brief')}
-    </p>
-  </div>
+  <div class="featured-blogs-section">
+    <div class="section-header">
+      <h3 class="section-title">
+        {t('homepage.featuredBlogs.title')}
+      </h3>
+      <p class="section-description">
+        {t('homepage.featuredBlogs.brief')}
+      </p>
+    </div>
 
-  <div class="animate w-full text-right text-gray-400">
-    <a href={`${import.meta.env.BASE_URL}blogs`}>查看更多</a>
-  </div>
-  <ol class="animate space-y-4">
-    {
-      sortedBlogs.slice(0, 3).map(blog => (
-        <li class="border-b border-gray-200 dark:border-gray-700">
+    <div class="blogs-container">
+      {
+        sortedBlogs.slice(0, 3).map(blog => (
           <a
-            class="block py-4 text-gray-900 transition-opacity duration-200 ease-in-out hover:opacity-70 dark:text-gray-100"
+            class="blog-card"
             href={l(
               `${import.meta.env.BASE_URL}${routeName}/${blog.data.permalink}`,
             )}
           >
-            {blog.data.title}
+            <div class="blog-card-inner">
+              <h4 class="blog-title">{blog.data.title}</h4>
+              {blog.data.createdAt && (
+                <span class="blog-date">
+                  {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
+                </span>
+              )}
+            </div>
           </a>
-        </li>
-      ))
-    }
-  </ol>
+        ))
+      }
+    </div>
+
+    <div class="view-more">
+      <a href={`${import.meta.env.BASE_URL}blogs`} class="view-more-link">
+        查看更多
+      </a>
+    </div>
+  </div>
 </Main>
 
 <style>
-  .floating-span {
-    display: inline-block;
+  .profile-section {
+    @apply mb-12;
   }
-  #copyLinkContainer.hidden {
-    display: none;
+
+  .profile-card {
+    @apply flex flex-wrap items-center gap-8 rounded-lg border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+  }
+
+  .profile-avatar {
+    @apply h-32 w-32 rounded-full object-cover transition-transform duration-200 hover:scale-105 max-md:h-24 max-md:w-24;
+  }
+
+  .profile-info {
+    @apply min-w-[300px] flex-1 max-[410px]:mt-4;
+  }
+
+  .profile-title {
+    @apply text-2xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl;
+  }
+
+  .profile-subtitle {
+    @apply mt-2 h-4 text-xl text-gray-700 dark:text-gray-300 sm:text-2xl;
+  }
+
+  .profile-slogan {
+    @apply mt-4 text-wrap text-sm text-gray-600 dark:text-gray-400 sm:text-base;
+  }
+
+  .featured-blogs-section {
+    @apply mt-12 border border-gray-100 bg-white/60 p-6 backdrop-blur-sm transition-all duration-200 dark:bg-gray-900/90;
+  }
+
+  .section-header {
+    @apply rounded-lg p-6 pt-0 backdrop-blur-sm transition-all duration-200 dark:border-gray-800 dark:bg-gray-900/90;
+  }
+
+  .section-title {
+    @apply text-xl font-medium text-gray-900 dark:text-gray-100;
+  }
+
+  .section-description {
+    @apply mt-2 text-sm text-gray-600 dark:text-gray-400;
+  }
+
+  .blogs-container {
+    @apply space-y-4;
+  }
+
+  .blog-card {
+    @apply block w-full transition-all duration-200;
+  }
+
+  .blog-card-inner {
+    @apply rounded-lg border border-gray-100 bg-white/90 p-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+  }
+
+  .blog-title {
+    @apply text-base font-medium text-gray-900 dark:text-gray-100;
+  }
+
+  .blog-date {
+    @apply mt-1 block text-xs text-gray-500 dark:text-gray-500;
+  }
+
+  .view-more {
+    @apply mt-6 text-right;
+  }
+
+  .view-more-link {
+    @apply inline-block rounded-lg border border-gray-100 bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:text-blue-600 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-blue-400;
   }
 </style>

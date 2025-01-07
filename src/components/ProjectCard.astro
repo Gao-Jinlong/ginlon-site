@@ -5,28 +5,56 @@ import Button from '../components/BtnProject.astro';
 import Technologies from '../components/Technologies.astro';
 ---
 
-<div class="flex flex-col sm:flex-row items-center mb-12">
-  <div class="flex-shrink-0 mb-4 sm:mb-0 sm:mr-4">
-    <Image
-      src={imgSrc}
-      alt={imgAlt}
-      class="w-[300px] h-[250px] object-cover grayscale hover:filter-none"
-      width={300}
-      height={250}
-    />
-  </div>
-  <div class="flex-1">
-    <h3
-      class="text-base lg:text-xl xl:text-2xl mb-4 text-gray-800 dark:text-gray-300"
-    >
-      {title}
-    </h3>
-    <p
-      class="text-xs sm:text-sm lg:text-base mb-4 text-gray-700 dark:text-gray-400"
-    >
-      {description}
-    </p>
-    <Technologies technologies={technologies} />
-    <Button text="Website" href={href} />
+<div class="project-card">
+  <div class="project-card-inner">
+    <div class="project-image-container">
+      <Image
+        src={imgSrc}
+        alt={imgAlt}
+        class="project-image"
+        width={300}
+        height={250}
+      />
+    </div>
+    <div class="project-content">
+      <h3 class="project-title">
+        {title}
+      </h3>
+      <p class="project-description">
+        {description}
+      </p>
+      <Technologies technologies={technologies} />
+      <Button text="Website" href={href} />
+    </div>
   </div>
 </div>
+
+<style>
+  .project-card {
+    @apply mb-8 w-full transition-all duration-200;
+  }
+
+  .project-card-inner {
+    @apply overflow-hidden rounded-lg border border-gray-100 bg-white/90 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+  }
+
+  .project-image-container {
+    @apply w-full;
+  }
+
+  .project-image {
+    @apply h-[250px] w-full object-cover grayscale transition-all duration-300 hover:filter-none;
+  }
+
+  .project-content {
+    @apply p-6;
+  }
+
+  .project-title {
+    @apply mb-3 text-lg font-medium text-gray-900 dark:text-gray-100;
+  }
+
+  .project-description {
+    @apply mb-4 text-sm text-gray-600 dark:text-gray-400;
+  }
+</style>

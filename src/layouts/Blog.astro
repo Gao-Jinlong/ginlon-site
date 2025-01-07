@@ -5,37 +5,42 @@ import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
 import { t } from 'astro-i18n';
 import dayjs from 'dayjs';
+import TableOfContents from '../components/TableOfContents.astro';
 
-const { title, subtitle, poster, createdAt } = Astro.props.frontmatter;
+const { title, subtitle, poster, createdAt, lastModified } =
+  Astro.props.frontmatter;
 
 const blogs = await getBlogs();
 const otherBlogs = blogs.filter(({ data }) => {
   return title !== data.title;
 });
+
+// 获取文章中的所有标题
+const headings = await Astro.props.headings;
 ---
 
 <Main pageTitle={title}>
   <header
-    class="animate relative w-full h-64 bg-gray-800 flex items-center justify-center mb-4"
+    class="animate relative mb-4 flex h-64 w-full items-center justify-center bg-gray-800"
   >
     <Image
       src={`${poster}`}
       alt="Poster image"
       width={1024}
       height={480}
-      class="absolute inset-0 w-full h-full object-cover opacity-50"
+      class="absolute inset-0 h-full w-full object-cover opacity-50"
     />
     <div class="relative z-10 text-center">
-      <h1 class="text-4xl font-bold text-white dark:text-grey-900">
+      <h1 class="dark:text-grey-900 text-4xl font-bold text-white">
         {title}
       </h1>
       {
         subtitle && (
-          <h2 class="text-2xl text-gray-300 dark:text-grey-600">{subtitle}</h2>
+          <h2 class="dark:text-grey-600 text-2xl text-gray-300">{subtitle}</h2>
         )
       }
     </div>
-    <div class="flex absolute w-full bottom-0 text-gray-300 text-sm px-2 py-1">
+    <div class="absolute bottom-0 flex w-full px-2 py-1 text-sm text-gray-300">
       <div class="flex-1"></div>
       <div class="w-auto">
         {t('blogs.createdAt')}:
@@ -45,10 +50,15 @@ const otherBlogs = blogs.filter(({ data }) => {
   </header>
 
   <div class="animate container mx-auto px-4 lg:px-8">
-    <article class="prose dark:prose-invert">
+    <article class="prose mx-auto dark:prose-invert">
       <slot />
+      <div class="mt-8 text-sm text-gray-500 dark:text-gray-400">
+        {t('blogs.lastModified')}:
+        {dayjs(lastModified).format('YYYY-MM-DD HH:mm')}
+      </div>
     </article>
-  </div>
 
-  <RecentPosts blogs={otherBlogs} />
+    <RecentPosts blogs={otherBlogs} />
+  </div>
+  {headings.length > 0 && <TableOfContents headings={headings} />}
 </Main>

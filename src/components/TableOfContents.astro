@@ -1,0 +1,76 @@
+---
+import { t } from 'astro-i18n';
+
+interface Props {
+  headings: {
+    depth: number;
+    slug: string;
+    text: string;
+  }[];
+}
+
+const { headings } = Astro.props;
+
+// 只显示前三级标题
+const filteredHeadings = headings.filter(heading => heading.depth <= 4);
+---
+
+<nav class="toc">
+  <div class="toc-container">
+    <h2 class="toc-title">{t('blogs.tableOfContents')}</h2>
+    <ul class="toc-list">
+      {
+        filteredHeadings.map(heading => (
+          <li class:list={['toc-item', `depth-${heading.depth}`]}>
+            <a href={`#${heading.slug}`} class="toc-link">
+              {heading.text}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .toc {
+    @apply fixed right-8 top-32 z-10 hidden w-60 lg:block;
+    max-height: calc(100vh - 12rem);
+  }
+
+  .toc-container {
+    @apply overflow-y-auto rounded-lg border border-gray-100 bg-white/90 p-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+    max-height: inherit;
+  }
+
+  .toc-title {
+    @apply mb-3 text-base font-medium text-gray-900 dark:text-gray-100;
+  }
+
+  .toc-list {
+    @apply space-y-1.5;
+  }
+
+  .toc-item {
+    @apply text-sm transition-colors;
+  }
+
+  .toc-link {
+    @apply block rounded px-2 py-1 text-gray-600 transition-colors hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-gray-800/60 dark:hover:text-blue-400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .depth-1 {
+    @apply font-medium;
+  }
+
+  .depth-2 {
+    @apply pl-3;
+  }
+
+  .depth-3 {
+    @apply pl-6 text-xs;
+  }
+</style>

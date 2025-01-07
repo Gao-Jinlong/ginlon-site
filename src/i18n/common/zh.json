@@ -2,11 +2,17 @@
   "blogs": {
     "titre": "blogs",
     "recentPosts": "最近文章",
-    "createdAt": "创建于"
+    "createdAt": "创建于",
+    "lastModified": "最后更新",
+    "tableOfContents": "目录"
   },
   "homepage": {
     "hello": "你好, 我是 Ginlon",
-    "briefs": ["一名前端工程师", "编程爱好者", "持续学习者"],
+    "briefs": [
+      "一名前端工程师",
+      "编程爱好者",
+      "持续学习者"
+    ],
     "slogan": "绝知此事，定要躬行",
     "featuredBlogs": {
       "title": "最近文章",

@@ -2,36 +2,31 @@
 export type Props = {
   to: string;
   title: string;
-  gradientFrom: string;
-  gradientTo: string;
+  gradientFrom?: string;
+  gradientTo?: string;
 };
 
 const { to, title } = Astro.props;
 ---
 
-<a
-  href={`${import.meta.env.BASE_URL}${to}`}
-  class={`card rounded-md transition-transform duration-200 ease-in-out bg-gray-100 `}
->
-  <div class="card-inner bg-red flex flex-col rounded-md p-6 dark:bg-[#18181b]">
-    <div class="card-title text-lg font-medium leading-7 dark:text-gray-100">
+<a href={`${import.meta.env.BASE_URL}${to}`} class="card">
+  <div class="card-inner">
+    <div class="card-title">
       {title}
     </div>
-    <!-- <div class="flex items-center justify-between mt-4">
-      <div class="card-footer text-gray-900 dark:text-gray-100 text-sm">
-        &rarr;
-      </div>
-    </div> -->
   </div>
 </a>
 
 <style>
-  @keyframes rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+  .card {
+    @apply block w-full transition-all duration-200;
+  }
+
+  .card-inner {
+    @apply rounded-lg border border-gray-100 bg-white/90 p-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:bg-gray-50 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700 dark:hover:bg-gray-800/60;
+  }
+
+  .card-title {
+    @apply text-base font-medium text-gray-900 dark:text-gray-100;
   }
 </style>
