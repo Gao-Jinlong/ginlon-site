@@ -1,9 +1,17 @@
 ---
 import { createGetStaticPaths } from 'astro-i18n';
-import { getCollection } from 'astro:content';
 import { getBlogs } from '../../utils/getBlogs';
 
-type Blogs = Awaited<ReturnType<typeof getCollection>>;
+interface BlogData {
+  data: {
+    title: string;
+    subtitle?: string;
+    permalink: string;
+    createdAt: string;
+    lastModified?: string;
+    tags?: string[];
+  };
+}
 
 export const getStaticPaths = createGetStaticPaths(async () => {
   const blogs = await getBlogs();
@@ -15,7 +23,7 @@ export const getStaticPaths = createGetStaticPaths(async () => {
 });
 
 const { article } = Astro.props as {
-  article: Blogs[number];
+  article: BlogData;
 };
 // @ts-ignore
 const { Content } = await article.render();

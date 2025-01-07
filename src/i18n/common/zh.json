@@ -4,14 +4,16 @@
     "recentPosts": "最近文章",
     "createdAt": "创建于",
     "lastModified": "最后更新",
-    "tableOfContents": "目录"
+    "tableOfContents": "目录",
+    "pageName": "博客文章",
+    "subtitle": "好记性不如烂...键盘~"
   },
   "homepage": {
     "hello": "你好, 我是 Ginlon",
     "briefs": [
-      "一名前端工程师",
-      "编程爱好者",
-      "持续学习者"
+      "会点代码的工程师",
+      "没干过产品经理的自封产品",
+      "功利的读书爱好者"
     ],
     "slogan": "绝知此事，定要躬行",
     "featuredBlogs": {
@@ -21,6 +23,7 @@
   },
   "navigation": {
     "home": "首页",
+    "blogs": "博客",
     "about": "关于",
     "projects": "项目",
     "contact": "联系"

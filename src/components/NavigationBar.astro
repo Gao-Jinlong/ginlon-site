@@ -2,99 +2,90 @@
 import ThemeToggler from '../components/ThemeToggler.astro';
 import { t } from 'astro-i18n';
 
-const links = [{ href: '', label: t('navigation.home') }];
+const links = [
+  { href: '', label: t('navigation.home') },
+  { href: 'blogs', label: t('navigation.blogs') },
+  { href: 'projects', label: t('navigation.projects') },
+  { href: 'about', label: t('navigation.about') },
+];
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
   const url = `${import.meta.env.BASE_URL}${href}`.replace(/\/*$/, '');
-
   return url === pathname || url === pathname.replace(/\/*$/, '');
 };
 ---
 
-<nav
-  class="nav relative sticky top-0 z-10 flex py-4 px-4 justify-between items-center"
->
-  <div class="nav-bg"></div>
-  <ul class="flex flex-wrap p-0 m-0">
-    {
-      links.map(({ href, label }) => (
-        <li class="opacity-80 list-none text-[0.95rem]">
-          <a
-            href={`${import.meta.env.BASE_URL}${href}`}
-            class={[
-              isActive(href)
-                ? 'active-link'
-                : 'hover:text-rose hover:border-rose transition-all duration-300',
-              `px-4 py-2 rounded-lg no-underline text-grey-400 border border-transparent`,
-            ].join(' ')}
-          >
-            {label}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-  <ThemeToggler />
+<nav class="nav-container">
+  <div class="nav-content">
+    <ul class="nav-links">
+      {
+        links.map(({ href, label }) => (
+          <li class="nav-item">
+            <a
+              href={`${import.meta.env.BASE_URL}${href}`}
+              class:list={['nav-link', isActive(href) && 'nav-link-active']}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <ThemeToggler />
+  </div>
+  <div class="nav-backdrop"></div>
 </nav>
 
 <style>
-  .nav-bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-
-    --progress: 0;
-    background-image: linear-gradient(
-      to bottom,
-      var(--bg-grey-100),
-      var(--bg-grey-100)
-    );
-    mask-image: linear-gradient(
-      90deg,
-      white 0%,
-      rgba(255, 255, 255, 1) calc(100% * var(--progress)),
-      transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      90deg,
-      white 0%,
-      rgba(255, 255, 255, var(--progress)) calc(100% * var(--progress)),
-      transparent 100%
-    );
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* @apply shadow-xl; */
+  .nav-container {
+    @apply sticky top-0 z-50;
   }
-  .nav {
-    --progress: 0;
 
-    box-shadow:
-      0 20px 25px -5px rgb(0 0 0 / calc(0.1 * var(--progress))),
-      0 8px 10px -6px rgb(0 0 0 / calc(0.1 * var(--progress)));
+  .nav-content {
+    @apply relative z-10 mx-auto flex max-w-4xl items-center justify-between px-4 py-4;
+  }
+
+  .nav-backdrop {
+    @apply absolute inset-0 bg-white/80 backdrop-blur-sm transition-all duration-200 dark:bg-gray-900/80;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+  }
+
+  .nav-links {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .nav-item {
+    @apply list-none;
+  }
+
+  .nav-link {
+    @apply rounded-lg border border-transparent px-3 py-1.5 text-sm text-gray-600 transition-all duration-200 hover:border-gray-200 hover:bg-white/90 hover:text-blue-600 hover:shadow-sm dark:text-gray-400 dark:hover:border-gray-700 dark:hover:bg-gray-800/60 dark:hover:text-blue-400;
+  }
+
+  .nav-link-active {
+    @apply border-gray-200 bg-white/90 text-blue-600 shadow-sm dark:border-gray-700 dark:bg-gray-800/60 dark:text-blue-400;
   }
 </style>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/all';
+  // import gsap from 'gsap';
+  // import { ScrollTrigger } from 'gsap/all';
 
-  document.addEventListener('astro:page-load', () => {
-    const nav = document.querySelector('.nav');
-    const navBackground = document.querySelector('.nav-bg');
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.create({
-      trigger: 'body',
-      start: `+=10`,
-      end: `+=${navBackground?.clientHeight ?? 90}`,
-      onUpdate: self => {
-        const { progress } = self;
-        if (navBackground instanceof HTMLElement) {
-          navBackground.style.setProperty('--progress', String(progress));
-        }
-        if (nav instanceof HTMLElement) {
-          nav.style.setProperty('--progress', String(progress));
-        }
-      },
-    });
-  });
+  // document.addEventListener('astro:page-load', () => {
+  //   const navBackdrop = document.querySelector('.nav-backdrop');
+  //   gsap.registerPlugin(ScrollTrigger);
+
+  //   ScrollTrigger.create({
+  //     trigger: 'body',
+  //     start: '+=10',
+  //     end: '+=90',
+  //     onUpdate: self => {
+  //       if (navBackdrop instanceof HTMLElement) {
+  //         navBackdrop.style.opacity = String(self.progress);
+  //         navBackdrop.style.backdropFilter = `blur(${self.progress * 8}px)`;
+  //       }
+  //     },
+  //   });
+  // });
 </script>

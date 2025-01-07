@@ -1,7 +1,6 @@
 ---
 import { l, t } from 'astro-i18n';
 import Main from '../layouts/Main.astro';
-import SectionNavigation from '../components/SectionNavigation.astro';
 import BriefText from '../components/BriefText.vue';
 import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
@@ -44,7 +43,7 @@ const routeName = t('blogs.titre');
     </div>
   </div>
 
-  <SectionNavigation />
+  <!-- <SectionNavigation /> -->
 
   <div class="featured-blogs-section">
     <div class="section-header">
@@ -92,7 +91,7 @@ const routeName = t('blogs.titre');
   }
 
   .profile-card {
-    @apply flex flex-wrap items-center gap-8 rounded-lg border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+    @apply flex flex-wrap items-center gap-8 border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
   }
 
   .profile-avatar {
@@ -108,19 +107,19 @@ const routeName = t('blogs.titre');
   }
 
   .profile-subtitle {
-    @apply mt-2 h-4 text-xl text-gray-700 dark:text-gray-300 sm:text-2xl;
+    @apply mt-2 text-xl text-gray-700 dark:text-gray-300 sm:text-2xl;
   }
 
   .profile-slogan {
-    @apply mt-4 text-wrap text-sm text-gray-600 dark:text-gray-400 sm:text-base;
+    @apply text-wrap pt-1 text-sm text-gray-600 dark:text-gray-400 sm:text-base;
   }
 
   .featured-blogs-section {
-    @apply mt-12 border border-gray-100 bg-white/60 p-6 backdrop-blur-sm transition-all duration-200 dark:bg-gray-900/90;
+    @apply mt-12 border border-gray-100 bg-white/60 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
   }
 
   .section-header {
-    @apply rounded-lg p-6 pt-0 backdrop-blur-sm transition-all duration-200 dark:border-gray-800 dark:bg-gray-900/90;
+    @apply p-6 transition-all duration-200 dark:border-gray-800;
   }
 
   .section-title {
