@@ -67,7 +67,7 @@ const headings = await Astro.props.headings;
               lastModified && (
                 <div class="last-modified">
                   {t('blogs.lastModified')}:
-                  {dayjs(lastModified).format('YYYY-MM-DD HH:mm')}
+                  {dayjs(lastModified).format('YYYY-MM-DD HH:mm Z')}
                 </div>
               )
             }
