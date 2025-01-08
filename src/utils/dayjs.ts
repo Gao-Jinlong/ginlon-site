@@ -7,7 +7,7 @@ _dayjs.extend(utc);
 _dayjs.extend(timezone);
 _dayjs.locale(zh);
 
-const format = 'YYYY-MM-DD HH:mm dddd';
+const format = 'YYYY-MM-DD HH:mm dddd Z';
 const dayjs = (time: string) => _dayjs(time).utcOffset(8);
 
 export { format, dayjs };
