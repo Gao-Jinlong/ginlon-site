@@ -6,20 +6,15 @@ import { getBlogs } from '../utils/getBlogs';
 import { t } from 'astro-i18n';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import TableOfContents from '../components/TableOfContents.astro';
 
+dayjs.extend(timezone);
 dayjs.extend(utc);
+dayjs.tz.setDefault('Asia/Shanghai');
 
-const {
-  title,
-  subtitle,
-  poster,
-  posterDescription,
-  createdAt,
-  lastModified: utcTime,
-} = Astro.props.frontmatter;
-
-const lastModified = dayjs(utcTime).utc().format('HH:mm:ss DD MMMM YYYY UTC');
+const { title, subtitle, poster, posterDescription, createdAt, lastModified } =
+  Astro.props.frontmatter;
 
 const blogs = await getBlogs();
 const otherBlogs = blogs.filter(({ data }) => {
