@@ -1,6 +1,6 @@
 ---
 import { t } from 'astro-i18n';
-import dayjs from 'dayjs';
+import { dayjs, format } from '../utils/dayjs';
 
 interface BlogData {
   data: {
@@ -32,7 +32,7 @@ const routeName = t('blogs.titre');
               <span class="recent-post-title">{title}</span>
               {createdAt && (
                 <span class="recent-post-date">
-                  {dayjs(createdAt).format('YYYY-MM-DD')}
+                  {dayjs(createdAt).format(format)}
                 </span>
               )}
             </a>

@@ -4,8 +4,7 @@ import Main from '../layouts/Main.astro';
 import BriefText from '../components/BriefText.vue';
 import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
-import dayjs from 'dayjs';
-
+import { dayjs, format } from '../utils/dayjs';
 const sortedBlogs = await getBlogs();
 const routeName = t('blogs.titre');
 ---
@@ -68,7 +67,7 @@ const routeName = t('blogs.titre');
               <h4 class="blog-title">{blog.data.title}</h4>
               {blog.data.createdAt && (
                 <span class="blog-date">
-                  {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
+                  {dayjs(blog.data.createdAt).format(format)}
                 </span>
               )}
             </div>

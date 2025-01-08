@@ -4,14 +4,8 @@ import Main from './Main.astro';
 import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
 import { t } from 'astro-i18n';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import TableOfContents from '../components/TableOfContents.astro';
-
-dayjs.extend(timezone);
-dayjs.extend(utc);
-dayjs.tz.setDefault('Asia/Shanghai');
+import { dayjs, format } from '../utils/dayjs';
 
 const { title, subtitle, poster, posterDescription, createdAt, lastModified } =
   Astro.props.frontmatter;
@@ -35,9 +29,7 @@ const headings = await Astro.props.headings;
             {subtitle && <h2 class="article-subtitle">{subtitle}</h2>}
             <div class="article-meta">
               <time class="article-date">
-                {t('blogs.createdAt')}: {
-                  dayjs(createdAt).format('YYYY-MM-DD HH:mm')
-                }
+                {t('blogs.createdAt')}: {dayjs(createdAt).format(format)}
               </time>
             </div>
           </div>
@@ -66,8 +58,7 @@ const headings = await Astro.props.headings;
             {
               lastModified && (
                 <div class="last-modified">
-                  {t('blogs.lastModified')}:
-                  {dayjs(lastModified).format('YYYY-MM-DD HH:mm Z')}
+                  {t('blogs.lastModified')}:{dayjs(lastModified).format(format)}
                 </div>
               )
             }

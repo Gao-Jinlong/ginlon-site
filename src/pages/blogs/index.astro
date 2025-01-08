@@ -2,7 +2,7 @@
 import { t, l } from 'astro-i18n';
 import Main from '../../layouts/Main.astro';
 import { getBlogs } from '../../utils/getBlogs';
-import dayjs from 'dayjs';
+import { format, dayjs } from '../../utils/dayjs';
 
 interface BlogData {
   data: {
@@ -42,7 +42,7 @@ const routeName = t('blogs.titre');
               <div class="blog-meta">
                 {blog.data.createdAt && (
                   <span class="blog-date">
-                    {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
+                    {dayjs(blog.data.createdAt).format(format)}
                   </span>
                 )}
                 {blog.data.tags && (
