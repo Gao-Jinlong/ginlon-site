@@ -5,10 +5,21 @@ import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
 import { t } from 'astro-i18n';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import TableOfContents from '../components/TableOfContents.astro';
 
-const { title, subtitle, poster, createdAt, lastModified } =
-  Astro.props.frontmatter;
+dayjs.extend(utc);
+
+const {
+  title,
+  subtitle,
+  poster,
+  posterDescription,
+  createdAt,
+  lastModified: utcTime,
+} = Astro.props.frontmatter;
+
+const lastModified = dayjs(utcTime).utc().format('HH:mm:ss DD MMMM YYYY UTC');
 
 const blogs = await getBlogs();
 const otherBlogs = blogs.filter(({ data }) => {
@@ -20,46 +31,165 @@ const headings = await Astro.props.headings;
 ---
 
 <Main pageTitle={title}>
-  <!-- TODO 样式调整，标题独立成行，图片可附加一条说明，背景色 -->
-  <header
-    class="animate relative mb-4 flex h-64 w-full items-center justify-center bg-gray-800"
-  >
-    <Image
-      src={`${poster}`}
-      alt="Poster image"
-      width={1024}
-      height={480}
-      class="absolute inset-0 h-full w-full object-cover opacity-50"
-    />
-    <div class="relative z-10 text-center">
-      <h1 class="dark:text-grey-900 text-4xl font-bold text-white">
-        {title}
-      </h1>
-      {
-        subtitle && (
-          <h2 class="dark:text-grey-600 text-2xl text-gray-300">{subtitle}</h2>
-        )
-      }
-    </div>
-    <div class="absolute bottom-0 flex w-full px-2 py-1 text-sm text-gray-300">
-      <div class="flex-1"></div>
-      <div class="w-auto">
-        {t('blogs.createdAt')}:
-        {dayjs(createdAt).format('YYYY-MM-DD HH:mm')}
+  <article class="blog-article">
+    <div class="article-container">
+      <div class="article-main">
+        <header class="article-header">
+          <div class="header-text">
+            <h1 class="article-title">{title}</h1>
+            {subtitle && <h2 class="article-subtitle">{subtitle}</h2>}
+            <div class="article-meta">
+              <time class="article-date">
+                {t('blogs.createdAt')}: {
+                  dayjs(createdAt).format('YYYY-MM-DD HH:mm')
+                }
+              </time>
+            </div>
+          </div>
+
+          <div class="cover-container">
+            <div class="cover-image">
+              <Image
+                src={`${poster}`}
+                alt="Poster image"
+                width={1024}
+                height={480}
+                class="poster-image"
+              />
+            </div>
+            {
+              posterDescription && (
+                <div class="cover-description">{posterDescription}</div>
+              )
+            }
+          </div>
+        </header>
+
+        <div class="content-wrapper">
+          <div class="article-content prose dark:prose-invert">
+            <slot />
+            {
+              lastModified && (
+                <div class="last-modified">
+                  {t('blogs.lastModified')}:
+                  {dayjs(lastModified).format('YYYY-MM-DD HH:mm')}
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        <footer class="article-footer">
+          <RecentPosts blogs={otherBlogs} />
+        </footer>
       </div>
     </div>
-  </header>
 
-  <div class="animate container mx-auto px-4 lg:px-8">
-    <article class="prose mx-auto dark:prose-invert">
-      <slot />
-      <div class="mt-8 text-sm text-gray-500 dark:text-gray-400">
-        {t('blogs.lastModified')}:
-        {dayjs(lastModified).format('YYYY-MM-DD HH:mm')}
-      </div>
-    </article>
-
-    <RecentPosts blogs={otherBlogs} />
-  </div>
-  {headings.length > 0 && <TableOfContents headings={headings} />}
+    {headings.length > 0 && <TableOfContents headings={headings} />}
+  </article>
 </Main>
+
+<style>
+  .blog-article {
+    @apply relative mx-auto max-w-4xl;
+  }
+
+  .article-container {
+    @apply relative flex gap-8;
+  }
+
+  .article-main {
+    @apply mt-6 w-full rounded-lg border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/90;
+  }
+
+  .article-header {
+    @apply mb-6;
+  }
+
+  .header-text {
+    @apply mb-6 border-b border-gray-100 pb-4 dark:border-gray-800;
+  }
+
+  .article-title {
+    @apply text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100;
+  }
+
+  .article-subtitle {
+    @apply mt-2 text-xl font-normal leading-relaxed text-gray-600 dark:text-gray-400;
+  }
+
+  .article-meta {
+    @apply mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500;
+  }
+
+  .article-date {
+    @apply flex items-center gap-1;
+  }
+
+  .cover-container {
+    @apply overflow-hidden rounded-lg border border-gray-100 dark:border-gray-800;
+  }
+
+  .cover-image {
+    @apply relative h-64 w-full overflow-hidden bg-gray-800;
+  }
+
+  .poster-image {
+    @apply h-full w-full object-cover transition-all duration-300 hover:scale-105;
+  }
+
+  .cover-description {
+    @apply border-t border-gray-100 bg-white/50 p-3 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-400;
+  }
+
+  .content-wrapper {
+    @apply mt-8;
+  }
+
+  .article-content {
+    @apply prose prose-lg mx-auto w-full dark:prose-invert;
+  }
+
+  .last-modified {
+    @apply mt-8 text-right text-sm text-gray-500 dark:text-gray-500;
+  }
+
+  .article-footer {
+    @apply mt-12;
+  }
+
+  /* 移动端适配 */
+  @media (max-width: 768px) {
+    .article-main {
+      @apply p-4;
+    }
+
+    .header-text {
+      @apply mb-4 pb-3;
+    }
+
+    .article-title {
+      @apply text-2xl;
+    }
+
+    .article-subtitle {
+      @apply text-lg;
+    }
+
+    .article-meta {
+      @apply mt-3;
+    }
+
+    .cover-image {
+      @apply h-48;
+    }
+
+    .cover-description {
+      @apply p-2 text-xs;
+    }
+
+    .content-wrapper {
+      @apply mt-6;
+    }
+  }
+</style>

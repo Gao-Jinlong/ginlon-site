@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
 
 import netlify from '@astrojs/netlify';
+import { remarkModifiedTime } from './src/plugins/remark-modified-time';
 
 // https://docs.astro.build/en/reference/configuration-reference/
 
@@ -38,6 +39,8 @@ export default defineConfig({
     },
   },
 
-  markdown: {},
+  markdown: {
+    remarkPlugins: [remarkModifiedTime],
+  },
   adapter: netlify(),
 });

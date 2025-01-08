@@ -5,8 +5,8 @@ import { t } from 'astro-i18n';
 const links = [
   { href: '', label: t('navigation.home') },
   { href: 'blogs', label: t('navigation.blogs') },
-  { href: 'projects', label: t('navigation.projects') },
-  { href: 'about', label: t('navigation.about') },
+  // { href: 'projects', label: t('navigation.projects') },
+  // { href: 'about', label: t('navigation.about') },
 ];
 
 const { pathname } = Astro.url;
@@ -43,11 +43,11 @@ const isActive = (href: string) => {
   }
 
   .nav-content {
-    @apply relative z-10 mx-auto flex max-w-4xl items-center justify-between px-4 py-4;
+    @apply relative z-10 mx-auto flex max-w-4xl items-center justify-between rounded-b-lg bg-white/80 px-4 py-4 dark:bg-gray-900/80;
   }
 
   .nav-backdrop {
-    @apply absolute inset-0 bg-white/80 backdrop-blur-sm transition-all duration-200 dark:bg-gray-900/80;
+    @apply absolute inset-0 backdrop-blur-sm transition-all duration-200;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
   }
 
