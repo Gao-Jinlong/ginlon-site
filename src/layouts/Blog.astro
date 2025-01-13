@@ -33,23 +33,25 @@ const headings = await Astro.props.headings;
               </time>
             </div>
           </div>
+          {
+            poster && (
+              <div class="cover-container">
+                <div class="cover-image">
+                  <Image
+                    src={`${poster}`}
+                    alt="Poster image"
+                    width={1024}
+                    height={480}
+                    class="poster-image"
+                  />
+                </div>
 
-          <div class="cover-container">
-            <div class="cover-image">
-              <Image
-                src={`${poster}`}
-                alt="Poster image"
-                width={1024}
-                height={480}
-                class="poster-image"
-              />
-            </div>
-            {
-              posterDescription && (
-                <div class="cover-description">{posterDescription}</div>
-              )
-            }
-          </div>
+                {posterDescription && (
+                  <div class="cover-description">{posterDescription}</div>
+                )}
+              </div>
+            )
+          }
         </header>
 
         <div class="content-wrapper">
