@@ -47,6 +47,11 @@
     scroll-margin-top: 6rem;
   }
 
+  h4 {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
   .text-rose-custom {
     color: var(--clr-rose);
   }
