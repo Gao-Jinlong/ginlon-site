@@ -6,7 +6,7 @@ import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
 import { dayjs, format } from '../utils/dayjs';
 const sortedBlogs = await getBlogs();
-const routeName = t('blogs.titre');
+const routeName = 'blogs'
 ---
 
 <Main pageTitle="Home">
