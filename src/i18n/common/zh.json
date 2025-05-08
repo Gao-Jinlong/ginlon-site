@@ -1,6 +1,6 @@
 {
   "blogs": {
-    "titre": "blogs",
+    "titre": "博客",
     "recentPosts": "最近文章",
     "createdAt": "创建于",
     "lastModified": "最后更新",
@@ -9,16 +9,17 @@
     "subtitle": "好记性不如烂...键盘~"
   },
   "homepage": {
-    "hello": "你好, 我是 Ginlon",
+    "hello": "你好，我是 Ginlon",
     "briefs": [
-      "会点代码的工程师",
-      "没干过产品经理的自封产品",
+      "一个全干工程师",
+      "刚入门的产品负责人",
       "功利的读书爱好者"
     ],
     "slogan": "绝知此事，定要躬行",
+    "personalMission": "个体生命的全部意义，在于它能否成为另一段生命的火引",
     "featuredBlogs": {
       "title": "最近文章",
-      "brief": "这里展示了我的最近的文章，反应了我最近在思考或者解决的问题。"
+      "brief": "所有经验，都是可以传递的火种"
     }
   },
   "navigation": {

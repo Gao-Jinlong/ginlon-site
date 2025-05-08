@@ -2,23 +2,29 @@
   "blogs": {
     "titre": "blogs",
     "recentPosts": "Recent Posts",
-    "createdAt": "Created At"
+    "createdAt": "Created At",
+    "lastModified": "Last Modified",
+    "tableOfContents": "Table of Contents",
+    "pageName": "Blog Posts",
+    "subtitle": "A short pencil is better than a long memory."
   },
   "homepage": {
-    "hello": "Hello, I'm Ginlon",
+    "hello": "Hi, I'm Ginlon",
     "briefs": [
       "A Frontend Engineer",
       "Coding Enthusiast",
       "Continuous Learner"
     ],
     "slogan": "The only way to know for sure is to try.",
+    "personalMission": "The value of an individual life lies in whether it can serve as the spark for another life",
     "featuredBlogs": {
-      "title": "my blogs",
-      "brief": "Here, in reverse chronological order, is my blog column, which is also a trace of my growing up."
+      "title": "Recent Posts",
+      "brief": "All experiences are sparks that can be passed on"
     }
   },
   "navigation": {
     "home": "Home",
+    "blogs": "Blogs",
     "about": "About",
     "projects": "Projects",
     "contact": "Contact"

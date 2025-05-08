@@ -16,13 +16,13 @@ draft: true
 场景：假设我们正在开发一个企业级文档管理系统。在这个系统中有基本的需求如下：
 
 - 企业内部分为多个不同部门
-- 部门内的员工可访问部门内的公开文档，非部门成员则不可访问部门内的文档
+- **部门内的员工可访问部门内的公开文档，非部门成员则不可访问部门内的文档**
 - 文档本身包含密级（秘密、机密、绝密），不同密级的文档需要不同权限的员工才能访问
 - 文档创建者本身拥有文档的完整权限
 
 部门： 研发部门、产品部门、经理办公室
 
-员工： 
+员工：
 
 - 研发部门： 研发 A, 研发 B, 研发 C
 - 产品部门： 产品 A, 产品 B, 产品 C
@@ -50,7 +50,7 @@ draft: true
 
 基于角色的访问控制，易于批量管理，实现相对简单，
 
-实现思路是用户和权限的分离，通过新加角色中间层实现权限的批量编辑，例如： 
+实现思路是用户和权限的分离，通过新加角色中间层实现权限的批量编辑，例如：
 
 系统中可以包含一个角色**研发部员工**，同时将所有研发部门的基本说明文档的访问权限配置给这个角色，
 
@@ -66,7 +66,7 @@ draft: true
 
 在一个大型系统中，不同部门、职位和权限组合可能导致成千上万的角色，增加了管理负担，例如：
 
-研发部门分为三个项目组，每个项目组中的文档又分为三个密级，此时研发部门将拥有 3 * 3 = 9 个角色
+研发部门分为三个项目组，每个项目组中的文档又分为三个密级，此时研发部门将拥有 3 \* 3 = 9 个角色
 
 可以看到角色的数量随着判别条件的增加是指数级增长的，这很容易导致角色数量爆炸
 
@@ -78,9 +78,7 @@ draft: true
 
 又比如，为了保证信息安全，绝密文档只能在公司内网的 ip 时才能访问，在这种场景下 RBAC 就会失效，无法表达这个权限
 
-
 ...
-
 
 RBAC 还有许多变体，弥补了 RBAC 本身的一些缺陷，但是基于角色的表达方式本身的缺陷始终制约着 RBAC 的灵活性
 
@@ -118,38 +116,47 @@ ABAC 是一种动态的访问控制模型，通过评估主体（用户）、资
 
 ```typescript
 interface User {
-role: string;
-department: string;
+  role: string;
+  department: string;
 }
 
 interface Resource {
-type: string;
-owner: string;
+  type: string;
+  owner: string;
 }
 
 interface Environment {
-time: Date;
-ipAddress: string;
+  time: Date;
+  ipAddress: string;
 }
 
-function evaluatePolicy(user: User, resource: Resource, environment: Environment): boolean {
-// 示例策略：只有管理员在工作时间可以访问机密文件
-const isAdmin = user.role === "admin";
-const isConfidential = resource.type === "confidential";
-const isWorkingHours = environment.time.getHours() >= 9 && environment.time.getHours() <= 17;
+function evaluatePolicy(
+  user: User,
+  resource: Resource,
+  environment: Environment,
+): boolean {
+  // 示例策略：只有管理员在工作时间可以访问机密文件
+  const isAdmin = user.role === 'admin';
+  const isConfidential = resource.type === 'confidential';
+  const isWorkingHours =
+    environment.time.getHours() >= 9 && environment.time.getHours() <= 17;
 
-return isAdmin && isConfidential && isWorkingHours;
+  return isAdmin && isConfidential && isWorkingHours;
 }
 
-function enforceAccess(user: User, resource: Resource, environment: Environment): string {
-const isAllowed = evaluatePolicy(user, resource, environment);
-return isAllowed ? "Access granted" : "Access denied";
+function enforceAccess(
+  user: User,
+  resource: Resource,
+  environment: Environment,
+): string {
+  const isAllowed = evaluatePolicy(user, resource, environment);
+  return isAllowed ? 'Access granted' : 'Access denied';
 }
 
 // 示例调用
-const user: User = { role: "admin", department: "IT" };
-const resource: Resource = { type: "confidential", owner: "company" };
-const environment: Environment = { time: new Date(), ipAddress: "192.168.1.1" };
+const user: User = { role: 'admin', department: 'IT' };
+const resource: Resource = { type: 'confidential', owner: 'company' };
+const environment: Environment = { time: new Date(), ipAddress: '192.168.1.1' };
 
 console.log(enforceAccess(user, resource, environment)); // 输出 "Access granted" 或 "Access denied" 6. ABAC 的挑战与注意事项
 ```
@@ -158,14 +165,16 @@ console.log(enforceAccess(user, resource, environment)); // 输出 "Access grant
 
 性能开销：动态评估策略可能带来性能开销，尤其是在大规模系统中。
 
-策略管理：需要良好的策略管理工具，避免策略冲突和混乱。 
+策略管理：需要良好的策略管理工具，避免策略冲突和混乱。
 
 ## 结论
-   总结 ABAC 的优势和适用场景。
+
+总结 ABAC 的优势和适用场景。
 
 强调 ABAC 在复杂系统中的重要性。
 
 鼓励读者在实际项目中尝试 ABAC，并结合 TypeScript 进行实现。
 
 ## 参考资料
-   列出相关的文献、文档或工具，如 OASIS XACML 标准、IAM 工具等。
+
+列出相关的文献、文档或工具，如 OASIS XACML 标准、IAM 工具等。
