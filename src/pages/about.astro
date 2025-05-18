@@ -1,0 +1,157 @@
+---
+import Main from '../layouts/Main.astro';
+import { Image } from 'astro:assets';
+---
+
+<Main pageTitle="About Me">
+  <div class="about-container">
+    <!-- 个人简介 -->
+    <section class="profile-section">
+      <Image
+        class="profile-avatar"
+        src="https://avatars.githubusercontent.com/u/41514616?v=4"
+        alt="Avatar"
+        width={120}
+        height={120}
+        loading="eager"
+      />
+      <h1 class="profile-title">Ginlon</h1>
+      <h2 class="profile-subtitle">前端工程师</h2>
+      <p class="profile-description">
+        渴望一切能够实现自我价值和自我成长的事情<br>
+        技术是我实现自我价值的工具之一<br>
+      </p>
+    </section>
+
+    <!-- <section class="content-section">
+      <h2 class="section-title">工作经历</h2>
+      <div class="content-block">
+        <h3>2024.09 - 至今</h3>
+        <p>
+          xxx
+        </p>
+      </div>
+      <div class="content-block">
+        <h3>2022.08 - 2024.06</h3>
+        <p> 
+          在一家创业公司担任前端工程师，负责公司官网和内部管理系统的开发。
+          参与了公司官网的开发，负责了官网的搭建和维护。
+        </p>
+      </div>
+    </section> -->
+
+    <section class="content-section">
+      <h2 class="section-title">个人兴趣</h2>
+      <div class="content-block">
+        <h3>业务架构</h3>
+        <p>
+          探索业务架构实现，运用工程化手段提升业务效率创造价值
+        </p>
+        <p>
+          享受在工程设计中解决问题，迭代升级的过程
+        </p>
+      </div>
+      <div class="content-block">
+        <h3>丰富人生体验</h3>
+        <p>
+          阅读：享受通过阅读感受不同的人生体验，也通过阅读认识自己，找寻自我
+        </p>
+        <p>
+          影视、游戏：喜欢极致的视听艺术，层层跌进的戏剧结构，声乐的极致震撼
+        </p>
+        <p>
+          旅行：感受人文，看跨越时空亘古不变的土地，看太阳底下没有新鲜事的人间
+        </p>
+      </div>
+    </section>
+
+
+    <!-- 联系方式 -->
+    <section class="content-section">
+      <h2 class="section-title">联系方式</h2>
+      <div class="contact-links">
+        <a href="https://github.com/gao-jinlong" target="_blank" class="contact-link">
+          GitHub
+        </a>
+        <a href="mailto:ginlon5241@gmail.com" class="contact-link">
+          Email
+        </a>
+      </div>
+    </section>
+  </div>
+</Main>
+
+<style>
+  .about-container {
+    @apply mx-auto max-w-2xl space-y-12 p-6;
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    @apply dark:bg-gradient-to-br dark:from-gray-900/90 dark:to-gray-800/70;
+    @apply rounded-lg backdrop-blur-sm;
+    @apply border border-gray-100 dark:border-gray-800;
+    @apply shadow-sm;
+  }
+
+  .profile-section {
+    @apply flex flex-col items-center text-center;
+    @apply pb-8 border-b border-gray-200 dark:border-gray-700;
+  }
+
+  .profile-avatar {
+    @apply rounded-full;
+    @apply ring-4 ring-gray-100 dark:ring-gray-800;
+  }
+
+  .profile-title {
+    @apply mt-4 text-3xl font-bold text-gray-900 dark:text-gray-100;
+  }
+
+  .profile-subtitle {
+    @apply mt-2 text-xl text-gray-700 dark:text-gray-300;
+  }
+
+  .profile-description {
+    @apply mt-4 text-gray-600 dark:text-gray-400;
+    @apply leading-relaxed;
+  }
+
+  .content-section {
+    @apply space-y-6;
+  }
+
+  .content-section:last-child {
+    @apply border-b-0;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-gray-900 dark:text-gray-100;
+    @apply pb-2 border-b-2 border-blue-500 dark:border-blue-400;
+    @apply inline-block;
+  }
+
+  .content-block {
+    @apply space-y-3;
+    @apply pl-4  border-gray-200 dark:border-gray-700;
+  }
+
+  .content-block h3 {
+    @apply text-xl font-semibold text-gray-900 dark:text-gray-100;
+    @apply -ml-4;
+  }
+
+  .content-block p {
+    @apply text-gray-600 dark:text-gray-400;
+    @apply leading-relaxed;
+  }
+
+  .contact-links {
+    @apply flex gap-4;
+    @apply mt-4;
+  }
+
+  .contact-link {
+    @apply text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300;
+    @apply px-4 py-2 rounded-md;
+    @apply bg-blue-50 dark:bg-blue-900/30;
+    @apply transition-colors duration-200;
+  }
+</style> 
