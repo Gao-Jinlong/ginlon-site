@@ -19,8 +19,9 @@ interface BlogData extends CollectionEntry<'blogs'> {
 }
 
 export async function getBlogs() {
+  const isDev = process.env.NODE_ENV === 'development';
   const localizedBlogs = await getCollection('blogs', ({ data }) => {
-    return !data.draft;
+    return isDev || !data.draft;
   });
 
   const locale = astroI18n.locale;

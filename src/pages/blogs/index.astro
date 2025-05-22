@@ -15,6 +15,9 @@ interface BlogData {
 }
 
 const sortedBlogs = (await getBlogs()) as BlogData[];
+
+const drafts = sortedBlogs.filter(blog => blog.data.draft);
+const published = sortedBlogs.filter(blog => !blog.data.draft);
 const routeName = 'blogs';
 ---
 
@@ -27,7 +30,7 @@ const routeName = 'blogs';
 
     <div class="blogs-container">
       {
-        sortedBlogs.map(blog => (
+        [...drafts, ...published].map(blog => (
           <a
             class="blog-card"
             href={l(
@@ -35,7 +38,7 @@ const routeName = 'blogs';
             )}
           >
             <div class="blog-card-inner">
-              <h2 class="blog-title">{blog.data.title}</h2>
+              <h2 class="blog-title">{blog.data.draft && '🚧'}{blog.data.title}</h2>
               {blog.data.description && (
                 <p class="blog-description">{blog.data.description}</p>
               )}
