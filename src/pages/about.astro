@@ -1,6 +1,6 @@
 ---
-import Main from '../layouts/Main.astro';
-import { Image } from 'astro:assets';
+import Main from '../layouts/Main.astro'
+import { Image } from 'astro:assets'
 ---
 
 <Main pageTitle="About Me">
@@ -18,8 +18,8 @@ import { Image } from 'astro:assets';
       <h1 class="profile-title">Ginlon</h1>
       <h2 class="profile-subtitle">前端工程师</h2>
       <p class="profile-description">
-        渴望一切能够实现自我价值和自我成长的事情<br>
-        技术是我实现自我价值的工具之一<br>
+        渴望一切能够实现自我价值和自我成长的事情<br />
+        技术是我实现自我价值的工具之一<br />
       </p>
     </section>
 
@@ -40,21 +40,30 @@ import { Image } from 'astro:assets';
       </div>
     </section> -->
 
+    <!-- 价值观 -->
+    <section class="content-section">
+      <h2 class="section-title">我的价值观</h2>
+      <div class="content-block">
+        <h3>真诚</h3>
+        <p>真诚是人与人之间相互沟通、了解的基石</p>
+      </div>
+      <div class="content-block">
+        <h3>分享</h3>
+        <p>希望将我的经验分享给他人，能给他人一些启发、共鸣或另一种视角</p>
+      </div>
+    </section>
+
     <section class="content-section">
       <h2 class="section-title">个人兴趣</h2>
       <div class="content-block">
         <h3>研究业务架构</h3>
-        <p>
-          探索事物的构成本质，并通过工程手段描述事物的构成和发展过程
-        </p>
-        <p>
-          享受通过工程设计中解决问题，和系统迭代升级的过程
-        </p>
+        <p>探索事物的构成本质，并通过工程手段描述事物的构成和发展过程</p>
+        <p>享受通过工程设计中解决问题，和系统迭代升级的过程</p>
       </div>
       <div class="content-block">
         <h3>丰富人生体验</h3>
         <p>
-          阅读：享受通过阅读感受不同的人生体验，也通过阅读认识自己，找寻自我
+          阅读：享受通过阅读获得不同的人生体验，也通过阅读认识自己
         </p>
         <p>
           影视、游戏：喜欢极致的视听艺术，层层跌进的戏剧结构，声乐的极致震撼
@@ -64,34 +73,19 @@ import { Image } from 'astro:assets';
         </p>
       </div>
     </section>
-    <!-- 价值观 -->
-    <section class="content-section"> 
-      <h2 class="section-title">我的价值观</h2>
-      <div class="content-block"> 
-        <h3>真诚</h3>
-        <p>
-          真诚是人与人之间相互沟通、了解的基石
-        </p>
-      </div>
-      <div class="content-block">
-        <h3>分享</h3>
-        <p>
-          希望将我的经验分享给他人，能给他人一些启发、共鸣或另一种视角
-        </p>
-      </div>
-     
-    </section>
 
     <!-- 联系方式 -->
     <section class="content-section">
       <h2 class="section-title">联系方式</h2>
       <div class="contact-links">
-        <a href="https://github.com/gao-jinlong" target="_blank" class="contact-link">
+        <a
+          href="https://github.com/gao-jinlong"
+          target="_blank"
+          class="contact-link"
+        >
           GitHub
         </a>
-        <a href="mailto:ginlon5241@gmail.com" class="contact-link">
-          Email
-        </a>
+        <a href="mailto:ginlon5241@gmail.com" class="contact-link"> Email </a>
       </div>
     </section>
   </div>
@@ -100,7 +94,11 @@ import { Image } from 'astro:assets';
 <style>
   .about-container {
     @apply mx-auto max-w-2xl space-y-12 p-6;
-    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.7)
+    );
     @apply dark:bg-gradient-to-br dark:from-gray-900/90 dark:to-gray-800/70;
     @apply rounded-lg backdrop-blur-sm;
     @apply border border-gray-100 dark:border-gray-800;
@@ -109,7 +107,7 @@ import { Image } from 'astro:assets';
 
   .profile-section {
     @apply flex flex-col items-center text-center;
-    @apply pb-8 border-b border-gray-200 dark:border-gray-700;
+    @apply border-b border-gray-200 pb-8 dark:border-gray-700;
   }
 
   .profile-avatar {
@@ -140,13 +138,13 @@ import { Image } from 'astro:assets';
 
   .section-title {
     @apply text-2xl font-bold text-gray-900 dark:text-gray-100;
-    @apply pb-2 border-b-2 border-blue-500 dark:border-blue-400;
+    @apply border-b-2 border-blue-500 pb-2 dark:border-blue-400;
     @apply inline-block;
   }
 
   .content-block {
     @apply space-y-3;
-    @apply pl-4  border-gray-200 dark:border-gray-700;
+    @apply border-gray-200 pl-4 dark:border-gray-700;
   }
 
   .content-block h3 {
@@ -166,8 +164,9 @@ import { Image } from 'astro:assets';
 
   .contact-link {
     @apply text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300;
-    @apply px-4 py-2 rounded-md;
+    @apply rounded-md px-4 py-2;
     @apply bg-blue-50 dark:bg-blue-900/30;
     @apply transition-colors duration-200;
   }
-</style> 
+</style>
+

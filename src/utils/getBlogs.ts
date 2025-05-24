@@ -15,10 +15,26 @@ interface BlogData extends CollectionEntry<'blogs'> {
     permalink: string;
     createdAt: string;
     lastModified?: Date;
+    category: BlogCategory;
   };
 }
 
-export async function getBlogs() {
+export type BlogCategory = 'tech' | 'life';
+
+export interface Blog {
+  data: {
+    title: string;
+    subtitle?: string;
+    createdAt: string;
+    lastModified?: string;
+    poster?: string;
+    posterDescription?: string;
+    category: BlogCategory;
+  };
+  slug: string;
+}
+
+export async function getBlogs(category?: BlogCategory) {
   const isDev = process.env.NODE_ENV === 'development';
   const localizedBlogs = await getCollection('blogs', ({ data }) => {
     return isDev || !data.draft;
@@ -70,7 +86,13 @@ export async function getBlogs() {
     },
   );
 
-  return Array.from(finalBlogMap.values()).sort((a, b) => {
+  const sortedBlogs = Array.from(finalBlogMap.values()).sort((a, b) => {
     return dayjs(b.data.createdAt).unix() - dayjs(a.data.createdAt).unix();
   });
+
+  if (category) {
+    return sortedBlogs.filter((blog) => blog.data.category === category);
+  }
+
+  return sortedBlogs;
 }

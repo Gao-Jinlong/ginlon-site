@@ -1,0 +1,78 @@
+---
+interface Tab {
+  id: string;
+  title: string;
+  icon: string;
+}
+
+interface Props {
+  tabs: Tab[];
+  defaultTab?: string;
+}
+
+const { tabs, defaultTab = tabs?.[0]?.id } = Astro.props;
+---
+
+<div class="tabs">
+  {tabs.map((tab) => (
+    <button
+      class="tab-button"
+      data-category={tab.id}
+      data-active={tab.id === defaultTab}
+    >
+      <span class="tab-icon">{tab.icon}</span>
+      <span class="tab-title">{tab.title}</span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .tabs {
+    @apply flex gap-4 mb-8;
+    @apply border-b border-gray-200 dark:border-gray-700;
+  }
+
+  .tab-button {
+    @apply flex items-center gap-2 px-4 py-2;
+    @apply text-gray-600 dark:text-gray-400;
+    @apply border-b-2 border-transparent;
+    @apply transition-all duration-200;
+    @apply hover:text-gray-900 dark:hover:text-gray-100;
+  }
+
+  .tab-button[data-active="true"] {
+    @apply text-blue-600 dark:text-blue-400;
+    @apply border-blue-600 dark:border-blue-400;
+  }
+
+  .tab-icon {
+    @apply text-xl;
+  }
+
+  .tab-title {
+    @apply font-medium;
+  }
+</style>
+
+<script>
+ // Tab 切换功能
+ document.addEventListener('astro:page-load', () => {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        
+        // 更新按钮状态
+        tabButtons.forEach(btn => btn.setAttribute('data-active', 'false'));
+        button.setAttribute('data-active', 'true');
+        
+        // 更新面板状态
+        tabPanels.forEach(panel => {
+          panel.setAttribute('data-active', panel.getAttribute('data-category') === category ? 'true' : 'false');
+        });
+      });
+    });
+  });
+</script> 

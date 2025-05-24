@@ -1,0 +1,182 @@
+---
+import { Image } from 'astro:assets';
+import { dayjs } from '../utils/dayjs';
+
+interface Props {
+  blog: {
+    data: {
+      title: string;
+      permalink: string;
+      createdAt: string;
+      description?: string;
+      tags?: string[];
+      poster?: string;
+      subtitle?: string;
+    };
+  };
+}
+
+const { blog } = Astro.props;
+
+const getRandomColor = () => {
+  const colors = [
+    'bg-blue-50 dark:bg-blue-900/30',
+    'bg-purple-50 dark:bg-purple-900/30',
+    'bg-green-50 dark:bg-green-900/30',
+    'bg-yellow-50 dark:bg-yellow-900/30',
+    'bg-pink-50 dark:bg-pink-900/30',
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+const getRandomPattern = () => {
+  const patterns = [
+    'pattern-dots',
+    'pattern-lines',
+    'pattern-grid',
+    'pattern-waves',
+  ];
+  return patterns[Math.floor(Math.random() * patterns.length)];
+};
+
+---
+
+<a href={`/blogs/${blog.data.permalink}`} class="blog-card">
+  <div class="blog-card-inner">
+    {blog.data.poster ? (
+      <div class="blog-image">
+        <Image
+          src={blog.data.poster}
+          alt={blog.data.title}
+          width={400}
+          height={200}
+          class="poster-image"
+        />
+      </div>
+    ) : (
+      <div class={`blog-image ${getRandomColor()} ${getRandomPattern()}`}>
+        <div class="poster-content">
+          <h3 class="poster-title">{blog.data.title}</h3>
+        </div>
+      </div>
+    )}
+    <div class="blog-content">
+      <div class="blog-meta">
+        <time class="blog-date">
+          {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
+        </time>
+        {blog.data.tags && (
+          <div class="blog-tags">
+            {blog.data.tags.map(tag => (
+              <span class="blog-tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+      {blog.data.subtitle && (
+        <p class="blog-subtitle">{blog.data.subtitle}</p>
+      )}
+      {blog.data.description && (
+        <p class="blog-description">{blog.data.description}</p>
+      )}
+    </div>
+  </div>
+</a>
+
+<style>
+  .blog-card {
+    @apply block;
+    @apply transition-all duration-300;
+    @apply hover:scale-[1.02];
+  }
+
+  .blog-card-inner {
+    @apply rounded-lg overflow-hidden;
+    @apply bg-white dark:bg-gray-900;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply shadow-sm;
+    @apply transition-all duration-300;
+    @apply hover:shadow-lg;
+  }
+
+  .blog-image {
+    @apply relative h-48 w-full overflow-hidden;
+    @apply flex items-center justify-center;
+  }
+
+  .poster-content {
+    @apply p-6 text-center;
+    @apply relative z-10;
+  }
+
+  .poster-title {
+    @apply text-xl font-bold;
+    @apply text-gray-900 dark:text-gray-100;
+    @apply line-clamp-3;
+  }
+
+  .blog-content {
+    @apply p-6;
+  }
+
+  .blog-meta {
+    @apply flex items-center justify-between;
+    @apply mb-4;
+  }
+
+  .blog-date {
+    @apply text-sm text-gray-500 dark:text-gray-400;
+  }
+
+  .blog-tags {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .blog-tag {
+    @apply px-2 py-1;
+    @apply text-xs font-medium;
+    @apply bg-blue-100 text-blue-800;
+    @apply dark:bg-blue-900 dark:text-blue-200;
+    @apply rounded-full;
+  }
+
+  .blog-subtitle {
+    @apply text-gray-700 dark:text-gray-300;
+    @apply text-base;
+    @apply mb-3;
+    @apply line-clamp-2;
+  }
+
+  .blog-description {
+    @apply text-gray-600 dark:text-gray-400;
+    @apply text-sm;
+    @apply line-clamp-3;
+  }
+
+  /* 随机背景图案 */
+  .pattern-dots {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .pattern-lines {
+    background-image: linear-gradient(45deg, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .pattern-grid {
+    background-image: linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .pattern-waves {
+    background-image: linear-gradient(45deg, currentColor 25%, transparent 25%),
+      linear-gradient(-45deg, currentColor 25%, transparent 25%);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+</style> 

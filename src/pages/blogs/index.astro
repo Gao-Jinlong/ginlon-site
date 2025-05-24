@@ -1,8 +1,8 @@
 ---
-import { t, l } from 'astro-i18n';
 import Main from '../../layouts/Main.astro';
-import { getBlogs } from '../../utils/getBlogs';
-import { format, dayjs } from '../../utils/dayjs';
+import { getBlogs, type BlogCategory } from '../../utils/getBlogs';
+import Tabs from '../../components/Tabs.astro';
+import BlogCard from '../../components/BlogCard.astro';
 
 interface BlogData {
   data: {
@@ -12,102 +12,191 @@ interface BlogData {
     description?: string;
     tags?: string[];
     draft?: boolean;
+    category: BlogCategory;
+    poster?: string;
+    subtitle?: string;
   };
 }
 
-const sortedBlogs = (await getBlogs()) as BlogData[];
+const blogs = await getBlogs() as BlogData[];
+const techBlogs = blogs.filter(blog => blog.data.category === 'tech');
+const lifeBlogs = blogs.filter(blog => blog.data.category === 'life');
 
-const drafts = sortedBlogs.filter(blog => blog.data.draft);
-const published = sortedBlogs.filter(blog => !blog.data.draft);
-const routeName = 'blogs';
+const categories = [
+  {
+    id: 'tech',
+    title: '技术文章',
+    description: '分享学习笔记、技术实践、技术思考等技术相关的内容',
+    icon: '💻'
+  },
+  {
+    id: 'life',
+    title: '生活随笔',
+    description: '记录阅读、游戏、观影、旅行等生活体验和感悟',
+    icon: '📝'
+  }
+];
+
 ---
 
-<Main pageTitle="blogs">
-  <div class="blogs-section">
-    <div class="section-header">
-      <h1 class="section-title">{t('blogs.pageName')}</h1>
-      <p class="section-description">{t('blogs.subtitle')}</p>
+<Main pageTitle="博客">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">博客</h1>
+      <p class="page-description">记录技术探索与生活感悟</p>
     </div>
+  </div>
 
+  <div class="page-content">
     <div class="blogs-container">
-      {
-        [...drafts, ...published].map(blog => (
-          <a
-            class="blog-card"
-            href={l(
-              `${import.meta.env.BASE_URL}${routeName}/${blog.data.permalink}`,
-            )}
+      <Tabs tabs={categories} />
+
+      <div class="tab-content">
+        {categories.map((category, index) => (
+          <div
+            class="tab-panel"
+            data-category={category.id}
+            data-active={index === 0}
           >
-            <div class="blog-card-inner">
-              <h2 class="blog-title">{blog.data.draft && '🚧'}{blog.data.title}</h2>
-              {blog.data.description && (
-                <p class="blog-description">{blog.data.description}</p>
-              )}
-              <div class="blog-meta">
-                {blog.data.createdAt && (
-                  <span class="blog-date">
-                    {dayjs(blog.data.createdAt).format(format)}
-                  </span>
-                )}
-                {blog.data.tags && (
-                  <div class="blog-tags">
-                    {blog.data.tags.map(tag => (
-                      <span class="blog-tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
+            <div class="category-description">{category.description}</div>
+            <div class="blog-list">
+              {(category.id === 'tech' ? techBlogs : lifeBlogs).map(blog => (
+                <BlogCard blog={blog} />
+              ))}
             </div>
-          </a>
-        ))
-      }
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </Main>
 
 <style>
-  .blogs-section {
-    @apply mx-auto mt-6 max-w-4xl bg-white/80 p-6 dark:border-gray-800 dark:bg-gray-900/90;
+  .page-header {
+    @apply bg-white dark:bg-gray-800;
+    @apply border-b border-gray-200 dark:border-gray-700;
+    @apply mb-8;
   }
 
-  .section-header {
-    @apply p-4 shadow-sm backdrop-blur-sm transition-all duration-200;
+  .header-content {
+    @apply max-w-5xl mx-auto px-4 py-8;
+    @apply text-center;
   }
 
-  .section-title {
-    @apply text-xl font-medium text-gray-900 dark:text-gray-100;
+  .page-title {
+    @apply text-3xl font-bold mb-2;
+    @apply text-gray-900 dark:text-gray-100;
   }
 
-  .section-description {
-    @apply mt-2 text-sm text-gray-600 dark:text-gray-400;
+  .page-description {
+    @apply text-gray-600 dark:text-gray-400;
+  }
+
+  .page-content {
+    @apply bg-white dark:bg-gray-800;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply rounded-lg;
+    @apply mb-8;
   }
 
   .blogs-container {
-    @apply space-y-3;
+    @apply mx-auto max-w-5xl px-4 py-8;
+  }
+
+  .tab-panel {
+    @apply hidden;
+  }
+
+  .tab-panel[data-active="true"] {
+    @apply block;
+  }
+
+  .category-description {
+    @apply text-gray-600 dark:text-gray-400;
+    @apply mb-8;
+    @apply text-lg;
+  }
+
+  .blog-list {
+    @apply grid gap-8;
+    @apply md:grid-cols-2;
   }
 
   .blog-card {
-    @apply block w-full transition-all duration-200;
+    @apply block;
+    @apply transition-all duration-300;
+    @apply hover:scale-[1.02];
   }
 
   .blog-card-inner {
-    @apply rounded-lg border border-gray-100 bg-white/90 p-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:bg-gray-50 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700 dark:hover:bg-gray-800/60;
+    @apply rounded-lg overflow-hidden;
+    @apply bg-white dark:bg-gray-900;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply shadow-sm;
+    @apply transition-all duration-300;
+    @apply hover:shadow-lg;
   }
 
-  .blog-title {
-    @apply text-base font-medium text-gray-900 dark:text-gray-100;
+  .blog-image {
+    @apply relative h-48 w-full overflow-hidden;
+    @apply flex items-center justify-center;
   }
 
-  .blog-description {
-    @apply mt-1.5 text-sm text-gray-600 dark:text-gray-400;
+  .poster-content {
+    @apply p-6 text-center;
+    @apply relative z-10;
+  }
+
+  .poster-category {
+    @apply text-sm font-medium;
+    @apply text-gray-600 dark:text-gray-400;
+    @apply mb-2;
+  }
+
+  .poster-title {
+    @apply text-xl font-bold;
+    @apply text-gray-900 dark:text-gray-100;
+    @apply line-clamp-3;
+  }
+
+  /* 随机背景图案 */
+  .pattern-dots {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .pattern-lines {
+    background-image: linear-gradient(45deg, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .pattern-grid {
+    background-image: linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .pattern-waves {
+    background-image: linear-gradient(45deg, currentColor 25%, transparent 25%),
+      linear-gradient(-45deg, currentColor 25%, transparent 25%);
+    background-size: 20px 20px;
+    @apply text-gray-200 dark:text-gray-700;
+  }
+
+  .blog-content {
+    @apply p-6;
   }
 
   .blog-meta {
-    @apply mt-2 flex flex-wrap items-center gap-3;
+    @apply flex items-center justify-between;
+    @apply mb-4;
   }
 
   .blog-date {
-    @apply text-xs text-gray-500 dark:text-gray-500;
+    @apply text-sm text-gray-500 dark:text-gray-400;
   }
 
   .blog-tags {
@@ -115,6 +204,48 @@ const routeName = 'blogs';
   }
 
   .blog-tag {
-    @apply rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700;
+    @apply px-2 py-1;
+    @apply text-xs font-medium;
+    @apply bg-blue-100 text-blue-800;
+    @apply dark:bg-blue-900 dark:text-blue-200;
+    @apply rounded-full;
+  }
+
+  .blog-title {
+    @apply text-xl font-bold text-gray-900 dark:text-gray-100;
+    @apply mb-2;
+    @apply line-clamp-2;
+  }
+
+  .blog-subtitle {
+    @apply text-gray-700 dark:text-gray-300;
+    @apply text-base;
+    @apply mb-3;
+    @apply line-clamp-2;
+  }
+
+  .blog-description {
+    @apply text-gray-600 dark:text-gray-400;
+    @apply text-sm;
+    @apply line-clamp-3;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
   }
 </style>
+
+<script>
+ 
+</script>
