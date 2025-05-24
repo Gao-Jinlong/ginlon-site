@@ -13,6 +13,7 @@ const routeName = 'blogs'
   <div class="profile-section">
     <div class="profile-card">
       <Image
+        transition:name="avatar"
         class="profile-avatar"
         src="https://avatars.githubusercontent.com/u/41514616?v=4"
         alt="Avatar"
@@ -22,7 +23,7 @@ const routeName = 'blogs'
       />
 
       <div class="profile-info">
-        <h1 class="profile-title">
+        <h1 class="profile-title" >
           {t('homepage.hello')}
         </h1>
         <h2 class="profile-subtitle">
