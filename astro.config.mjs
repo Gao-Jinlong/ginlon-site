@@ -43,4 +43,8 @@ export default defineConfig({
     remarkPlugins: [remarkModifiedTime],
   },
   adapter: netlify(),
+  devToolbar:{
+    enabled: false,
+  },
+
 });

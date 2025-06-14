@@ -12,7 +12,7 @@ const { title, subtitle, poster, posterDescription, createdAt, lastModified } =
 
 const blogs = await getBlogs();
 const otherBlogs = blogs.filter(({ data }) => {
-  return title !== data.title;
+  return title !== data.title && !data.draft;
 });
 
 // 获取文章中的所有标题

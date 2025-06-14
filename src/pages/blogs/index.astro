@@ -20,7 +20,7 @@ interface BlogData {
 
 const blogs = await getBlogs() as BlogData[];
 const techBlogs = blogs.filter(blog => blog.data.category === 'tech');
-const lifeBlogs = blogs.filter(blog => blog.data.category === 'life');
+const lifeBlogs = blogs.filter(blog => blog.data.category === 'note');
 
 const categories = [
   {
@@ -30,9 +30,9 @@ const categories = [
     icon: '💻'
   },
   {
-    id: 'life',
-    title: '生活随笔',
-    description: '记录阅读、游戏、观影、旅行等生活体验和感悟',
+    id: 'note',
+    title: '笔记',
+    description: '记录思考，读书笔记，游戏体验等输出内容',
     icon: '📝'
   }
 ];
@@ -50,7 +50,15 @@ const categories = [
   <div class="page-content">
     <div class="blogs-container">
       <Tabs tabs={categories} />
-      <div class="tab-content">
+      
+      <!-- Loading 状态 -->
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">加载中...</p>
+      </div>
+      
+      <!-- Tab 内容 -->
+      <div class="tab-content" style="display: none;">
         {categories.map((category, index) => (
           <div
             class="tab-panel"
@@ -72,7 +80,7 @@ const categories = [
 
 <style>
   .page-header {
-    @apply bg-white dark:bg-gray-800;
+    @apply bg-white dark:bg-gray-900/90;
     @apply border-b border-gray-200 dark:border-gray-700;
     @apply mb-8;
   }
@@ -92,7 +100,7 @@ const categories = [
   }
 
   .page-content {
-    @apply bg-white dark:bg-gray-800;
+    @apply bg-white dark:bg-gray-900/90;
     @apply border border-gray-200 dark:border-gray-700;
     @apply rounded-lg;
     @apply mb-8;
@@ -243,8 +251,68 @@ const categories = [
   .animate-fade-in {
     animation: fade-in 0.6s ease-out;
   }
+
+  /* Loading 状态样式 */
+  .loading-state {
+    @apply flex flex-col items-center justify-center;
+    @apply py-16;
+    @apply text-gray-600 dark:text-gray-400;
+  }
+
+  .loading-spinner {
+    @apply w-8 h-8 border-2 border-gray-300 dark:border-gray-600;
+    @apply border-t-blue-600 dark:border-t-blue-400;
+    @apply rounded-full;
+    @apply animate-spin;
+    @apply mb-4;
+  }
+
+  .loading-text {
+    @apply text-sm;
+  }
+
+  /* Tab 内容淡入动画 */
+  .tab-content {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .tab-content.show {
+    @apply block;
+    animation: fade-in 0.3s ease-out;
+  }
 </style>
 
 <script>
- 
+  // 防止闪烁的初始化脚本
+  document.addEventListener('astro:page-load', () => {
+    const loadingState = document.querySelector('.loading-state');
+    const tabContent = document.querySelector('.tab-content');
+    const tabButtons = document.querySelectorAll('.tab-button');
+    
+    // 初始化完成后显示内容
+    function showContent() {
+      if (loadingState) {
+        (loadingState as HTMLElement).style.display = 'none';
+      }
+      if (tabContent) {
+        (tabContent as HTMLElement).style.display = 'block';
+        (tabContent as HTMLElement).classList.add('show');
+      }
+    }
+
+    // 等待 Tabs 组件初始化完成
+    setTimeout(() => {
+      // 检查是否有激活的 tab 按钮，如果没有说明还未初始化
+      const hasActiveButton = Array.from(tabButtons).some(btn => 
+        btn.getAttribute('data-active') === 'true'
+      );
+      
+      if (hasActiveButton) {
+        showContent();
+      } else {
+        // 如果还没初始化，再等一下
+        setTimeout(showContent, 100);
+      }
+    }, 50);
+  });
 </script>

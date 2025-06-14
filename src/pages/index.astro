@@ -64,7 +64,7 @@ const routeName = 'blogs'
             )}
           >
             <div class="blog-card-inner">
-              <h4 class="blog-title">{blog.data.title}</h4>
+              <h4 class="blog-title">{blog.data.draft ? '🚧' : ''} {blog.data.title}</h4>
               {blog.data.createdAt && (
                 <span class="blog-date">
                   {dayjs(blog.data.createdAt).format(format)}

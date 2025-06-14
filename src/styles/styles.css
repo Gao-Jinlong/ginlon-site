@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer base {
+
   /* 目录卡片滚动条样式 */
   *::-webkit-scrollbar {
     width: 3px;

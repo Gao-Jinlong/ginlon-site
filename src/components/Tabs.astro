@@ -8,9 +8,10 @@ interface Tab {
 interface Props {
   tabs: Tab[];
   defaultTab?: string;
+  urlParam?: string;
 }
 
-const { tabs, defaultTab = tabs?.[0]?.id } = Astro.props;
+const { tabs, defaultTab = tabs?.[0]?.id, urlParam = 'tab' } = Astro.props;
 ---
 
 <div class="tabs">
@@ -18,7 +19,7 @@ const { tabs, defaultTab = tabs?.[0]?.id } = Astro.props;
     <button
       class="tab-button"
       data-category={tab.id}
-      data-active={tab.id === defaultTab}
+      data-default={tab.id === defaultTab}
     >
       <span class="tab-icon">{tab.icon}</span>
       <span class="tab-title">{tab.title}</span>
@@ -54,11 +55,56 @@ const { tabs, defaultTab = tabs?.[0]?.id } = Astro.props;
   }
 </style>
 
-<script>
+<script define:vars={{ urlParam }}>
  // Tab 切换功能
  document.addEventListener('astro:page-load', () => {
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');
+
+    // 从 URL 中读取初始状态
+    function getActiveTabFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(urlParam);
+    }
+
+    // 更新 URL 参数
+    function updateUrlParam(tabId) {
+      const url = new URL(window.location);
+      url.searchParams.set(urlParam, tabId);
+      window.history.replaceState({}, '', url);
+    }
+
+    // 初始化状态
+    function initializeTabs() {
+      const activeTabFromUrl = getActiveTabFromUrl();
+      let activeTab = activeTabFromUrl;
+      
+      // 如果 URL 中没有指定 tab 或指定的 tab 不存在，使用默认 tab
+      if (!activeTab || !Array.from(tabButtons).some(btn => btn.getAttribute('data-category') === activeTab)) {
+        const defaultButton = document.querySelector('.tab-button[data-default="true"]');
+        activeTab = defaultButton?.getAttribute('data-category') || tabButtons[0]?.getAttribute('data-category');
+      }
+
+      // 更新按钮状态
+      tabButtons.forEach(btn => {
+        const isActive = btn.getAttribute('data-category') === activeTab;
+        btn.setAttribute('data-active', isActive ? 'true' : 'false');
+      });
+      
+      // 更新面板状态
+      tabPanels.forEach(panel => {
+        const isActive = panel.getAttribute('data-category') === activeTab;
+        panel.setAttribute('data-active', isActive ? 'true' : 'false');
+      });
+
+      // 如果当前激活的 tab 不是从 URL 来的，更新 URL
+      if (activeTab && activeTab !== activeTabFromUrl) {
+        updateUrlParam(activeTab);
+      }
+    }
+
+    // 立即初始化
+    initializeTabs();
 
     tabButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -72,7 +118,15 @@ const { tabs, defaultTab = tabs?.[0]?.id } = Astro.props;
         tabPanels.forEach(panel => {
           panel.setAttribute('data-active', panel.getAttribute('data-category') === category ? 'true' : 'false');
         });
+
+        // 更新 URL 参数
+        updateUrlParam(category);
       });
+    });
+
+    // 监听浏览器前进/后退按钮
+    window.addEventListener('popstate', () => {
+      initializeTabs();
     });
   });
 </script> 

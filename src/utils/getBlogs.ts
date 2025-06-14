@@ -19,7 +19,7 @@ interface BlogData extends CollectionEntry<'blogs'> {
   };
 }
 
-export type BlogCategory = 'tech' | 'life';
+export type BlogCategory = 'tech' | 'note';
 
 export interface Blog {
   data: {
