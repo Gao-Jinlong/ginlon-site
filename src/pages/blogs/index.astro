@@ -1,78 +1,77 @@
 ---
-import Main from '../../layouts/Main.astro';
-import { getBlogs, type BlogCategory } from '../../utils/getBlogs';
-import Tabs from '../../components/Tabs.astro';
-import BlogCard from '../../components/BlogCard.astro';
+import Main from '../../layouts/Main.astro'
+import { getBlogs, type BlogCategory } from '../../utils/getBlogs'
+import Tabs from '../../components/Tabs.astro'
+import BlogCard from '../../components/BlogCard.astro'
 
 interface BlogData {
   data: {
-    title: string;
-    permalink: string;
-    createdAt: string;
-    description?: string;
-    tags?: string[];
-    draft?: boolean;
-    category: BlogCategory;
-    poster?: string;
-    subtitle?: string;
-  };
+    title: string
+    permalink: string
+    createdAt: string
+    description?: string
+    tags?: string[]
+    draft?: boolean
+    category: BlogCategory
+    poster?: string
+    subtitle?: string
+  }
 }
 
-const blogs = await getBlogs() as BlogData[];
-const techBlogs = blogs.filter(blog => blog.data.category === 'tech');
-const lifeBlogs = blogs.filter(blog => blog.data.category === 'note');
+const blogs = (await getBlogs()) as BlogData[]
+const techBlogs = blogs.filter(blog => blog.data.category === 'tech')
+const lifeBlogs = blogs.filter(blog => blog.data.category === 'note')
 
 const categories = [
   {
     id: 'tech',
     title: '技术文章',
     description: '分享学习笔记、技术实践、技术思考等技术相关的内容',
-    icon: '💻'
+    icon: '💻',
   },
   {
     id: 'note',
     title: '笔记',
-    description: '记录思考，读书笔记，游戏体验等输出内容',
-    icon: '📝'
-  }
-];
-
+    description: '记录思考、读书笔记、体验等输出内容',
+    icon: '📝',
+  },
+]
 ---
 
 <Main pageTitle="博客">
   <div class="page-header">
-    <div class="header-content">
-      <h1 class="page-title">博客</h1>
-      <p class="page-description">记录技术探索与生活感悟</p>
-    </div>
+    <h1 class="page-title">博客</h1>
+    <p class="page-description">无记录，不成长</p>
   </div>
 
   <div class="page-content">
     <div class="blogs-container">
       <Tabs tabs={categories} />
-      
+
       <!-- Loading 状态 -->
       <div class="loading-state">
         <div class="loading-spinner"></div>
         <p class="loading-text">加载中...</p>
       </div>
-      
+
       <!-- Tab 内容 -->
       <div class="tab-content" style="display: none;">
-        {categories.map((category, index) => (
-          <div
-            class="tab-panel"
-            data-category={category.id}
-            data-active={index === 0}
-          >
-            <div class="category-description">{category.description}</div>
-            <div class="blog-list">
-              {(category.id === 'tech' ? techBlogs : lifeBlogs).map(blog => (
-                <BlogCard blog={blog} />
-              ))}
+        {
+          categories.map((category, index) => (
+            <div
+              class="tab-panel"
+              data-category={category.id}
+              data-active={index === 0}
+            >
+              <div class="category-description">{category.description}</div>
+              <div class="blog-list">
+                {(category.id === 'tech' ? techBlogs : lifeBlogs).map(blog => (
+                  <BlogCard blog={blog} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
@@ -80,18 +79,12 @@ const categories = [
 
 <style>
   .page-header {
-    @apply bg-white dark:bg-gray-900/90;
-    @apply border-b border-gray-200 dark:border-gray-700;
-    @apply mb-8;
-  }
-
-  .header-content {
-    @apply max-w-5xl mx-auto px-4 py-8;
-    @apply text-center;
+    @apply my-6;
+    @apply flex flex-wrap items-center gap-8 border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
   }
 
   .page-title {
-    @apply text-3xl font-bold mb-2;
+    @apply mb-2 text-3xl font-bold;
     @apply text-gray-900 dark:text-gray-100;
   }
 
@@ -102,8 +95,8 @@ const categories = [
   .page-content {
     @apply bg-white dark:bg-gray-900/90;
     @apply border border-gray-200 dark:border-gray-700;
-    @apply rounded-lg;
     @apply mb-8;
+    @apply shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
   }
 
   .blogs-container {
@@ -114,7 +107,7 @@ const categories = [
     @apply hidden;
   }
 
-  .tab-panel[data-active="true"] {
+  .tab-panel[data-active='true'] {
     @apply block;
   }
 
@@ -136,7 +129,7 @@ const categories = [
   }
 
   .blog-card-inner {
-    @apply rounded-lg overflow-hidden;
+    @apply overflow-hidden rounded-lg;
     @apply bg-white dark:bg-gray-900;
     @apply border border-gray-200 dark:border-gray-700;
     @apply shadow-sm;
@@ -180,14 +173,16 @@ const categories = [
   }
 
   .pattern-grid {
-    background-image: linear-gradient(currentColor 1px, transparent 1px),
+    background-image:
+      linear-gradient(currentColor 1px, transparent 1px),
       linear-gradient(90deg, currentColor 1px, transparent 1px);
     background-size: 20px 20px;
     @apply text-gray-200 dark:text-gray-700;
   }
 
   .pattern-waves {
-    background-image: linear-gradient(45deg, currentColor 25%, transparent 25%),
+    background-image:
+      linear-gradient(45deg, currentColor 25%, transparent 25%),
       linear-gradient(-45deg, currentColor 25%, transparent 25%);
     background-size: 20px 20px;
     @apply text-gray-200 dark:text-gray-700;
@@ -260,7 +255,7 @@ const categories = [
   }
 
   .loading-spinner {
-    @apply w-8 h-8 border-2 border-gray-300 dark:border-gray-600;
+    @apply h-8 w-8 border-2 border-gray-300 dark:border-gray-600;
     @apply border-t-blue-600 dark:border-t-blue-400;
     @apply rounded-full;
     @apply animate-spin;
@@ -285,34 +280,34 @@ const categories = [
 <script>
   // 防止闪烁的初始化脚本
   document.addEventListener('astro:page-load', () => {
-    const loadingState = document.querySelector('.loading-state');
-    const tabContent = document.querySelector('.tab-content');
-    const tabButtons = document.querySelectorAll('.tab-button');
-    
+    const loadingState = document.querySelector('.loading-state')
+    const tabContent = document.querySelector('.tab-content')
+    const tabButtons = document.querySelectorAll('.tab-button')
+
     // 初始化完成后显示内容
     function showContent() {
       if (loadingState) {
-        (loadingState as HTMLElement).style.display = 'none';
+        ;(loadingState as HTMLElement).style.display = 'none'
       }
       if (tabContent) {
-        (tabContent as HTMLElement).style.display = 'block';
-        (tabContent as HTMLElement).classList.add('show');
+        ;(tabContent as HTMLElement).style.display = 'block'
+        ;(tabContent as HTMLElement).classList.add('show')
       }
     }
 
     // 等待 Tabs 组件初始化完成
     setTimeout(() => {
       // 检查是否有激活的 tab 按钮，如果没有说明还未初始化
-      const hasActiveButton = Array.from(tabButtons).some(btn => 
-        btn.getAttribute('data-active') === 'true'
-      );
-      
+      const hasActiveButton = Array.from(tabButtons).some(
+        btn => btn.getAttribute('data-active') === 'true'
+      )
+
       if (hasActiveButton) {
-        showContent();
+        showContent()
       } else {
         // 如果还没初始化，再等一下
-        setTimeout(showContent, 100);
+        setTimeout(showContent, 100)
       }
-    }, 50);
-  });
+    }, 50)
+  })
 </script>

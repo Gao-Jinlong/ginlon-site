@@ -11,7 +11,6 @@ const routeName = 'blogs'
 
 <Main pageTitle="Home">
   <div class="profile-section">
-    <div class="profile-card">
       <Image
         transition:name="avatar"
         class="profile-avatar"
@@ -41,7 +40,6 @@ const routeName = 'blogs'
         </p>
       
       </div>
-    </div>
   </div>
 
   <div class="featured-blogs-section">
@@ -87,9 +85,6 @@ const routeName = 'blogs'
 <style>
   .profile-section {
     @apply my-6;
-  }
-
-  .profile-card {
     @apply flex flex-wrap items-center gap-8 border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
   }
 

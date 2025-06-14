@@ -4,26 +4,26 @@ import { Image } from 'astro:assets'
 ---
 
 <Main pageTitle="About Me">
-  <div class="about-container">
-    <!-- 个人简介 -->
-    <section class="profile-section">
-      <Image
-        transition:name="avatar"
-        class="profile-avatar"
-        src="https://avatars.githubusercontent.com/u/41514616?v=4"
-        alt="Avatar"
-        width={120}
-        height={120}
-        loading="eager"
-      />
-      <h1 class="profile-title">Ginlon</h1>
-      <h2 class="profile-subtitle">前端工程师</h2>
-      <p class="profile-description">
-        渴望一切能够实现自我价值和自我成长的事情<br />
-        技术是我实现自我价值的工具之一<br />
-      </p>
-    </section>
+  <!-- 个人简介 -->
+  <section class="profile-section">
+    <Image
+      transition:name="avatar"
+      class="profile-avatar"
+      src="https://avatars.githubusercontent.com/u/41514616?v=4"
+      alt="Avatar"
+      width={120}
+      height={120}
+      loading="eager"
+    />
+    <h1 class="profile-title">Ginlon</h1>
+    <h2 class="profile-subtitle">前端工程师</h2>
+    <p class="profile-description">
+      渴望一切能够实现自我价值和自我成长的事情<br />
+      技术是我实现自我价值的工具之一<br />
+    </p>
+  </section>
 
+  <div class="about-container">
     <!-- <section class="content-section">
       <h2 class="section-title">工作经历</h2>
       <div class="content-block">
@@ -40,7 +40,6 @@ import { Image } from 'astro:assets'
         </p>
       </div>
     </section> -->
-
     <!-- 价值观 -->
     <section class="content-section">
       <h2 class="section-title">我的价值观</h2>
@@ -63,9 +62,7 @@ import { Image } from 'astro:assets'
       </div>
       <div class="content-block">
         <h3>丰富人生体验</h3>
-        <p>
-          阅读：享受通过阅读获得不同的人生体验，也通过阅读认识自己
-        </p>
+        <p>阅读：享受通过阅读获得不同的人生体验，也通过阅读认识自己</p>
         <p>
           影视、游戏：喜欢极致的视听艺术，层层跌进的戏剧结构，声乐的极致震撼
         </p>
@@ -95,20 +92,14 @@ import { Image } from 'astro:assets'
 <style>
   .about-container {
     @apply mx-auto max-w-2xl space-y-12 p-6;
-    background: linear-gradient(
-      to bottom right,
-      rgba(255, 255, 255, 0.9),
-      rgba(255, 255, 255, 0.7)
-    );
-    @apply dark:bg-gradient-to-br dark:from-gray-900/90 dark:to-gray-800/70;
-    @apply rounded-lg backdrop-blur-sm;
-    @apply border border-gray-100 dark:border-gray-800;
     @apply shadow-sm;
+    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
   }
 
   .profile-section {
-    @apply flex flex-col items-center text-center;
-    @apply border-b border-gray-200 pb-8 dark:border-gray-700;
+    @apply flex flex-col flex-wrap items-center text-center;
+    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+    @apply my-6;
   }
 
   .profile-avatar {
@@ -170,4 +161,3 @@ import { Image } from 'astro:assets'
     @apply transition-colors duration-200;
   }
 </style>
-
