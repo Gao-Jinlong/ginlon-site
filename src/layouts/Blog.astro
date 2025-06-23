@@ -1,22 +1,22 @@
 ---
-import RecentPosts from '../components/RecentPosts.astro';
-import Main from './Main.astro';
-import { Image } from 'astro:assets';
-import { getBlogs } from '../utils/getBlogs';
-import { t } from 'astro-i18n';
-import TableOfContents from '../components/TableOfContents.astro';
-import { dayjs, format } from '../utils/dayjs';
+import RecentPosts from '../components/RecentPosts.astro'
+import Main from './Main.astro'
+import { Image } from 'astro:assets'
+import { getBlogs } from '../utils/getBlogs'
+import { t } from 'astro-i18n'
+import TableOfContents from '../components/TableOfContents.astro'
+import { dayjs, format } from '../utils/dayjs'
 
 const { title, subtitle, poster, posterDescription, createdAt, lastModified } =
-  Astro.props.frontmatter;
+  Astro.props.frontmatter
 
-const blogs = await getBlogs();
+const blogs = await getBlogs()
 const otherBlogs = blogs.filter(({ data }) => {
-  return title !== data.title && !data.draft;
-});
+  return title !== data.title && !data.draft
+})
 
 // 获取文章中的所有标题
-const headings = await Astro.props.headings;
+const headings = await Astro.props.headings
 ---
 
 <Main pageTitle={title}>
@@ -115,7 +115,7 @@ const headings = await Astro.props.headings;
   }
 
   .cover-container {
-    @apply overflow-hidden rounded-lg border border-gray-100 dark:border-gray-800;
+    @apply overflow-hidden rounded-sm border border-gray-100 dark:border-gray-800;
   }
 
   .cover-image {
