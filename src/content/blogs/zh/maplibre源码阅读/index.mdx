@@ -81,3 +81,56 @@ TODO:
 
 - 空间矩阵变换基础知识扫盲
 - 分析 `map.project` 中的变换矩阵是如何计算的
+
+通过一次点击事件的处理过程分析坐标是如何转换的
+
+**背景知识：**
+
+用矩阵表述变换与齐次坐标https://www.jianshu.com/p/c3e887c4c4f4
+
+相机系列——透视投影：针孔相机模型https://zhuanlan.zhihu.com/p/692565077
+
+https://juejin.cn/book/6844733755580481543/section/6844733755941191687
+
+https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html
+
+**名词解释：**
+
+- 裁剪空间：WebGL 中空间的表示范围在 [-1, 1] 之间
+
+**相关类：**
+
+`TransformHelper` : 管理和地图变换的所有状态信息，如： `zoom` , `pitch` , `tileSzie` 等，并在 `set*` 方法中实现了状态验证和约束机制。
+同时，将计算所需的逻辑通过注册回调的方式交给具体的投影实现（如 `MercatorTransform` ）这样可以避免在每个投影系统中重复实现状态管理逻辑
+
+`MercatorTransform` : 通过 `TransformHelper` 管理所有变换状态，这个类专注于投影计算逻辑，实现多种坐标系之间的双向转换，如：**屏幕坐标**和**墨卡托坐标**的转换，**屏幕坐标**和**地理坐标（包含地形高度的墨卡托坐标）**的转换等
+
+> 这里为了方便表述投影空间直接表述为了墨卡托坐标，实际上地图有非常的多的投影空间，不过 maplibre 中目前只支持了墨卡托投影
+> 
+
+`MercatorCoveringTilesDetailsProvider` : 墨卡托投影系统的瓦片覆盖计算服务核心类
+
+`MercatorCameraHelper` : 在墨卡托投影系统中提供相机控制和动画功能的核心类
+
+**初始化：**
+
+1. 在 `map` 实例中初始化 `MercatorTransform`  实例
+2. `MercatorTransform` 初始化 `TransformHelper` 实例，并将 `calcMatrices` 回调注册到 `TransformHelper` 中
+初始化 `MercatorCoveringTilesDetailsProvider` 类
+3. `map` 实例初始化 `MercatorTransform` 的状态
+4. `map` 调用 `jumpTo` 通过 `MercatorCameraHelper.handleJumpToCenterZoom()`  方法初始化视图
+5. `handleJumpToCenterZoom`  中会调用 `ITransform.setCenter()`  方法，进一步调用 `MercatorTransform._calcMatrices` 初始化变换矩阵
+    1. `_calcMatrices` 中会计算七个变换相关的矩阵，分别是：
+    `_projectionMatrix` - 透视投影矩阵
+    `_mercatorMatrix` - 墨卡托坐标到裁剪空间矩阵
+    `_pixelMatrix` - 世界坐标到屏幕像素矩阵
+    `_viewProjMatrix` - 视图投影矩阵
+    `_pixelMatrix3D` - 3D世界坐标到屏幕矩阵
+    `_fogMatrix` - 雾效计算矩阵
+    `_alignedProjMatrix` - 像素对齐投影矩阵
+    2. **转换过程：**
+        1. 获取地图中心点在世界坐标系中的位置 `(x, y)`
+        2. 计算 `_pixelPerMeter` 像素/米
+        3. 创建标准的**透视投影矩阵**，计算投影矩阵的逆矩阵，应用视角中心偏移（处理地图padding）
+        4. 
+        ****
