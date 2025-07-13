@@ -1,0 +1,369 @@
+---
+lang: zh
+layout: /src/layouts/Blog.astro
+title: 'CSP内容安全'
+subtitle: ''
+draft: false
+permalink: 'CSP内容安全'
+createdAt: '2025-07-11 18:34:10 +08:00'
+category: 'tech'
+poster: 'https://images.unsplash.com/photo-1586739050530-2fddeb1770d4?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+---
+
+## CSP 内容安全策略
+
+[内容安全策略（CSP）](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/CSP)
+
+[Content-Security-Policy (CSP)](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#csp_in_workers)
+
+**内容安全策略（CSP）是一个额外的安全层，用于检测并削弱某些特定类型的攻击，包括跨站脚本（XSS）和数据注入攻击等。**
+
+**CSP 的主要目标是减少和报告 XSS 攻击**
+
+CSP 通过指定有效域——即浏览认可的可执行脚本的有效来源——使服务器管理者有能力减少或消除 XSS 攻击所依赖的载体。CSP 兼容的浏览器只会执行从白名单域获取到的脚本文件，忽略其他的脚本（包括内联脚本和 HTML 的事件处理属性）
+
+始终不允许执行脚本的站点可以选择全面禁止脚本执行
+
+### **使用 CSP**
+
+服务器可以通过设置返回内容的 `Content-Security-Policy` HTTP 标头来使用 CSP 功能
+
+```http
+Content-Security-Policy: policy
+```
+
+**策略（policy）**参数是一个包含了各种描述你的 CSP 策略指令的字符串
+
+此外还可以通过 `<meta>` 元素来配置该策略
+
+```html
+<meta
+  http-equiv="Content-Security-Policy"content="default-src 'self'; img-src https://*; child-src 'none';" />
+```
+
+> **备注：** 某些功能（例如发送 CSP 违规报告）仅在使用 HTTP 标头时可用。
+> 
+
+**编写策略**
+
+策略由一系列**Fecth 指令**组成，每个**Fecth 指令**都描述了某个针对特定资源的类型以及策略生效的范围
+
+策略应该包含一个 `default-src` 指令作为回退指令
+
+对于不同类型的项目都有特定的指令，因此每种类型都可以有自己的指令，包括字体、frame、图像、音频和视频媒体、script 和 worker。
+
+> **Fecth 指令：** 用于 `Content-Security-Policy` 标头中，可以用来控制某些具体类型的资源可以从哪些来源被加载。
+比如 `script-src` 使得开发者可以允许可信任来源的脚本在页面上执行， `font-src` 可以控制字体的来源
+> 
+> 
+> 所有的指令都会回落到 `default-src` 。即如果某个 fetch 指令在 CSP 标头中未定义，那么用户代理就会使用 `defalut-src`  指令来替代。
+> 
+
+详细文档 [Content-Security-Policy (CSP)](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#csp_in_workers)
+
+**常见用例**
+
+**示例 1：** 网站管理者想要所有内容均来自站点的同一个源（不包括其子域名）。
+
+`Content-Security-Policy: default-src 'self'` 
+
+**示例 2：**网站管理者允许内容来自信任的域名及子域名（域名不必须与 CSP 设置所在的域名相同）
+
+`Content-Security-Policy: default-src 'self' *.trusted.com`
+
+**示例 3：**网站管理者允许网页应用的用户在他们自己的内容中包含来自任何源的图片，但是限制音频或视频需从信任的资源提供者，所有脚本必须从特定主机服务器获取可信的代码
+
+`Content-Security-Policy: default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com`
+
+**示例 4：**一个线上银行网站的管理者想要确保网站的所有内容都要通过 SSL 方式获取，以避免攻击者窃听用户发出的请求。
+`Content-Security-Policy: default-src https://onlinebanking.jumbobank.com` 
+
+该服务器仅允许通过 HTTPS 方式并仅从 `onlinebanking.jumbobank.com` 域名来访问文档
+
+### **`script-src` 的特殊配置**
+
+当我们使用如下配置时
+
+```http
+Content-Security-Policy: script-src https://example.com/
+```
+
+以下脚本将被阻止，将无法加载或执行
+
+```html
+<script src="https://not-example.com/js/library.js"></script>
+```
+
+值得注意的是，内联事件处理程序也将被阻止
+
+```html
+<button id="btn" onclick="doSomething()"></button>
+```
+
+此时该使用 `addEventListener` 接口替代
+
+```js
+document.getElementById("btn").addEventListener("click", doSomething);
+```
+
+如果无法替换可以使用 `unsafe-hashes` 源表达式来允许它们
+
+**使用文件哈希指定允许的脚本**
+
+[Allowlisting external scripts using hashes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src#allowlisting_external_scripts_using_hashes)
+
+[子资源完整性](https://developer.mozilla.org/zh-CN/docs/Web/Security/Subresource_Integrity)
+
+使用这种方式时，只有 `<script integrity="xxx">` 标签中的 `intergrity` 属性中的所有有效哈希值与 CSP 标头中允许的值匹配时，才能被加载和执行。**子资源完整性**功能还会检查下载的文件是否具有指定的哈希值，即文件是否被修改。
+
+下面这个例子演示了这个用法：
+
+```http 
+Content-Security-Policy: script-src 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC' 'sha256-fictional_value'
+```
+
+在这个例子中，它允许 SHA384 哈希值为 oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC 或 SHA256 哈希值为 fictional_value 的脚本加载和执行
+
+```html
+<script
+  src="https://example.com/example-framework.js"
+  integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
+  crossorigin="anonymous"></script>
+```
+
+`integrity` 属性可以有多个值，每个值都使用不同的算法为文件提供哈希值。CSP 要求该属性中的所有有效哈希值都必须包含在 CSP 的 `script-src` 中声明。因此，下面的脚本将无法加载，因为上面的 CSP 标头中不存在第二个哈希值
+
+```html
+<script
+  src="https://example.com/example-framework.js"
+  integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC sha256-not-in-csp"
+  crossorigin="anonymous"></script>
+```
+
+此规则仅适用有效的哈希值。浏览器无法识别的哈希值将被忽略。
+
+**不安全的内联脚本（Unsafe inline script ）**
+
+> **笔记：** 禁止内联样式和内联脚本是 CSP 提供的最大安全优势之一。 如果您确实必须使用它们，那么有一些机制可以允许使用它们。 哈希适用于内联脚本和样式，但不适用于事件处理程序。 有关详细信息，请参阅[不安全哈希](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src#unsafe_hashes) 。
+> 
+
+要允许内联脚本和样式，可以指定 `unsafe-inline` 、与内联块匹配的 nonce-source 或 hash-source。
+
+以下策略将允许所有的内联 `<script>` 元素
+
+```http
+Content-Security-Policy: script-src 'unsafe-inline';
+```
+
+允许所有内联脚本被视为一种安全风险，因此建议改用 nonce-source 或 hash-source。
+
+**nonce-source 方式：**
+
+在 `script-src` 中添加一个加密随机数（nonce），只有在 `<script nonce="xxxx">` 标签中包含相同的随机数时才能执行相应的脚本内容。
+
+需要注意，nonce 值需要动态生成，因为它对于每个 HTTP 请求必须是唯一的。
+
+例如：
+
+```http
+Content-Security-Policy: script-src 'nonce-2726c7f26c'
+```
+
+然后需要在 `<script>` 标签中添加相同的随机数：
+
+```html
+<script nonce="2726c7f26c">
+  const inline = 1;
+  // …
+</script>
+```
+
+**hash-source 方式：**
+
+也可以可从内联脚本创建哈希值
+
+```http
+Content-Security-Policy: script-src 'sha256-B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8='
+```
+
+生成哈希时，不要包含 `<script>` 标签，并且注意大小写和空格很重要，包括前导和尾随空格。
+
+```html
+<script>
+  const inline = 1;
+</script>
+```
+
+**不安全的哈希（Unsafe hashes）**
+
+带有哈希值的内联资源的策略允许通过哈希值使用脚本和样式，但不允许使用事件处理程序：
+
+```html
+<!-- Allowed by CSP: script-src 'sha256-{HASHED_INLINE_SCRIPT}' -->
+<script>
+  const inline = 1;
+</script><!-- CSP: script-src 'sha256-{HASHED_EVENT_HANDLER}'
+      will not allow this event handler -->
+<button onclick="myScript()">Submit</button>
+```
+
+如果不能替换为 `addEventListener` 调用，则可以使用 `unsafe-heades` 源表达式，而不是 `unsafe-inline` 。
+
+假设一个 HTML 页面包含以下内联事件处理程序
+
+```html
+<!-- I want to use addEventListener, but I can't :( -->
+<button onclick="myScript()">Submit</button>
+```
+
+以下 CSP 标头将允许脚本执行
+
+```http
+Content-Security-Policy:  script-src 'unsafe-hashes' 'sha256-{HASHED_EVENT_HANDLER}'
+```
+
+**不安全的 eval 表达式（Unsafe eval expressions）**
+
+如果页面包含 CSP 标头，并且未使用 `script-src` 指令指定 `unsafe-eval` ，则以下方法会被阻止，不会产生任何效果：
+
+- [`eval()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
+- [`Function()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
+- 将字符串文字传递给如下方法时：
+ `setTimeout("alert(\"Hello World!\");", 500);`
+    - [`setTimeout()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout)
+    - [`setInterval()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval)
+    - [`setImmediate()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate)
+- `window.execScript()` （仅限 IE 11 以下版本）
+
+**不安全的 WebAssembly 执行**
+
+如果页面包含 CSP 标头，并且在 `script-src` 中未指定 `wasm-unsafe-eval` ，则会阻止 WebAssembly 在该页面上加载和执行。
+
+**严格动态（strict-dynamic）**
+
+`strict-dynamic` 指定通过 nonce 或 hash 明确授予标记中存在的脚本的信任，应该传播到该根脚本加载的所有脚本。同时，任何允许列表或源表达式，如 `self` 或 `unsafe-inline` 都将被忽略 。
+
+例如:
+
+```http
+Content-Security-Policy: script-src 'strict-dynamic' 'nonce-R4nd0m' https://allowlisted.example.com/
+```
+
+将允许下面的脚本加载，并将信任传播给该脚本加载的任何脚本
+
+```html
+<script nonce="R4nd0m" src="https://example.com/loader.js"></script>
+```
+
+但不允许从 `https://allowlisted.example.com/` 加载脚本，除非附带随机数或从受信任的脚本加载。
+
+**允许投机规则（Allowing speculation rules）（实验）**
+
+[推测规则 API](https://developer.mozilla.org/zh-CN/docs/Web/API/Speculation_Rules_API)
+
+### 对策略进行测试
+
+为降低部署成本， CSP 可以部署为仅报告（report-only）模式。在这个模式下，CSP 策略不是强制性的，但是任何违规行为都将报告给一个指定的 URI 地址。
+
+通过 `Content-Security-Policy-Report-Only: policy` HTTP 标头来指定策略
+
+支持 CSP 的浏览器将对每个企图违反策略的行为发送违规报告，如果策略里包含一个有效的 `report-uri` / `report-to`指令（ `report-uri` 已弃用，可以同时添加 `report-uri` 和 `report-to` 来保持兼容 ）
+
+[Content-Security-Policy: report-to directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to)
+
+### 兼容性
+
+在某些版本的 Safari 网络浏览器中存在一种特殊的不兼容性，即如果设置了内容安全策略标头，但没有设置相同来源（Same Origin）标头。浏览器将阻止自我托管的内容和网站外的内容，并错误地报告说这是由于内容安全政策不允许该内容。
+
+---
+
+### 实践
+
+dify 在 next 框架中的 `middleware.ts` 中间件中设置的内容安全策略
+
+```ts
+const NECESSARY_DOMAIN = '*.sentry.io http://localhost:* http://127.0.0.1:* https://analytics.google.com googletagmanager.com *.googletagmanager.com https://www.google-analytics.com https://api.github.com'
+
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  const requestHeaders = new Headers(request.headers)
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
+	
+	const whiteList = `${process.env.NEXT_PUBLIC_CSP_WHITELIST} ${NECESSARY_DOMAIN}`
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const csp = `'nonce-${nonce}'`
+
+  const scheme_source = 'data: mediastream: blob: filesystem:'
+
+  const cspHeader = `
+    default-src 'self' ${scheme_source} ${csp} ${whiteList};
+    connect-src 'self' ${scheme_source} ${csp} ${whiteList};
+    script-src 'self' ${scheme_source} ${csp} ${whiteList};
+    style-src 'self' 'unsafe-inline' ${scheme_source} ${whiteList};
+    worker-src 'self' ${scheme_source} ${csp} ${whiteList};
+    media-src 'self' ${scheme_source} ${csp} ${whiteList};
+    img-src * data: blob:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    upgrade-insecure-requests;
+`
+  // Replace newline characters and spaces
+  const contentSecurityPolicyHeaderValue = cspHeader
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+
+  requestHeaders.set('x-nonce', nonce)
+
+  requestHeaders.set(
+    'Content-Security-Policy',
+    contentSecurityPolicyHeaderValue,
+  )
+
+  response.headers.set(
+    'Content-Security-Policy',
+    contentSecurityPolicyHeaderValue,
+  )
+
+  return response
+}
+```
+
+在中间件中创建了一个 nonce-source 并添加到了 CSP 中
+
+并且在 GA （google ） 组件中通过 `<script>` 标签引入追踪模块时添加了 nonce-source
+
+```tsx
+// ...
+const GA: FC<IGAProps> = ({
+  gaType,
+}) => {
+  const nonce = process.env.NODE_ENV === 'production' ? (headers() as unknown as UnsafeUnwrappedHeaders).get('x-nonce') : ''
+
+  return (
+    <>
+      <Script
+        nonce={nonce!}
+      ></Script>
+      <Script
+        nonce={nonce!}
+      >
+      </Script>
+      {/* Cookie banner */}
+      <Script
+        id="cookieyes"
+        src='https://cdn-cookieyes.com/client_data/2a645945fcae53f8e025a2b1/script.js'
+        nonce={nonce!}
+      ></Script>
+    </>
+
+  )
+}
+export default React.memo(GA)
+
+```
