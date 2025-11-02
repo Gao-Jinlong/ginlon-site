@@ -57,22 +57,24 @@ const { tabs, defaultTab = tabs?.[0]?.id, urlParam = 'tab' } = Astro.props
   }
 </style>
 
-<script define:vars={{ urlParam }}>
+<script define:vars={{ urlParam }} is:inline>
   // Tab 切换功能
   document.addEventListener('astro:page-load', () => {
+    // 变量声明
+    const urlParamName = urlParam
     const tabButtons = document.querySelectorAll('.tab-button')
     const tabPanels = document.querySelectorAll('.tab-panel')
 
     // 从 URL 中读取初始状态
     function getActiveTabFromUrl() {
       const urlParams = new URLSearchParams(window.location.search)
-      return urlParams.get(urlParam)
+      return urlParams.get(urlParamName)
     }
 
     // 更新 URL 参数
     function updateUrlParam(tabId) {
       const url = new URL(window.location)
-      url.searchParams.set(urlParam, tabId)
+      url.searchParams.set(urlParamName, tabId)
       window.history.replaceState({}, '', url)
     }
 
