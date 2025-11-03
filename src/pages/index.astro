@@ -6,40 +6,39 @@ import { Image } from 'astro:assets';
 import { getBlogs } from '../utils/getBlogs';
 import { dayjs, format } from '../utils/dayjs';
 const sortedBlogs = await getBlogs();
-const routeName = 'blogs'
+const routeName = 'blogs';
 ---
 
 <Main pageTitle="Home">
   <div class="profile-section">
-      <Image
-        transition:name="avatar"
-        class="profile-avatar"
-        src="https://avatars.githubusercontent.com/u/41514616?v=4"
-        alt="Avatar"
-        width={124}
-        height={124}
-        loading="eager"
-      />
+    <Image
+      transition:name="avatar"
+      class="profile-avatar"
+      src="https://gravatar.com/avatar/cd5878de1abed51ad8d91f354427a98647e470547b2dc1c714a43f76d7b8d025?v=1754772938000&size=512&d=initials"
+      alt="Avatar"
+      width={124}
+      height={124}
+      loading="eager"
+    />
 
-      <div class="profile-info">
-        <h1 class="profile-title" >
-          {t('homepage.hello')}
-        </h1>
-        <h2 class="profile-subtitle">
-          <BriefText
-            briefs={[
-              t('homepage.briefs.0'),
-              t('homepage.briefs.1'),
-              t('homepage.briefs.2'),
-            ]}
-            client:load
-          />
-        </h2>
-        <p class="profile-slogan">
-          {t('homepage.personalMission')}
-        </p>
-      
-      </div>
+    <div class="profile-info">
+      <h1 class="profile-title">
+        {t('homepage.hello')}
+      </h1>
+      <h2 class="profile-subtitle">
+        <BriefText
+          briefs={[
+            t('homepage.briefs.0'),
+            t('homepage.briefs.1'),
+            t('homepage.briefs.2'),
+          ]}
+          client:load
+        />
+      </h2>
+      <p class="profile-slogan">
+        {t('homepage.personalMission')}
+      </p>
+    </div>
   </div>
 
   <div class="featured-blogs-section">
@@ -62,7 +61,9 @@ const routeName = 'blogs'
             )}
           >
             <div class="blog-card-inner">
-              <h4 class="blog-title">{blog.data.draft ? '🚧' : ''} {blog.data.title}</h4>
+              <h4 class="blog-title">
+                {blog.data.draft ? '🚧' : ''} {blog.data.title}
+              </h4>
               {blog.data.createdAt && (
                 <span class="blog-date">
                   {dayjs(blog.data.createdAt).format(format)}
