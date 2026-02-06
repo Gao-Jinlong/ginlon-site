@@ -1,19 +1,16 @@
 ---
 import Main from '../layouts/Main.astro';
-import { Image } from 'astro:assets';
 ---
 
 <Main pageTitle="About Me">
   <!-- 个人简介 -->
   <section class="profile-section">
-    <Image
-      transition:name="avatar"
-      class="profile-avatar"
-      src="https://gravatar.com/userimage/229885501/abd91d7fdee0a2123572e7468ad89009.jpeg?size=256"
+    <img
+      src="/images/avatar.jpg"
       alt="Avatar"
+      class="profile-avatar"
       width={120}
       height={120}
-      loading="eager"
     />
     <h1 class="profile-title">Ginlon</h1>
     <h2 class="profile-subtitle">前端工程师</h2>
