@@ -4,6 +4,7 @@ import Main from '../layouts/Main.astro';
 import BriefText from '../components/BriefText.vue';
 import { getBlogs } from '../utils/getBlogs';
 import { dayjs, format } from '../utils/dayjs';
+import TagCloud from '../components/TagCloud.astro';
 const sortedBlogs = await getBlogs();
 const routeName = 'blogs';
 ---
@@ -78,6 +79,8 @@ const routeName = 'blogs';
       </a>
     </div>
   </div>
+
+  <TagCloud />
 </Main>
 
 <style>

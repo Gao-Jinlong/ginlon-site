@@ -1,0 +1,91 @@
+---
+import { getAllTags } from '../utils/getTags';
+
+const tags = await getAllTags();
+const maxCount = Math.max(...tags.map(t => t.count));
+
+// 计算标签大小（按热度）
+function getTagSize(count: number) {
+  const ratio = count / maxCount;
+  if (ratio > 0.8) return 'text-lg';
+  if (ratio > 0.5) return 'text-base';
+  if (ratio > 0.3) return 'text-sm';
+  return 'text-xs';
+}
+---
+
+<div class="tag-cloud">
+  <h3 class="tag-cloud-title">热门标签</h3>
+  <div class="tag-cloud-list">
+    {tags.map(tag => (
+      <a
+        href={`/tags/${tag.slug}`}
+        class={`tag-cloud-item ${getTagSize(tag.count)}`}
+        style={`--tag-count: ${tag.count}`}
+      >
+        <span class="tag-name">{tag.name}</span>
+        <span class="tag-count">({tag.count})</span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .tag-cloud {
+    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm;
+    @apply dark:border-gray-800 dark:bg-gray-900/90;
+    @apply my-6;
+  }
+
+  .tag-cloud-title {
+    @apply mb-4 text-xl font-bold text-gray-900 dark:text-gray-100;
+    @apply border-b-2 border-blue-500 pb-2;
+  }
+
+  .tag-cloud-list {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .tag-cloud-item {
+    @apply inline-flex items-center gap-1;
+    @apply px-3 py-1.5;
+    @apply rounded-lg;
+    @apply bg-gradient-to-r from-blue-50 to-purple-50 text-gray-700;
+    @apply hover:from-blue-100 hover:to-purple-100 hover:text-gray-900;
+    @apply dark:from-blue-900/30 dark:to-purple-900/30 dark:text-gray-300;
+    @apply dark:hover:from-blue-900/50 dark:hover:to-purple-900/50 dark:hover:text-gray-100;
+    @apply transition-all duration-200;
+    @apply cursor-pointer;
+    @apply font-medium;
+  }
+
+  .tag-name {
+    @apply truncate;
+  }
+
+  .tag-count {
+    @apply text-gray-500 dark:text-gray-400;
+    @apply text-xs;
+  }
+
+  /* 动态字体大小 */
+  .tag-cloud-item.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .tag-cloud-item.text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .tag-cloud-item.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .tag-cloud-item.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+</style>

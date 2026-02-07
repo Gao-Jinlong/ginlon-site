@@ -16,6 +16,7 @@ interface BlogData extends CollectionEntry<'blogs'> {
     createdAt: string;
     lastModified?: Date;
     category: BlogCategory;
+    tags?: string[];
   };
 }
 
@@ -30,6 +31,7 @@ export interface Blog {
     poster?: string;
     posterDescription?: string;
     category: BlogCategory;
+    tags?: string[];
   };
   slug: string;
 }

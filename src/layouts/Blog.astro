@@ -6,8 +6,9 @@ import { getBlogs } from '../utils/getBlogs'
 import { t } from 'astro-i18n'
 import TableOfContents from '../components/TableOfContents.astro'
 import { dayjs, format } from '../utils/dayjs'
+import TagsDisplay from '../components/TagsDisplay.astro'
 
-const { title, subtitle, poster, posterDescription, createdAt, lastModified } =
+const { title, subtitle, poster, posterDescription, createdAt, lastModified, tags } =
   Astro.props.frontmatter
 
 const blogs = await getBlogs()
@@ -32,6 +33,11 @@ const headings = await Astro.props.headings
                 {t('blogs.createdAt')}: {dayjs(createdAt).format(format)}
               </time>
             </div>
+            {tags && tags.length > 0 && (
+              <div class="article-tags">
+                <TagsDisplay tags={tags} />
+              </div>
+            )}
           </div>
           {
             poster && (
@@ -112,6 +118,10 @@ const headings = await Astro.props.headings
 
   .article-date {
     @apply flex items-center gap-1;
+  }
+
+  .article-tags {
+    @apply mt-3;
   }
 
   .cover-container {
