@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { dayjs } from '../utils/dayjs'
+import TagsDisplay from './TagsDisplay.astro'
 
 interface Props {
   blog: {
@@ -78,15 +79,6 @@ const getRandomPattern = () => {
         <time class="blog-date">
           {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
         </time>
-        {
-          blog.data.tags && (
-            <div class="blog-tags">
-              {blog.data.tags.map(tag => (
-                <span class="blog-tag">{tag}</span>
-              ))}
-            </div>
-          )
-        }
       </div>
       {blog.data.subtitle && <p class="blog-subtitle">{blog.data.subtitle}</p>}
       {
@@ -94,6 +86,11 @@ const getRandomPattern = () => {
           <p class="blog-description">{blog.data.description}</p>
         )
       }
+      {blog.data.tags && (
+        <div class="blog-tags">
+          <TagsDisplay tags={blog.data.tags} />
+        </div>
+      )}
     </div>
   </div>
 </a>

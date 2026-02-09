@@ -1,5 +1,6 @@
 ---
 import RecentPosts from '../components/RecentPosts.astro'
+import TagsDisplay from '../components/TagsDisplay.astro'
 import Main from './Main.astro'
 import { Image } from 'astro:assets'
 import { getBlogs } from '../utils/getBlogs'
@@ -7,7 +8,7 @@ import { t } from 'astro-i18n'
 import TableOfContents from '../components/TableOfContents.astro'
 import { dayjs, format } from '../utils/dayjs'
 
-const { title, subtitle, poster, posterDescription, createdAt, lastModified } =
+const { title, subtitle, poster, posterDescription, createdAt, lastModified, tags } =
   Astro.props.frontmatter
 
 const blogs = await getBlogs()

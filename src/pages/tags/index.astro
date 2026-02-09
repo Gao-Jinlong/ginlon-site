@@ -1,0 +1,94 @@
+---
+import Main from '../../layouts/Main.astro';
+import { getAllTags } from '../../utils/getTags';
+import { t } from 'astro-i18n';
+
+const tags = await getAllTags();
+---
+
+<Main pageTitle={t('tags.title')}>
+  <section class="tags-page">
+    <div class="tags-header">
+      <h1 class="page-title">{t('tags.title')}</h1>
+      <p class="page-description">{t('tags.description')}</p>
+    </div>
+
+    <div class="tags-container">
+      <div class="tags-grid">
+        {tags.map(tag => (
+          <a
+            href={`/tags/${tag.slug}`}
+            class="tag-card"
+          >
+            <div class="tag-card-header">
+              <span class="tag-card-icon">#</span>
+              <h3 class="tag-card-name">{tag.name}</h3>
+            </div>
+            <p class="tag-card-count">{tag.count} 篇文章</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Main>
+
+<style>
+  .tags-page {
+    @apply mx-auto max-w-5xl;
+    @apply py-8;
+  }
+
+  .tags-header {
+    @apply mb-8 text-center;
+  }
+
+  .page-title {
+    @apply mb-2 text-4xl font-bold;
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .page-description {
+    @apply text-lg text-gray-600 dark:text-gray-400;
+  }
+
+  .tags-container {
+    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm;
+    @apply dark:border-gray-800 dark:bg-gray-900/90;
+  }
+
+  .tags-grid {
+    @apply grid gap-4;
+    @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+  }
+
+  .tag-card {
+    @apply block p-4;
+    @apply rounded-lg;
+    @apply bg-gradient-to-br from-gray-50 to-gray-100;
+    @apply hover:from-blue-50 hover:to-purple-50;
+    @apply dark:from-gray-800 dark:to-gray-900;
+    @apply dark:hover:from-blue-900/30 dark:hover:to-purple-900/30;
+    @apply transition-all duration-300;
+    @apply hover:shadow-lg;
+    @apply hover:-translate-y-1;
+  }
+
+  .tag-card-header {
+    @apply flex items-center gap-2;
+  }
+
+  .tag-card-icon {
+    @apply text-blue-500 text-xl;
+  }
+
+  .tag-card-name {
+    @apply text-lg font-semibold;
+    @apply text-gray-900 dark:text-gray-100;
+    @apply truncate;
+  }
+
+  .tag-card-count {
+    @apply mt-2 text-sm;
+    @apply text-gray-600 dark:text-gray-400;
+  }
+</style>

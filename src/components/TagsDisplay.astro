@@ -1,0 +1,51 @@
+---
+interface Props {
+  tags?: string[];
+  className?: string;
+}
+
+const { tags = [], className = '' } = Astro.props;
+
+if (tags.length === 0) {
+  return null;
+}
+---
+
+<div class={`tags ${className}`}>
+  {tags.map(tag => (
+    <a
+      href={`/tags/${encodeURIComponent(tag)}`}
+      class="tag"
+      aria-label={`查看标签: ${tag}`}
+    >
+      <span class="tag-icon">#</span>
+      <span class="tag-text">{tag}</span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .tags {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1;
+    @apply px-2.5 py-1 text-sm;
+    @apply rounded-full;
+    @apply bg-blue-50 text-blue-700;
+    @apply hover:bg-blue-100 hover:text-blue-800;
+    @apply dark:bg-blue-900/30 dark:text-blue-300;
+    @apply dark:hover:bg-blue-900/50 dark:hover:text-blue-200;
+    @apply transition-all duration-200;
+    @apply cursor-pointer;
+  }
+
+  .tag-icon {
+    @apply text-blue-400 dark:text-blue-400;
+  }
+
+  .tag-text {
+    @apply font-medium;
+  }
+</style>
