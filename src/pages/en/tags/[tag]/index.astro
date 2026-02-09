@@ -1,5 +1,9 @@
 ---
 import Page from "../../../tags/[tag].astro"
-const { props } = Astro
+const { tag } = Astro.params
+
+if (!tag) {
+  return new Response('Tag not found', { status: 404 })
+}
 ---
-<Page {...props} />
+<Page tag={tag} />

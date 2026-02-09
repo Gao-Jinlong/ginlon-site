@@ -19,7 +19,7 @@ export async function getAllTags(): Promise<Tag[]> {
 
   blogs.forEach(blog => {
     const tags = blog.data.tags || [];
-    tags.forEach(tag => {
+    tags.forEach((tag: string) => {
       const count = tagMap.get(tag) || 0;
       tagMap.set(tag, count + 1);
     });

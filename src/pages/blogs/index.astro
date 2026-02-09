@@ -65,8 +65,8 @@ const categories = [
             >
               <div class="category-description">{category.description}</div>
               <div class="blog-list">
-                {(category.id === 'tech' ? techBlogs : lifeBlogs).map(blog => (
-                  <BlogCard blog={blog} />
+                {(category.id === 'tech' ? techBlogs : lifeBlogs).map((blog, index) => (
+                  <BlogCard blog={blog} index={index} />
                 ))}
               </div>
             </div>
@@ -118,8 +118,8 @@ const categories = [
   }
 
   .blog-list {
-    @apply grid gap-8;
-    @apply md:grid-cols-2;
+    @apply max-w-4xl mx-auto;
+    @apply space-y-8;
   }
 
   .blog-card {
