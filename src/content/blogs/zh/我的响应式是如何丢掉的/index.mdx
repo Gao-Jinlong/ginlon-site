@@ -2,24 +2,14 @@
 lang: zh
 layout: /src/layouts/Blog.astro
 title: '我的响应式是如何丢掉的'
-subtitle: ''
-
+subtitle: '从源码层面分析响应式丢失的原因'
 permalink: '我的响应式是如何丢掉的'
 category: 'tech'
 createdAt: '2023-04-19 06:58:10 +08:00'
 tags: ['Vue', '响应式', 'JavaScript', '前端']
-
-lang: zh
-layout: /src/layouts/Blog.astro
-title: '我的响应式是如何丢掉的'
-subtitle: ''
-
-permalink: '我的响应式是如何丢掉的'
-category: 'tech'
-createdAt: '2023-04-19 06:58:10 +08:00'
 ---
 
-## ref 还是 reactive ？
+## ref 还是 reactive？
 
 **结论：二者本质是相同的，建议无脑 ref。**
 
@@ -27,7 +17,7 @@ createdAt: '2023-04-19 06:58:10 +08:00'
 
 `ref(someValue)` 就是 `reactive({value: someValue})`
 
-> 关于 ref 的 .value 后缀，VueConf（vue 开发者大会）曾经提出过使用`$`语法糖声明响应式变量，并且在编译时自动帮助开发者添加 .value 从而使开发者更加无感的使用响应式，后来这个提案被拒绝掉了没能成为正式标准，因为 vue 团队发现没有 .value 时，开发者不能够清晰地确定自己引用的值是否是响应式的，会带来一些困扰和问题，反而增加了开发者的心智负担，因此拒绝了这个提案。（因此当你不能很好地掌控 ref 与 reactive 时，建议使用 ref，通过 .value 可以更清晰的告诉你：“hey guys，i'm a ref!”）
+> 关于 ref 的 .value 后缀，VueConf（vue 开发者大会）曾经提出过使用`$`语法糖声明响应式变量，并且在编译时自动帮助开发者添加 .value 从而使开发者更加无感的使用响应式，后来这个提案被拒绝掉了没能成为正式标准，因为 vue 团队发现没有 .value 时，开发者不能够清晰地确定自己引用的值是否是响应式的，会带来一些困扰和问题，反而增加了开发者的心智负担，因此拒绝了这个提案。（因此当你不能很好地掌控 ref 与 reactive 时，建议使用 ref，通过 .value 可以更清晰的告诉你："hey guys, i'm a ref!"）
 > 更多阅读：[知道尤雨溪为什么要放弃 $ 语法糖提案么？ - 掘金](https://juejin.cn/post/7222874734185922597?share_token=42842692-7a4b-440d-85a8-1fb56d16f7e7#heading-4)
 
 （就这？这谁都知道！退钱！）
@@ -40,7 +30,7 @@ createdAt: '2023-04-19 06:58:10 +08:00'
 
 在 javascript 中字面量和引用类型都是存储的指向值所在地址的指针，只不过字面量在使用时是按值传递（将值复制一份给使用目标），而引用类型的值仍然是一个地址，这使得**引用类型的值发生变化后在所有被引用位置都会取得变化后的值。**
 
-![](https://cdn.nlark.com/yuque/0/2023/jpeg/35025722/1681871135584-678bf377-5e80-4d16-80f0-e326cbace1ea.jpeg)
+![](https://cdn.nlark.com/yuque/0/2023/jpeg/35025722/168187113558-678bf377-5e80-4d16-80f0-e326cbace1ea.jpeg)
 
 这**通常**是一个非常有用的特性，这可以保证我们**查询**到的值始终是最新的，从而保证所有引用数据的地方都是最新的值，避免数据不一致带来的问题。举个例子
 
@@ -62,7 +52,7 @@ getMemberCount(club); // 20
 
 我们在所有使用`count`的地方都通过查询`club`来取值从而达到了所有引用位置都可以同步最新的值。
 
-我前面使用了一个词语“通常”，那么肯定会有不常见的情况，接下来我们来讲“但是”
+我前面使用了一个词语"通常"，那么肯定会有不常见的情况，接下来我们来讲"但是"
 
 引用类型虽然可以很方便的保证数据的一致性，这非常棒，但是也打开了潘多拉的魔盒。当一个程序员只是为了方便而使用引用类型，而并不清楚引用类型的本质，那么混乱就会悄悄地侵入我们的程序，并且这是一个很难察觉的问题，直到某一天，产品经理提出了一个新的需求，他要对我们以前的业务逻辑进行一些修改和升级！此时我们面对自己一点一点迭代出来的庞然大物，却无从下手，因为我们无法知道每个值究竟是在什么地方被改掉了！
 
@@ -127,7 +117,6 @@ Promise.resolve().then(() => {
 结果
 
 ![image.png](image2.png)
-
 ![image.png](image3.png)
 
 哦天哪，这太可怕了，我们在程序中访问到的值和在页面中访问到的值不是同一个值！
@@ -140,7 +129,7 @@ Promise.resolve().then(() => {
 
 首先在改为异步语句之前，一切都是正常的，这牵扯到了 vue 内部的一个优化机制，
 
-众所周知 DOM 操作是极其昂贵的，如果我们的响应数据（ref）每次发生变化时都去更新 DOM，那会带来很多不必要的 DOM 操作，造成很大的性能损耗。（尽管有虚拟 DOM、标记更新一系列优化，但是仍然是非常巨大的开销）
+众所周知 DOM 操作是极其昂贵的，如果我们的响应数据（ref）每次发生变化时都去更新 DOM，那会带来很多不必要的 DOM 操作，造成很大的性能损耗。（尽管有虚拟 DOM、标记更新等一系列优化，但是仍然是非常巨大的开销）
 
 再来个例子
 
@@ -169,7 +158,6 @@ for (let i = 0; i < 10; i++) {
 执行结果
 
 ![image.png](image4.png)
-
 ![image.png](image5.png)
 
 可以看到`watch`只执行了一次，也就是说只监听到了一次响应式数据变化，为什么？
@@ -306,52 +294,12 @@ const idToData = list.reduce((map, item) => {
 
 千辛万苦，终于搞定了响应式，可是很遗憾，解决了响应式的问题并不代表彻底解决了页面更新的问题，因为实际的开发中有些代码会非常庞大复杂，迭代多次后往往很难完善的处理响应式的流转，会造成有些极端情况下，即使在可追踪的范围内我们的数据完成了响应式的更新，我们的页面也有可能不会重新渲染。万不得已时可以尝试的解决方案：
 
-给需要重新渲染的部分添加`:key`属性来明确的告诉 vue： “hey, guys! 这一部分有变化，需要重新渲染！”
+给需要重新渲染的部分添加`:key`属性来明确的告诉 vue： "hey, guys! 这一部分有变化，需要重新渲染！"
 
-附部分代码，可直接在 [Vue SFC Playground](https://play.vuejs.org/#eNpdkUFrhDAQhf9K8BIXxHV7KEXchfbSlp5KS09egs6uaTUJGncLIf+9kxh1twcNzMx7+V7GRI9KpecRojwqhqrnSpMB9KgOpSg175TsNTGkh2OCP1ZpfoaEXJiumoQI+NWfvPohlhx72RGKPhR1qKykGNBJdiAFkP2ijY3rllqwDnL6zEUrBU2mGhdHmYd+qVWDypzusuzhfp4oNavrHoYhp+9cnGom3XVYtu6wm+luTxeHu5NYwOWLtSNs9odg7uBkC2krT2vXOySmBlC57keY3YJP6oj39IMJdhMR9a/IjRGD+cq9y2buhfoJ+DeCe2rHfOXv0qNL8PMdwNfF5qjjeIUPA2nwRAl9keL0ht9km2RIXmynZbo1ikJDp1qmwS+1aHYH0kDbSmLMvCIfj1hLii22p7E7f86JjLkmTX3R+ndHyTS6SubA/0ShfCMrtgtdZP8Aq7bv7Q==) 中执行并调试
-
-```vue
-<script setup>
-import { ref, reactive, watch, nextTick } from 'vue';
-
-const someone = reactive({
-  name: 'Ginlon',
-  info: {
-    phone: '10086',
-    address: 'Qingdao',
-  },
-});
-
-watch(
-  someone,
-  newValue => {
-    console.log(newValue);
-  },
-  { deep: true },
-);
-
-someone.name = 'Sana';
-
-const newInfo = {
-  phone: '10010',
-  address: 'Beijing',
-};
-
-someone.info = newInfo;
-setTimeout(() => {
-  newInfo.address = 'HongKong';
-}, 0);
-</script>
-
-<template>
-  <h1>hello {{ someone.name }}</h1>
-  <h2>phone:{{ someone.info.phone }}</h2>
-  <h2>address:{{ someone.info.address }}</h2>
-</template>
+附部分代码，可直接在 [Vue SFC Playground](https://play.vuejs.org/#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 1000000069 (ID 1000000069)
 ```
 
 ### 推荐阅读
 
 - 《Vue.js 设计与实现》.霍春阳.2022 [图灵社区](https://www.ituring.com.cn/book/2953)
-- [你不知道的 async、await 魔鬼细节](https://mp.weixin.qq.com/s/X1-DRaZ_9cAfl-q9UwhJGA)
-tags: ['Vue', '响应式', 'JavaScript', '前端']
+- [你不知道的 async、await 鬼细节](https://mp.weixin.qq.com/s/X1-DRaZ_9cAfl-q9UwhJGA)
