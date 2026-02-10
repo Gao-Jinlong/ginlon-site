@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets'
 import { dayjs } from '../utils/dayjs'
 import TagsDisplay from './TagsDisplay.astro'
 
@@ -20,44 +19,65 @@ interface Props {
 
 const { blog } = Astro.props
 
-const getRandomColor = () => {
+// 判断是否为外部URL
+const isExternalUrl = (url: string) => url.startsWith('http://') || url.startsWith('https://')
+
+// 获取第一个字符作为图标
+const getFirstChar = (title: string) => title.charAt(0).toUpperCase()
+
+// 生成基于标题的随机颜色
+const getColorFromTitle = (title: string) => {
   const colors = [
-    'bg-blue-50 dark:bg-blue-900/30',
-    'bg-purple-50 dark:bg-purple-900/30',
-    'bg-green-50 dark:bg-green-900/30',
-    'bg-yellow-50 dark:bg-yellow-900/30',
-    'bg-pink-50 dark:bg-pink-900/30',
+    { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
+    { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
+    { bg: 'bg-green-50 dark:bg-green-900/30', text: 'text-green-600 dark:text-green-400' },
+    { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-yellow-600 dark:text-yellow-400' },
+    { bg: 'bg-pink-50 dark:bg-pink-900/30', text: 'text-pink-600 dark:text-pink-400' },
+    { bg: 'bg-indigo-50 dark:bg-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' },
+    { bg: 'bg-teal-50 dark:bg-teal-900/30', text: 'text-teal-600 dark:text-teal-400' },
+    { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-600 dark:text-orange-400' },
   ]
-  return colors[Math.floor(Math.random() * colors.length)]
+
+  // 根据标题长度选择颜色
+  const index = title.length % colors.length
+  return colors[index]
 }
 
-const getRandomPattern = () => {
-  const patterns = [
-    'pattern-dots',
-    'pattern-lines',
-    'pattern-grid',
-    'pattern-waves',
-  ]
-  return patterns[Math.floor(Math.random() * patterns.length)]
-}
+const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
 ---
 
 <a href={`/blogs/${blog.data.permalink}`} class="blog-card">
   <div class="blog-card-inner">
     {
-      blog.data.poster ? (
+      blog.data.poster && isExternalUrl(blog.data.poster) ? (
+        // 外部URL - 使用img标签
         <div class="blog-image">
-          <Image
+          <img
             src={blog.data.poster}
             alt={blog.data.title}
-            width={400}
-            height={200}
             class="poster-image"
+            loading="lazy"
+            onerror="this.parentElement.parentElement.classList.add('image-error')"
           />
+          <div class="image-fallback">
+            <span class={`fallback-text ${textColor}`}>
+              {getFirstChar(blog.data.title)}
+            </span>
+          </div>
+        </div>
+      ) : blog.data.poster ? (
+        // 本地路径 - 使用占位图（因为博客目录下没有poster图片）
+        <div class={`blog-image ${bgColor}`}>
+          <span class={`placeholder-icon ${textColor}`}>
+            {getFirstChar(blog.data.title)}
+          </span>
         </div>
       ) : (
-        <div class={`blog-image ${getRandomColor()} ${getRandomPattern()}`}>
-          <span class="placeholder-icon">📄</span>
+        // 无封面 - 使用占位图
+        <div class={`blog-image ${bgColor}`}>
+          <span class={`placeholder-icon ${textColor}`}>
+            {getFirstChar(blog.data.title)}
+          </span>
         </div>
       )
     }
@@ -106,14 +126,34 @@ const getRandomPattern = () => {
   .poster-image {
     @apply h-full w-full object-cover;
     @apply transition-transform duration-300;
+    @apply absolute inset-0;
   }
 
   .blog-card:hover .poster-image {
     @apply scale-110;
   }
 
+  /* 图片加载失败时的fallback */
+  .image-fallback {
+    @apply absolute inset-0;
+    @apply flex items-center justify-center;
+    @apply hidden;
+  }
+
+  .blog-image.image-error .poster-image {
+    @apply hidden;
+  }
+
+  .blog-image.image-error .image-fallback {
+    @apply flex;
+  }
+
+  .fallback-text {
+    @apply text-6xl font-bold;
+  }
+
   .placeholder-icon {
-    @apply text-6xl text-gray-300 dark:text-gray-600;
+    @apply text-6xl font-bold;
   }
 
   /* 内容区域 - 右侧 */
