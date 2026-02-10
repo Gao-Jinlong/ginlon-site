@@ -1,11 +1,10 @@
 ---
-import { l, t } from 'astro-i18n';
+import { t } from 'astro-i18n';
 import Main from '../layouts/Main.astro';
 import BriefText from '../components/BriefText.vue';
 import { getBlogs } from '../utils/getBlogs';
 import BlogCard from '../components/BlogCard.astro';
 const sortedBlogs = await getBlogs();
-const routeName = 'blogs';
 ---
 
 <Main pageTitle="Home">
