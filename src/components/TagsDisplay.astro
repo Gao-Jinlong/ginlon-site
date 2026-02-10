@@ -1,4 +1,6 @@
 ---
+import { tagToSlug } from '../utils/getTags';
+
 interface Props {
   tags?: string[];
   className?: string;
@@ -12,16 +14,19 @@ if (tags.length === 0) {
 ---
 
 <div class={`tags ${className}`}>
-  {tags.map(tag => (
-    <a
-      href={`/tags/${encodeURIComponent(tag)}`}
-      class="tag"
-      aria-label={`查看标签: ${tag}`}
-    >
-      <span class="tag-icon">#</span>
-      <span class="tag-text">{tag}</span>
-    </a>
-  ))}
+  {tags.map(tag => {
+    const slug = tagToSlug(tag);
+    return (
+      <a
+        href={`/tags/${slug}`}
+        class="tag"
+        aria-label={`查看标签: ${tag}`}
+      >
+        <span class="tag-icon">#</span>
+        <span class="tag-text">{tag}</span>
+      </a>
+    );
+  })}
 </div>
 
 <style>
