@@ -54,38 +54,21 @@ const getRandomPattern = () => {
             height={200}
             class="poster-image"
           />
-          <div class="poster-overlay">
-            <div class="poster-content">
-              <h3 class="poster-title">
-                {blog.data.draft ? '🚧' : ''}
-                {blog.data.title}
-              </h3>
-            </div>
-          </div>
         </div>
       ) : (
         <div class={`blog-image ${getRandomColor()} ${getRandomPattern()}`}>
-          <div class="poster-content">
-            <h3 class="poster-title">
-              {blog.data.draft ? '🚧' : ''}
-              {blog.data.title}
-            </h3>
-          </div>
+          <span class="placeholder-icon">📄</span>
         </div>
       )
     }
     <div class="blog-content">
-      <div class="blog-meta">
-        <time class="blog-date">
-          {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
-        </time>
-      </div>
-      {blog.data.subtitle && <p class="blog-subtitle">{blog.data.subtitle}</p>}
-      {
-        blog.data.description && (
-          <p class="blog-description">{blog.data.description}</p>
-        )
-      }
+      <h3 class="blog-title">
+        {blog.data.draft ? '🚧' : ''}
+        {blog.data.title}
+      </h3>
+      <time class="blog-date">
+        {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
+      </time>
       {blog.data.tags && (
         <div class="blog-tags">
           <TagsDisplay tags={blog.data.tags} />
@@ -99,116 +82,80 @@ const getRandomPattern = () => {
   .blog-card {
     @apply block;
     @apply transition-all duration-300;
-    @apply hover:scale-[1.02];
+    @apply hover:scale-[1.01];
   }
 
   .blog-card-inner {
+    @apply flex flex-col md:flex-row;
     @apply overflow-hidden rounded-lg;
     @apply bg-white dark:bg-gray-900;
     @apply border border-gray-200 dark:border-gray-700;
     @apply shadow-sm;
     @apply transition-all duration-300;
     @apply hover:shadow-lg;
+    @apply hover:border-gray-300 dark:hover:border-gray-600;
   }
 
+  /* 图片区域 - 左侧 */
   .blog-image {
-    @apply relative h-48 w-full overflow-hidden;
+    @apply relative h-48 w-full md:h-auto md:w-48 md:flex-shrink-0;
+    @apply overflow-hidden;
     @apply flex items-center justify-center;
   }
 
-  .poster-content {
-    @apply p-6 text-center;
-    @apply relative z-10;
+  .poster-image {
+    @apply h-full w-full object-cover;
+    @apply transition-transform duration-300;
   }
 
-  .poster-overlay {
-    @apply absolute inset-0;
-    @apply flex items-center justify-center;
-    @apply bg-gradient-to-t from-black/60 via-transparent to-transparent;
-    @apply z-10;
+  .blog-card:hover .poster-image {
+    @apply scale-110;
   }
 
-  .poster-overlay .poster-content {
-    @apply absolute;
-    @apply p-6 text-left;
+  .placeholder-icon {
+    @apply text-6xl text-gray-300 dark:text-gray-600;
   }
 
-  .poster-overlay .poster-title {
-    @apply text-white;
-    @apply text-2xl font-bold;
-    @apply bg-black/50 p-4;
+  /* 内容区域 - 右侧 */
+  .blog-content {
+    @apply flex flex-col justify-between;
+    @apply p-6 md:p-8;
+    @apply flex-1;
   }
 
-  .poster-title {
+  .blog-title {
     @apply text-xl font-bold;
     @apply text-gray-900 dark:text-gray-100;
-    @apply line-clamp-3;
-  }
-
-  .blog-content {
-    @apply p-6;
-  }
-
-  .blog-meta {
-    @apply flex items-center justify-between;
-    @apply mb-4;
+    @apply mb-3;
+    @apply line-clamp-2;
+    @apply leading-snug;
   }
 
   .blog-date {
     @apply text-sm text-gray-500 dark:text-gray-400;
+    @apply mb-3;
   }
 
   .blog-tags {
-    @apply flex flex-wrap gap-2;
+    @apply mt-auto;
   }
 
-  .blog-tag {
-    @apply px-2 py-1;
-    @apply text-xs font-medium;
-    @apply bg-blue-100 text-blue-800;
-    @apply dark:bg-blue-900 dark:text-blue-200;
-    @apply rounded-full;
-  }
+  /* 移动端适配 */
+  @media (max-width: 767px) {
+    .blog-card-inner {
+      @apply flex-col;
+    }
 
-  .blog-subtitle {
-    @apply text-gray-700 dark:text-gray-300;
-    @apply text-base;
-    @apply mb-3;
-    @apply line-clamp-2;
-  }
+    .blog-image {
+      @apply w-full h-48;
+    }
 
-  .blog-description {
-    @apply text-gray-600 dark:text-gray-400;
-    @apply text-sm;
-    @apply line-clamp-3;
-  }
+    .blog-content {
+      @apply p-6;
+    }
 
-  /* 随机背景图案 */
-  .pattern-dots {
-    background-image: radial-gradient(currentColor 1px, transparent 1px);
-    background-size: 20px 20px;
-    @apply text-gray-200 dark:text-gray-700;
-  }
-
-  .pattern-lines {
-    background-image: linear-gradient(45deg, currentColor 1px, transparent 1px);
-    background-size: 20px 20px;
-    @apply text-gray-200 dark:text-gray-700;
-  }
-
-  .pattern-grid {
-    background-image:
-      linear-gradient(currentColor 1px, transparent 1px),
-      linear-gradient(90deg, currentColor 1px, transparent 1px);
-    background-size: 20px 20px;
-    @apply text-gray-200 dark:text-gray-700;
-  }
-
-  .pattern-waves {
-    background-image:
-      linear-gradient(45deg, currentColor 25%, transparent 25%),
-      linear-gradient(-45deg, currentColor 25%, transparent 25%);
-    background-size: 20px 20px;
-    @apply text-gray-200 dark:text-gray-700;
+    .blog-title {
+      @apply text-lg;
+    }
   }
 </style>
