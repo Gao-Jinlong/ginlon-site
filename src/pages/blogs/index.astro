@@ -120,6 +120,14 @@ const categories = [
   .blog-list {
     @apply grid gap-8;
     @apply md:grid-cols-2;
+    @apply lg:grid-cols-2;
+  }
+
+  /* 单列时让卡片占满更多宽度 */
+  @media (max-width: 767px) {
+    .blog-list {
+      @apply grid-cols-1;
+    }
   }
 
   .blog-card {

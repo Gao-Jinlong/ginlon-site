@@ -25,9 +25,14 @@
   "navigation": {
     "home": "Home",
     "blogs": "Blogs",
+    "tags": "Tags",
     "about": "About",
     "projects": "Projects",
     "contact": "Contact"
+  },
+  "tags": {
+    "title": "Tags",
+    "description": "Explore more related articles through tags"
   },
   "seo": {
     "keywords": "Ginlon, Frontend, Programmer, Frontend Engineer, vue",

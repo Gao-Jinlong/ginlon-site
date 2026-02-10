@@ -25,9 +25,14 @@
   "navigation": {
     "home": "首页",
     "blogs": "博客",
+    "tags": "标签",
     "about": "关于",
     "projects": "项目",
     "contact": "联系"
+  },
+  "tags": {
+    "title": "标签",
+    "description": "通过标签探索更多相关文章"
   },
   "seo": {
     "keywords": "Ginlon, 前端, 程序员, 前端工程师, vue",

@@ -17,11 +17,6 @@ export function tagToSlug(tag: string): string {
 }
 
 /**
- * 从 slug 还原标签名称
- */
-const tagSlugMap = new Map<string, string>();
-
-/**
  * 获取所有标签及其文章数量
  */
 export async function getAllTags(): Promise<Tag[]> {
@@ -37,10 +32,6 @@ export async function getAllTags(): Promise<Tag[]> {
     tags.forEach((tag: string) => {
       const count = tagMap.get(tag) || 0;
       tagMap.set(tag, count + 1);
-
-      // 建立slug到名称的映射
-      const slug = tagToSlug(tag);
-      tagSlugMap.set(slug, tag);
     });
   });
 
@@ -51,13 +42,6 @@ export async function getAllTags(): Promise<Tag[]> {
       count,
     }))
     .sort((a, b) => b.count - a.count);
-}
-
-/**
- * 根据标签 slug 获取对应的标签名称
- */
-export function getTagName(slug: string): string {
-  return tagSlugMap.get(slug) || slug;
 }
 
 /**

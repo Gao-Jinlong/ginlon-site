@@ -1,22 +1,23 @@
 ---
 import Main from '../../layouts/Main.astro';
-import { getBlogsByTag, getTagName, getAllTags } from '../../utils/getTags';
+import { getBlogsByTag, getAllTags, type Tag } from '../../utils/getTags';
 import BlogCard from '../../components/BlogCard.astro';
 
 export async function getStaticPaths() {
   const tags = await getAllTags()
 
   return tags.map((tag) => ({
-    params: { tag: tag.slug }
+    params: { tag: tag.slug },
+    props: { tagName: tag.name } // 传递原始标签名
   }))
 }
 
 interface Props {
   tag: string;
+  tagName: string;
 }
 
-const { tag } = Astro.props;
-const tagName = await getTagName(tag);
+const { tag, tagName } = Astro.props;
 const blogs = await getBlogsByTag(tagName);
 ---
 
