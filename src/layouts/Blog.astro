@@ -32,12 +32,12 @@ const headings = await Astro.props.headings
               <time class="article-date">
                 {t('blogs.createdAt')}: {dayjs(createdAt).format(format)}
               </time>
-              {tags && tags.length > 0 && (
-                <div class="article-tags">
-                  <TagsDisplay tags={tags} />
-                </div>
-              )}
             </div>
+            {tags && tags.length > 0 && (
+              <div class="article-tags">
+                <TagsDisplay tags={tags} />
+              </div>
+            )}
           </div>
           {
             poster && (
@@ -85,7 +85,8 @@ const headings = await Astro.props.headings
 
 <style>
   .blog-article {
-    @apply relative mx-auto max-w-4xl;
+    @apply relative mx-auto;
+    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
   }
 
   .article-container {
@@ -113,11 +114,15 @@ const headings = await Astro.props.headings
   }
 
   .article-meta {
-    @apply mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500;
+    @apply mt-2 text-sm text-gray-500 dark:text-gray-500;
   }
 
   .article-date {
     @apply flex items-center gap-1;
+  }
+
+  .article-tags {
+    @apply mt-4;
   }
 
   .cover-container {

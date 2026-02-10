@@ -88,15 +88,17 @@ import Main from '../layouts/Main.astro';
 
 <style>
   .about-container {
-    @apply mx-auto max-w-2xl space-y-12 p-6;
+    @apply mx-auto space-y-12 p-6;
     @apply shadow-sm;
     @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+    @apply max-w-2xl lg:max-w-3xl xl:max-w-4xl;
   }
 
   .profile-section {
     @apply flex flex-col flex-wrap items-center text-center;
     @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-    @apply my-6;
+    @apply my-6 mx-auto;
+    @apply max-w-2xl lg:max-w-3xl xl:max-w-4xl;
   }
 
   .profile-avatar {
