@@ -3,7 +3,7 @@ import { l, t } from 'astro-i18n';
 import Main from '../layouts/Main.astro';
 import BriefText from '../components/BriefText.vue';
 import { getBlogs } from '../utils/getBlogs';
-import { dayjs, format } from '../utils/dayjs';
+import BlogCard from '../components/BlogCard.astro';
 const sortedBlogs = await getBlogs();
 const routeName = 'blogs';
 ---
@@ -51,23 +51,7 @@ const routeName = 'blogs';
     <div class="blogs-container">
       {
         sortedBlogs.slice(0, 3).map(blog => (
-          <a
-            class="blog-card"
-            href={l(
-              `${import.meta.env.BASE_URL}${routeName}/${blog.data.permalink}`,
-            )}
-          >
-            <div class="blog-card-inner">
-              <h4 class="blog-title">
-                {blog.data.draft ? '🚧' : ''} {blog.data.title}
-              </h4>
-              {blog.data.createdAt && (
-                <span class="blog-date">
-                  {dayjs(blog.data.createdAt).format(format)}
-                </span>
-              )}
-            </div>
-          </a>
+          <BlogCard blog={blog} />
         ))
       }
     </div>
@@ -126,23 +110,8 @@ const routeName = 'blogs';
   }
 
   .blogs-container {
-    @apply space-y-4;
-  }
-
-  .blog-card {
-    @apply block w-full transition-all duration-200;
-  }
-
-  .blog-card-inner {
-    @apply rounded-lg border border-gray-100 bg-white/90 p-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-  }
-
-  .blog-title {
-    @apply text-base font-medium text-gray-900 dark:text-gray-100;
-  }
-
-  .blog-date {
-    @apply mt-1 block text-xs text-gray-500 dark:text-gray-500;
+    @apply grid gap-6;
+    @apply grid-cols-1;
   }
 
   .view-more {
