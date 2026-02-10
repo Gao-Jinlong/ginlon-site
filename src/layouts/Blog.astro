@@ -32,6 +32,11 @@ const headings = await Astro.props.headings
               <time class="article-date">
                 {t('blogs.createdAt')}: {dayjs(createdAt).format(format)}
               </time>
+              {tags && tags.length > 0 && (
+                <div class="article-tags">
+                  <TagsDisplay tags={tags} />
+                </div>
+              )}
             </div>
           </div>
           {

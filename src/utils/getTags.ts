@@ -28,7 +28,7 @@ export async function getAllTags(): Promise<Tag[]> {
   return Array.from(tagMap.entries())
     .map(([name, count]) => ({
       name,
-      slug: encodeURIComponent(name),
+      slug: encodeURIComponent(name).replace(/\./g, '%2E'),
       count,
     }))
     .sort((a, b) => b.count - a.count);
