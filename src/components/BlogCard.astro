@@ -118,18 +118,18 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
 
   /* 图片区域 - 左侧 */
   .blog-image {
-    @apply relative h-48 w-full md:h-auto md:w-48 md:flex-shrink-0;
-    @apply overflow-hidden;
+    @apply relative overflow-hidden;
     @apply flex items-center justify-center;
-    /* 确保在移动端有最小高度，桌面端使用 aspect-ratio 保持比例 */
-    @apply min-h-[192px];
+    /* 移动端：高度 192px，宽度 100% */
+    @apply h-48 w-full;
+    /* 桌面端：宽度 192px，高度自动跟随宽度（通过 flex 或 aspect-ratio） */
   }
 
   @media (min-width: 768px) {
     .blog-image {
-      /* 在桌面端使用 aspect-ratio 确保容器有高度 */
-      aspect-ratio: 1 / 1;
-      min-height: auto;
+      /* 桌面端：固定宽度 192px，高度也设为 192px 形成正方形 */
+      @apply w-48 h-48;
+      @apply flex-shrink-0;
     }
   }
 
@@ -137,8 +137,6 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
     @apply h-full w-full object-cover;
     @apply transition-transform duration-300;
     @apply absolute inset-0;
-    /* 确保图片至少有一个最小高度，防止加载前塌陷 */
-    @apply min-h-[192px];
   }
 
   .blog-card:hover .poster-image {
@@ -197,10 +195,6 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
   @media (max-width: 767px) {
     .blog-card-inner {
       @apply flex-col;
-    }
-
-    .blog-image {
-      @apply w-full h-48;
     }
 
     .blog-content {
