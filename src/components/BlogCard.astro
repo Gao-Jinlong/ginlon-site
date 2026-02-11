@@ -121,12 +121,24 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
     @apply relative h-48 w-full md:h-auto md:w-48 md:flex-shrink-0;
     @apply overflow-hidden;
     @apply flex items-center justify-center;
+    /* 确保在移动端有最小高度，桌面端使用 aspect-ratio 保持比例 */
+    @apply min-h-[192px];
+  }
+
+  @media (min-width: 768px) {
+    .blog-image {
+      /* 在桌面端使用 aspect-ratio 确保容器有高度 */
+      aspect-ratio: 1 / 1;
+      min-height: auto;
+    }
   }
 
   .poster-image {
     @apply h-full w-full object-cover;
     @apply transition-transform duration-300;
     @apply absolute inset-0;
+    /* 确保图片至少有一个最小高度，防止加载前塌陷 */
+    @apply min-h-[192px];
   }
 
   .blog-card:hover .poster-image {
@@ -138,6 +150,7 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
     @apply absolute inset-0;
     @apply flex items-center justify-center;
     @apply hidden;
+    @apply w-full h-full;
   }
 
   .blog-image.image-error .poster-image {
