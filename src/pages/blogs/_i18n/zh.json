@@ -1,4 +1,17 @@
 {
-  "pageName": "博客",
-  "subtitle": "我有时候会写博客。"
+  "eyebrow": "WRITING",
+  "pageName": "写作",
+  "subtitle": "围绕前端工程、系统设计与阅读笔记持续输出，把零散经验沉淀成可回看的记录。",
+  "categories": {
+    "tech": {
+      "title": "工程与前端",
+      "description": "以软件工程、前端技术、架构思考和实践记录为主，关注能长期复用的方法与判断。",
+      "icon": "01"
+    },
+    "note": {
+      "title": "读书与笔记",
+      "description": "保留读书、思考与个人实践中的摘录和总结，让长期积累有迹可循。",
+      "icon": "02"
+    }
+  }
 }

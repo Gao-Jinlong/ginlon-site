@@ -1,4 +1,17 @@
 {
-  "pageName": "Blogs",
-  "subtitle": "I blog, sometimes."
+  "eyebrow": "WRITING",
+  "pageName": "Writing",
+  "subtitle": "Ongoing notes on frontend engineering, system design, and reading, shaped into a body of work that stays useful over time.",
+  "categories": {
+    "tech": {
+      "title": "Engineering",
+      "description": "Software engineering, frontend systems, architecture notes, and implementation lessons focused on reusable judgment.",
+      "icon": "01"
+    },
+    "note": {
+      "title": "Notes",
+      "description": "Reading notes, reflections, and personal practice collected into a quieter long-term archive.",
+      "icon": "02"
+    }
+  }
 }

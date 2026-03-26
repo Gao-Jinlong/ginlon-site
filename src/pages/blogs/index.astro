@@ -1,222 +1,115 @@
 ---
-import Main from '../../layouts/Main.astro'
-import { getBlogs, type BlogCategory } from '../../utils/getBlogs'
-import Tabs from '../../components/Tabs.astro'
-import BlogCard from '../../components/BlogCard.astro'
-import { getLocaleFromUrl } from '../../i18n/utils'
+import BlogCard from '../../components/BlogCard.astro';
+import PageContainer from '../../components/PageContainer.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Tabs from '../../components/Tabs.astro';
+import { getLocaleFromUrl } from '../../i18n/utils';
+import Main from '../../layouts/Main.astro';
+import { getBlogs, type BlogCategory } from '../../utils/getBlogs';
+import enCopy from './_i18n/en.json';
+import zhCopy from './_i18n/zh.json';
 
 interface BlogData {
   data: {
-    title: string
-    permalink: string
-    createdAt: string
-    description?: string
-    tags?: string[]
-    draft?: boolean
-    category: BlogCategory
-    poster?: string
-    subtitle?: string
-  }
+    title: string;
+    permalink: string;
+    createdAt: string;
+    description?: string;
+    tags?: string[];
+    draft?: boolean;
+    category: BlogCategory;
+    poster?: string;
+    subtitle?: string;
+  };
 }
 
-const locale = getLocaleFromUrl(Astro.url)
-const blogs = (await getBlogs(locale)) as BlogData[]
-const techBlogs = blogs.filter(blog => blog.data.category === 'tech')
-const lifeBlogs = blogs.filter(blog => blog.data.category === 'note')
+const locale = getLocaleFromUrl(Astro.url);
+const copy = locale === 'zh' ? zhCopy : enCopy;
+const blogs = (await getBlogs(locale)) as BlogData[];
+const techBlogs = blogs.filter((blog) => blog.data.category === 'tech');
+const noteBlogs = blogs.filter((blog) => blog.data.category === 'note');
 
 const categories = [
   {
     id: 'tech',
-    title: '技术文章',
-    description: '分享学习笔记、技术实践、技术思考等技术相关的内容',
-    icon: '💻',
+    title: copy.categories.tech.title,
+    description: copy.categories.tech.description,
+    icon: copy.categories.tech.icon,
   },
   {
     id: 'note',
-    title: '笔记',
-    description: '记录思考、读书笔记、体验等输出内容',
-    icon: '📝',
+    title: copy.categories.note.title,
+    description: copy.categories.note.description,
+    icon: copy.categories.note.icon,
   },
-]
+];
 ---
 
-<Main pageTitle="博客">
-  <div class="page-header">
-    <h1 class="page-title">博客</h1>
-    <p class="page-description">无记录，不成长</p>
-  </div>
+<Main
+  pageMeta={{
+    title: locale === 'zh' ? '写作 | Ginlon' : 'Writing | Ginlon',
+    description: copy.subtitle,
+  }}
+>
+  <PageContainer class="space-y-8 py-10 md:space-y-10 md:py-14">
+    <PageIntro eyebrow={copy.eyebrow} title={copy.pageName} description={copy.subtitle} />
 
-  <div class="page-content">
-    <div class="blogs-container">
+    <section class="writing-panel">
       <Tabs tabs={categories} />
 
-      <!-- Loading 状态 -->
-      <div class="loading-state">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">加载中...</p>
-      </div>
-
-      <!-- Tab 内容 -->
-      <div class="tab-content" style="display: none;">
+      <div class="tab-content">
         {
           categories.map((category, index) => (
-            <div
-              class="tab-panel"
-              data-category={category.id}
-              data-active={index === 0}
-            >
-              <div class="category-description">{category.description}</div>
+            <section class="tab-panel" data-category={category.id} data-active={index === 0}>
+              <p class="category-description">{category.description}</p>
+
               <div class="blog-list">
-                {(category.id === 'tech' ? techBlogs : lifeBlogs).map(blog => (
+                {(category.id === 'tech' ? techBlogs : noteBlogs).map((blog) => (
                   <BlogCard blog={blog} />
                 ))}
               </div>
-            </div>
+            </section>
           ))
         }
       </div>
-    </div>
-  </div>
+    </section>
+  </PageContainer>
 </Main>
 
 <style>
-  @reference "../../styles/styles.css";
-
-  .page-header {
-    @apply my-6;
-    @apply flex flex-wrap items-center gap-8 border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+  .writing-panel {
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg);
+    padding: 1.1rem;
+    box-shadow: var(--shadow-soft);
   }
 
-  .page-title {
-    @apply mb-2 text-3xl font-bold;
-    @apply text-gray-900 dark:text-gray-100;
-  }
-
-  .page-description {
-    @apply text-gray-600 dark:text-gray-400;
-  }
-
-  .page-content {
-    @apply bg-white dark:bg-gray-900/90;
-    @apply border border-gray-200 dark:border-gray-700;
-    @apply mb-8;
-    @apply shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-  }
-
-  .blogs-container {
-    @apply mx-auto px-4 py-8;
-    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
+  .tab-content {
+    padding-top: 0.5rem;
   }
 
   .tab-panel {
-    @apply hidden;
+    display: none;
   }
 
   .tab-panel[data-active='true'] {
-    @apply block;
+    display: block;
   }
 
   .category-description {
-    @apply text-gray-600 dark:text-gray-400;
-    @apply mb-8;
-    @apply text-lg;
+    margin: 0 0 1.35rem;
+    color: var(--text-muted);
+    line-height: 1.75;
   }
 
   .blog-list {
-    @apply grid gap-6;
-    @apply grid-cols-1;
+    display: grid;
+    gap: 1rem;
   }
 
-  .blog-card {
-    @apply block;
-    @apply transition-all duration-300;
-  }
-
-  .blog-card-inner {
-    @apply overflow-hidden rounded-lg;
-    @apply bg-white dark:bg-gray-900;
-    @apply border border-gray-200 dark:border-gray-700;
-    @apply shadow-sm;
-    @apply transition-all duration-300;
-    @apply hover:shadow-lg;
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
+  @media (min-width: 768px) {
+    .writing-panel {
+      padding: 1.4rem;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out;
-  }
-
-  /* Loading 状态样式 */
-  .loading-state {
-    @apply flex flex-col items-center justify-center;
-    @apply py-16;
-    @apply text-gray-600 dark:text-gray-400;
-  }
-
-  .loading-spinner {
-    @apply h-8 w-8 border-2 border-gray-300 dark:border-gray-600;
-    @apply border-t-blue-600 dark:border-t-blue-400;
-    @apply rounded-full;
-    @apply animate-spin;
-    @apply mb-4;
-  }
-
-  .loading-text {
-    @apply text-sm;
-  }
-
-  /* Tab 内容淡入动画 */
-  .tab-content {
-    @apply transition-all duration-300 ease-in-out;
-  }
-
-  .tab-content.show {
-    @apply block;
-    animation: fade-in 0.3s ease-out;
   }
 </style>
-
-<script>
-  // 防止闪烁的初始化脚本
-  document.addEventListener('astro:page-load', () => {
-    const loadingState = document.querySelector('.loading-state')
-    const tabContent = document.querySelector('.tab-content')
-    const tabButtons = document.querySelectorAll('.tab-button')
-
-    // 初始化完成后显示内容
-    function showContent() {
-      if (loadingState) {
-        ;(loadingState as HTMLElement).style.display = 'none'
-      }
-      if (tabContent) {
-        ;(tabContent as HTMLElement).style.display = 'block'
-        ;(tabContent as HTMLElement).classList.add('show')
-      }
-    }
-
-    // 等待 Tabs 组件初始化完成
-    setTimeout(() => {
-      // 检查是否有激活的 tab 按钮，如果没有说明还未初始化
-      const hasActiveButton = Array.from(tabButtons).some(
-        btn => btn.getAttribute('data-active') === 'true'
-      )
-
-      if (hasActiveButton) {
-        showContent()
-      } else {
-        // 如果还没初始化，再等一下
-        setTimeout(showContent, 100)
-      }
-    }, 50)
-  })
-</script>
