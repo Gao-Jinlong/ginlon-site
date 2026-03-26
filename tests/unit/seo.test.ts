@@ -5,6 +5,7 @@ import {
   buildLocaleAlternates,
   mergePageMeta,
 } from '../../src/utils/seo';
+import type { PageMeta } from '../../src/types/seo';
 
 describe('seo helpers', () => {
   it('builds the canonical URL from the Astro site URL and pathname', () => {
@@ -51,6 +52,16 @@ describe('seo helpers', () => {
       ogType: 'article',
       tags: ['frontend'],
     });
+  });
+
+  it('types hidden-page meta with robots directives', () => {
+    const hiddenPageMeta = {
+      title: 'Hidden resume',
+      description: 'Only Chinese content',
+      robots: 'noindex, nofollow',
+    } satisfies PageMeta;
+
+    expect(hiddenPageMeta.robots).toBe('noindex, nofollow');
   });
 
   it('allows pages to disable alternates and set robots directives', () => {
