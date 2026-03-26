@@ -8,7 +8,6 @@ import TableOfContents from '../components/TableOfContents.astro';
 import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
 import { dayjs, format } from '../utils/dayjs';
 import { getBlogs } from '../utils/getBlogs';
-import { buildArticleDescription } from '../utils/seo';
 import Main from './Main.astro';
 
 type Heading = {
@@ -59,7 +58,6 @@ const otherBlogs = blogs.filter(({ data }) => {
 
 const filteredHeadings = headings.filter((heading) => heading.depth <= 4);
 const summary = description ?? subtitle;
-const articleDescription = buildArticleDescription(locale, title, summary);
 const publishedLabel = dayjs(createdAt, locale).format(format);
 const publishedTime = new Date(createdAt).toISOString();
 const lastModifiedValue =
@@ -69,7 +67,7 @@ const lastModifiedLabel = lastModifiedValue
   : undefined;
 const articleMeta = {
   title: `${title} | ${siteConfig.name}`,
-  description: articleDescription,
+  description: summary || siteConfig[locale].description,
   ogType: 'article',
   ogImage: siteConfig.articleOgImage,
   ...(tags ? { tags } : {}),

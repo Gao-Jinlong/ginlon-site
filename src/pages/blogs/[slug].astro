@@ -1,10 +1,8 @@
 ---
 import { render } from 'astro:content';
 import { siteConfig } from '../../data/site';
-import { getLocaleFromUrl } from '../../i18n/utils';
 import type { PageMeta } from '../../types/seo';
 import { getBlogs } from '../../utils/getBlogs';
-import { buildArticleDescription } from '../../utils/seo';
 
 type BlogEntry = Awaited<ReturnType<typeof getBlogs>>[number];
 
@@ -35,12 +33,14 @@ const { article } = Astro.props as {
   article: BlogEntry;
 };
 const { Content, headings } = await render(article);
-const locale = getLocaleFromUrl(Astro.url);
 const publishedTime = toIsoString(article.data.createdAt);
 const modifiedTime = toIsoString(article.data.lastModified);
 const pageMeta = {
   title: `${article.data.title} | ${siteConfig.name}`,
-  description: buildArticleDescription(locale, article.data.title, article.data.description ?? article.data.subtitle),
+  description:
+    article.data.description ??
+    article.data.subtitle ??
+    siteConfig[article.data.lang].description,
   ogType: 'article',
   ogImage: siteConfig.articleOgImage,
   ...(article.data.tags ? { tags: article.data.tags } : {}),

@@ -13,31 +13,16 @@ function normalizePathname(pathname: string): string {
     return '/';
   }
 
-  const segments = normalizedPath.split('/');
-
-  if (appLocales.includes(segments[0] as AppLocale)) {
-    segments.shift();
-  }
-
-  const withoutDefaultLocale = segments.join('/');
+  const withoutDefaultLocale = normalizedPath.replace(
+    new RegExp(`^${defaultLocale}(?=\\/|$)`),
+    '',
+  );
 
   return withoutDefaultLocale ? `/${withoutDefaultLocale}` : '/';
 }
 
 export function buildCanonicalUrl(site: string, pathname: string): string {
   return new URL(pathname, site).toString();
-}
-
-export function buildArticleDescription(
-  locale: AppLocale,
-  title: string,
-  summary?: string,
-): string {
-  if (summary?.trim()) {
-    return summary.trim();
-  }
-
-  return locale === 'zh' ? `阅读 Ginlon 的文章《${title}》。` : `Read "${title}" on Ginlon.`;
 }
 
 export function buildLocaleAlternates(site: string, pathname: string): AlternateLink[] {

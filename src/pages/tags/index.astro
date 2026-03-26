@@ -1,111 +1,99 @@
 ---
-import PageContainer from '../../components/PageContainer.astro';
-import PageIntro from '../../components/PageIntro.astro';
+import Main from '../../layouts/Main.astro';
 import { getAllTags } from '../../utils/getTags';
 import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../../i18n/utils';
-import Main from '../../layouts/Main.astro';
 
 const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const tags = await getAllTags(locale);
-const pageMeta =
-  locale === 'zh'
-    ? {
-        title: '标签索引',
-        description: '通过标签浏览 Ginlon 的写作主题与相关文章。',
-      }
-    : {
-        title: 'Tag Index',
-        description: "Browse Ginlon's writing by recurring topics and themes.",
-      };
 ---
 
-<Main pageMeta={pageMeta}>
-  <PageContainer class="tags-page">
-    <PageIntro eyebrow={t('tags.eyebrow')} title={t('tags.title')} description={t('tags.description')} />
+<Main pageTitle={t('tags.title')}>
+  <section class="tags-page">
+    <div class="tags-header">
+      <h1 class="page-title">{t('tags.title')}</h1>
+      <p class="page-description">{t('tags.description')}</p>
+    </div>
 
-    <section class="tags-grid">
-      {tags.map((tag) => (
-        <a href={getLocalizedPath(locale, `tags/${tag.slug}`)} class="tag-card">
-          <div class="tag-card-top">
-            <span class="tag-mark">#</span>
-            <h2>{tag.name}</h2>
-          </div>
-          <p>{locale === 'zh' ? `${tag.count} 篇文章` : `${tag.count} articles`}</p>
-        </a>
-      ))}
-    </section>
-  </PageContainer>
+    <div class="tags-container">
+      <div class="tags-grid">
+        {tags.map(tag => (
+          <a
+            href={getLocalizedPath(locale, `tags/${tag.slug}`)}
+            class="tag-card"
+          >
+            <div class="tag-card-header">
+              <span class="tag-card-icon">#</span>
+              <h3 class="tag-card-name">{tag.name}</h3>
+            </div>
+            <p class="tag-card-count">{tag.count} 篇文章</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 </Main>
 
 <style>
+  @reference "../../styles/styles.css";
+
   .tags-page {
-    display: grid;
-    gap: 2rem;
-    padding-top: 2rem;
-    padding-bottom: 3rem;
+    @apply mx-auto;
+    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
+    @apply py-8;
+  }
+
+  .tags-header {
+    @apply mb-8 text-center;
+  }
+
+  .page-title {
+    @apply mb-2 text-4xl font-bold;
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .page-description {
+    @apply text-lg text-gray-600 dark:text-gray-400;
+  }
+
+  .tags-container {
+    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm;
+    @apply dark:border-gray-800 dark:bg-gray-900/90;
   }
 
   .tags-grid {
-    display: grid;
-    gap: 1rem;
+    @apply grid gap-4;
+    @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
   }
 
   .tag-card {
-    display: grid;
-    gap: 0.8rem;
-    border: 1px solid var(--surface-border);
-    background: var(--surface-bg-strong);
-    padding: 1rem;
-    color: inherit;
-    text-decoration: none;
-    box-shadow: var(--shadow-soft);
-    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    @apply block p-4;
+    @apply rounded-lg;
+    @apply bg-gradient-to-br from-gray-50 to-gray-100;
+    @apply hover:from-blue-50 hover:to-purple-50;
+    @apply dark:from-gray-800 dark:to-gray-900;
+    @apply dark:hover:from-blue-900/30 dark:hover:to-purple-900/30;
+    @apply transition-all duration-300;
+    @apply hover:shadow-lg;
+    @apply hover:-translate-y-1;
   }
 
-  .tag-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(31, 118, 103, 0.26);
-    box-shadow: 0 20px 36px rgba(15, 23, 42, 0.08);
+  .tag-card-header {
+    @apply flex items-center gap-2;
   }
 
-  .tag-card-top {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
+  .tag-card-icon {
+    @apply text-blue-500 text-xl;
   }
 
-  .tag-mark {
-    color: var(--accent);
-    font-size: 1rem;
-    font-weight: 700;
+  .tag-card-name {
+    @apply text-lg font-semibold;
+    @apply text-gray-900 dark:text-gray-100;
+    @apply truncate;
   }
 
-  .tag-card h2,
-  .tag-card p {
-    margin: 0;
-  }
-
-  .tag-card h2 {
-    color: var(--text-strong);
-    font-size: 1.08rem;
-    line-height: 1.3;
-  }
-
-  .tag-card p {
-    color: var(--text-muted);
-    font-size: 0.92rem;
-  }
-
-  @media (min-width: 640px) {
-    .tags-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .tags-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+  .tag-card-count {
+    @apply mt-2 text-sm;
+    @apply text-gray-600 dark:text-gray-400;
   }
 </style>

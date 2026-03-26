@@ -69,81 +69,8 @@
     "contact": "Contact"
   },
   "tags": {
-    "eyebrow": "TOPIC INDEX",
     "title": "Tags",
-    "description": "Browse the recurring themes that connect my writing and engineering notes.",
-    "emptyTitle": "There are no articles under this tag yet",
-    "backToBlogs": "Back to writing"
-  },
-  "about": {
-    "intro": {
-      "eyebrow": "ABOUT",
-      "title": "About Ginlon",
-      "description": "I treat this personal site like a product that keeps evolving, collecting engineering lessons, writing practice, and the way I think about systems.",
-      "role": "Frontend engineer / technical writer"
-    },
-    "summary": {
-      "title": "I want to do more than just ship the page.",
-      "description": "I care about whether a system stays understandable, whether the interface remains pleasant to read, and whether a team can keep moving with confidence. Engineering, writing, and product feel are part of the same craft for me."
-    },
-    "values": {
-      "eyebrow": "WORKING STYLE",
-      "title": "Principles I keep coming back to",
-      "description": "These ideas shape how I build interfaces, structure systems, write articles, and collaborate with teams.",
-      "items": [
-        {
-          "title": "Communicate honestly",
-          "description": "I try to reduce ambiguity with clear language and break complex problems into parts people can reason about together."
-        },
-        {
-          "title": "Optimize for maintainability",
-          "description": "I prefer structures that can evolve over time instead of short-term delivery that leaves hidden complexity behind."
-        },
-        {
-          "title": "Write things down",
-          "description": "I want experience to become reusable context, not something that only exists in one person's memory."
-        }
-      ]
-    },
-    "interests": {
-      "eyebrow": "INTERESTS",
-      "title": "Themes that keep me engaged",
-      "description": "These interests shape my input day to day and influence how I think about engineering, systems, and product work.",
-      "items": [
-        {
-          "title": "Systems and business structure",
-          "points": [
-            "I enjoy turning shifting requirements into clearer boundaries and more stable models.",
-            "A lot of my energy goes into making complexity feel more intentional and manageable."
-          ]
-        },
-        {
-          "title": "Reading and expression",
-          "points": [
-            "Reading lets me borrow other people's experience and understand myself more clearly.",
-            "Writing helps me turn scattered lessons into context I can return to later."
-          ]
-        },
-        {
-          "title": "Experiencing a bigger world",
-          "points": [
-            "Travel, films, and games keep reminding me that strong experiences come from rhythm, detail, and structure working together."
-          ]
-        }
-      ]
-    },
-    "contact": {
-      "eyebrow": "CONTACT",
-      "title": "If these topics resonate with you",
-      "description": "Feel free to reach out if you want to talk about engineering, writing, or how to build and maintain a personal-brand site."
-    }
-  },
-  "techStack": {
-    "eyebrow": "TOOLKIT",
-    "title": "Tech Stack",
-    "description": "These are the tools that show up most often in my frontend workflow across interfaces, architecture, and content-driven sites.",
-    "summaryTitle": "The combinations I rely on",
-    "summaryDescription": "I care less about chasing isolated trends and more about how a set of tools helps a team ship, maintain, and communicate with confidence."
+    "description": "Explore more related articles through tags"
   },
   "seo": {
     "keywords": "Ginlon, Frontend, Programmer, Frontend Engineer, vue",
