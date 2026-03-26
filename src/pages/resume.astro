@@ -138,40 +138,28 @@ const { header, summary, capabilityGroups, experience, projects } =
   }
 
   .resume-shell {
-    width: min(100%, 46rem);
+    width: min(100%, 66rem);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-  }
-
-  .hero-card,
-  .resume-section,
-  .capability-card,
-  .timeline-card {
-    border: 1px solid var(--surface-border);
-    background: var(--surface-bg);
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(18px);
-  }
-
-  .hero-card,
-  .resume-section {
-    border-radius: 1.75rem;
+    gap: 0;
   }
 
   .hero-card {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: 1.25rem;
+    padding: 1.75rem;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 88%, white);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--surface-bg) 92%, white);
   }
 
   .eyebrow,
   .section-kicker,
   .contact-label,
   .period-badge {
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
@@ -211,39 +199,33 @@ const { header, summary, capabilityGroups, experience, projects } =
   .highlight-list li {
     margin: 0;
     color: var(--text-muted);
-    line-height: 1.75;
+    line-height: 1.7;
   }
 
   .hero-tagline {
     margin-top: 0.75rem;
-    max-width: 34rem;
+    max-width: 42rem;
   }
 
   .contact-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.9rem 1.5rem;
   }
 
   .contact-link {
-    min-width: 0;
     display: inline-flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--surface-border);
-    border-radius: 1rem;
-    background: var(--surface-bg-strong);
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0;
+    border: none;
+    background: transparent;
     transition:
-      border-color 180ms ease,
-      transform 180ms ease,
       color 180ms ease;
   }
 
   .contact-link:hover {
-    border-color: color-mix(in srgb, var(--accent) 36%, var(--surface-border));
     color: var(--accent);
-    transform: translateY(-1px);
   }
 
   .contact-label {
@@ -253,50 +235,41 @@ const { header, summary, capabilityGroups, experience, projects } =
   }
 
   .resume-section {
-    padding: 1.35rem;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--surface-border) 92%, white);
   }
 
   .resume-section + .resume-section {
-    position: relative;
-  }
-
-  .resume-section + .resume-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 1.35rem;
-    right: 1.35rem;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in srgb, var(--accent) 18%, var(--surface-border)),
-      transparent
-    );
+    margin-top: 1.75rem;
   }
 
   .section-heading {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    margin-bottom: 1rem;
+    gap: 0.25rem;
+    margin-bottom: 0.95rem;
   }
 
   .section-heading h2 {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
 
-  .capability-list,
+  .capability-list {
+    display: grid;
+    gap: 1.15rem 2rem;
+  }
+
   .timeline-list {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 1.05rem;
   }
 
   .capability-card,
   .timeline-card {
-    border-radius: 1.25rem;
-    padding: 1rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid color-mix(in srgb, var(--surface-border) 90%, white);
   }
 
   .capability-card h3,
@@ -316,15 +289,16 @@ const { header, summary, capabilityGroups, experience, projects } =
     display: flex;
     flex-wrap: wrap;
     gap: 0.55rem;
-    margin-top: 0.85rem;
+    margin-top: 0.7rem;
   }
 
   .pill-list li {
-    padding: 0.42rem 0.75rem;
+    padding: 0.3rem 0.65rem;
     border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--text-strong);
-    font-size: 0.92rem;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 88%, white);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.88rem;
     line-height: 1.4;
   }
 
@@ -337,12 +311,13 @@ const { header, summary, capabilityGroups, experience, projects } =
   .period-badge {
     width: fit-content;
     margin: 0;
-    padding: 0.32rem 0.65rem;
+    padding: 0.18rem 0.45rem;
     border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 0.72rem;
-    font-weight: 700;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 88%, white);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 600;
   }
 
   .role-label,
@@ -357,7 +332,7 @@ const { header, summary, capabilityGroups, experience, projects } =
   .highlight-list {
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.55rem;
     margin-top: 1rem;
   }
 
@@ -383,21 +358,250 @@ const { header, summary, capabilityGroups, experience, projects } =
       padding-bottom: 5rem;
     }
 
-    .resume-shell {
-      gap: 1.2rem;
+    .capability-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .hero-card {
-      padding: 1.9rem;
+      padding: 2rem;
     }
 
     .resume-section {
-      padding: 1.6rem;
+      padding-top: 1.7rem;
+      margin-top: 1.7rem;
     }
 
     .timeline-topline {
       grid-template-columns: auto 1fr;
       gap: 1rem;
+    }
+  }
+
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    :global(html),
+    :global(body),
+    :global(.site-body),
+    :global(.site-shell),
+    :global(.site-main) {
+      background: #fff !important;
+    }
+
+    :global(body) {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      color: #0f172a;
+      font-size: 11px;
+    }
+
+    :global(.grid-bg),
+    :global(.site-glow),
+    :global(.nav-shell),
+    :global(.footer-shell) {
+      display: none !important;
+    }
+
+    :global(.site-main) {
+      padding: 0 !important;
+    }
+
+    .resume-page {
+      max-width: none;
+      padding: 0;
+    }
+
+    .resume-shell {
+      width: 100%;
+      max-width: none;
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 0.45rem;
+      align-items: start;
+    }
+
+    .hero-card {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(14rem, 0.8fr);
+      align-items: end;
+      gap: 0.75rem;
+      padding: 0.75rem 0.9rem;
+    }
+
+    .hero-card,
+    .resume-section,
+    .capability-card,
+    .timeline-card,
+    .contact-link {
+      background: #fff !important;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      box-shadow: none;
+      backdrop-filter: none;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .hero-card,
+    .resume-section {
+      border-radius: 0.95rem;
+    }
+
+    .capability-card,
+    .timeline-card,
+    .contact-link {
+      border-radius: 0.65rem;
+    }
+
+    .resume-section {
+      padding: 0.7rem 0.85rem;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .contact-label,
+    .period-badge {
+      letter-spacing: 0.06em;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .contact-label {
+      font-size: 0.62rem;
+    }
+
+    .hero-copy h1 {
+      margin-top: 0.15rem;
+      font-size: 1.95rem;
+    }
+
+    .hero-title {
+      margin-top: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .hero-tagline,
+    .summary-text,
+    .card-summary,
+    .role-label,
+    .highlight-list li {
+      font-size: 0.73rem;
+      line-height: 1.35;
+    }
+
+    .hero-tagline {
+      margin-top: 0.4rem;
+      max-width: none;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem;
+      align-self: stretch;
+    }
+
+    .contact-link {
+      padding: 0.45rem 0.55rem;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      gap: 0.1rem;
+      color: #0f172a;
+      text-decoration: none;
+    }
+
+    .resume-section,
+    .capability-card,
+    .timeline-card,
+    .contact-link,
+    .pill-list li,
+    .period-badge {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .section-heading {
+      gap: 0.12rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-heading h2 {
+      font-size: 0.95rem;
+    }
+
+    .capability-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem;
+    }
+
+    .timeline-list {
+      gap: 0.35rem;
+    }
+
+    .capability-card,
+    .timeline-card {
+      padding: 0.55rem 0.65rem;
+    }
+
+    .capability-card h3,
+    .timeline-card h3 {
+      font-size: 0.8rem;
+      line-height: 1.25;
+    }
+
+    .pill-list {
+      gap: 0.24rem;
+      margin-top: 0.35rem;
+    }
+
+    .pill-list li,
+    .period-badge {
+      background: rgba(15, 23, 42, 0.06);
+      color: #0f172a;
+    }
+
+    .pill-list li {
+      padding: 0.14rem 0.34rem;
+      font-size: 0.62rem;
+      line-height: 1.2;
+    }
+
+    .timeline-topline {
+      grid-template-columns: auto 1fr;
+      gap: 0.4rem;
+    }
+
+    .period-badge {
+      padding: 0.14rem 0.32rem;
+      font-size: 0.62rem;
+    }
+
+    .role-label,
+    .project-summary {
+      margin-top: 0.1rem;
+    }
+
+    .card-summary {
+      margin-top: 0.35rem;
+    }
+
+    .highlight-list {
+      gap: 0.18rem;
+      margin-top: 0.45rem;
+    }
+
+    .highlight-list li {
+      padding-left: 0.58rem;
+    }
+
+    .highlight-list li::before {
+      top: 0.48rem;
+      width: 0.18rem;
+      height: 0.18rem;
+      background: rgba(15, 23, 42, 0.55);
     }
   }
 </style>
