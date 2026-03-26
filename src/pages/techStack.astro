@@ -1,147 +1,124 @@
 ---
+import PageContainer from '../components/PageContainer.astro';
+import PageIntro from '../components/PageIntro.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { getLocaleFromUrl } from '../i18n/utils';
 import Main from '../layouts/Main.astro';
-import SectionNavigation from '../components/SectionNavigation.astro';
-import TechCard from '../components/TechCard.astro';
 import { techCardsData } from '../data/data';
+import enCommon from '../i18n/common/en.json';
+import zhCommon from '../i18n/common/zh.json';
+
+const locale = getLocaleFromUrl(Astro.url);
+const dictionary = locale === 'zh' ? zhCommon : enCommon;
+const techStack = dictionary.techStack;
+const pageMeta =
+  locale === 'zh'
+    ? {
+        title: '技术栈',
+        description: '查看 Ginlon 常用的前端技术组合与工程工具。',
+      }
+    : {
+        title: 'Tech Stack',
+        description: "See the tools Ginlon uses most often across frontend and content work.",
+      };
 ---
 
-<Main pageTitle="Tech Stack">
-  <SectionNavigation />
+<Main pageMeta={pageMeta}>
+  <PageContainer class="tech-page">
+    <PageIntro
+      eyebrow={techStack.eyebrow}
+      title={techStack.title}
+      description={techStack.description}
+    />
 
-  <div id="blogPostIframeContainer" class="hidden">
-    <iframe id="blogPostIframe" src="https://giphy.com/embed/kjDQ00nkmCrCezmje0"
-    ></iframe>
-  </div>
+    <section class="tech-summary-card">
+      <SectionHeader
+        title={techStack.summaryTitle}
+        description={techStack.summaryDescription}
+      />
+    </section>
 
-  <div id="resumeIframeContainer" class="hidden">
-    <iframe id="resumeIframe" src="https://giphy.com/embed/BkIWP8ZiXzo3cR6oS0"
-    ></iframe>
-  </div>
-
-  <p class="mt-5 animated-text">
-    Here are the technologies I specialize in! This is just a glimpse of my
-    expertise. For a detailed overview, feel free to check out <a
-      href="#"
-      id="resumeLink"
-      class="underline font-bold text-rose-custom uppercase underline-offset-4"
-      >my resume</a
-    > (in progress) or explore my <a
-      class="underline font-bold text-purple-600 uppercase underline-offset-4"
-      href="/blogs/technologies-stack"
-      id="blogPostLink">blog post</a
-    >
-    about my Front-end development journey.
-    <br />
-    <br />
-    <span>
-      Once all the images are displayed, feel free to drag them around and have
-      some fun!
-    </span>
-  </p>
-
-  <div
-    class="grid-container justify-items-center relative grid grid-cols-4 grid-rows-3 p-4 border-2 border-gray-200 dark:border-gray-700 mt-8 rounded-3xl tech-cards"
-  >
-    {
-      techCardsData.map(techCard => (
-        <TechCard
-          class="tech-card draggable"
-          url={techCard.url}
-          alt={techCard.alt}
-        />
-      ))
-    }
-  </div>
+    <section class="tech-grid">
+      {techCardsData.map((techCard) => (
+        <article class="tech-card">
+          <div class="tech-logo-wrap">
+            <img src={techCard.url} alt={techCard.alt} class="tech-logo" loading="lazy" />
+          </div>
+          <h2>{techCard.alt}</h2>
+        </article>
+      ))}
+    </section>
+  </PageContainer>
 </Main>
 
 <style>
-  @reference "../styles/styles.css";
-
-  .grid-container {
-    width: 100%;
-    height: 500px;
+  .tech-page {
+    display: grid;
+    gap: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
   }
 
-  .animated-text {
-    opacity: 0;
-    transform: translateY(20px);
+  .tech-summary-card {
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 1.2rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .tech-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .tech-card {
-    opacity: 0;
-    transform: translateY(20px);
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 1rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 180ms ease, border-color 180ms ease;
   }
 
-  #resumeIframeContainer,
-  #blogPostIframeContainer {
-    position: absolute;
-    pointer-events: none; /* Ignore mouse events */
-    z-index: 1000;
+  .tech-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(31, 118, 103, 0.26);
   }
 
-  #resumeIframe,
-  #blogPostIframe {
-    width: 400px;
-    height: 300px;
+  .tech-logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid var(--surface-border);
+    background: rgba(255, 255, 255, 0.45);
+  }
+
+  .tech-logo {
+    width: 2.2rem;
+    height: 2.2rem;
+    object-fit: contain;
+  }
+
+  .tech-card h2 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .tech-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tech-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 </style>
-
-<script>
-  import { gsap } from 'gsap';
-  import { Draggable } from 'gsap/Draggable';
-  gsap.registerPlugin(Draggable);
-
-  document.addEventListener('astro:page-load', () => {
-    gsap.to('.animated-text', {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: 'power2.out',
-    });
-
-    gsap.to('.tech-card', {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      stagger: 0.1,
-      ease: 'power2.out',
-      onComplete: () => {
-        Draggable.create('.draggable', {
-          type: 'x,y',
-          bounds: '.grid-container',
-          edgeResistance: 0.65,
-          inertia: true,
-        });
-      },
-    });
-    setupIframeHover('resumeLink', 'resumeIframeContainer');
-    setupIframeHover('blogPostLink', 'blogPostIframeContainer');
-
-    function setupIframeHover(linkId: string, containerId: string) {
-      const link = document.getElementById(linkId) as HTMLAnchorElement;
-      const container = document.getElementById(containerId) as HTMLDivElement;
-
-      link.addEventListener('mouseenter', (event: MouseEvent) => {
-        container.classList.remove('hidden');
-        positionIframe(event, container);
-      });
-
-      link.addEventListener('mousemove', (event: MouseEvent) => {
-        positionIframe(event, container);
-      });
-
-      link.addEventListener('mouseleave', () => {
-        container.classList.add('hidden');
-      });
-    }
-
-    function positionIframe(event: MouseEvent, container: HTMLDivElement) {
-      const offset = 10;
-      const x = event.clientX + offset;
-      const y = event.clientY + offset;
-
-      container.style.left = `${x}px`;
-      container.style.top = `${y}px`;
-    }
-  });
-</script>
