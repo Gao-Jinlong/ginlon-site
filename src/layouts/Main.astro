@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import NavigationBar from '../components/NavigationBar.astro';
 import GridBackground from '../components/GridBackground.astro';
 import Head from '../components/Head.astro';
+import { getLocaleFromUrl } from '../i18n/utils';
 // import { ViewTransitions } from 'astro:transitions';
 import 'viewerjs/dist/viewer.css';
 
@@ -12,9 +13,10 @@ type Props = {
 };
 
 const { pageTitle } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url);
 ---
 
-<html>
+<html lang={locale}>
   <Head pageTitle={pageTitle} />
 
   <body class="overflow-x-hidden">

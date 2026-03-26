@@ -1,23 +1,14 @@
-import { astroI18n } from 'astro-i18n';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import dayjs from 'dayjs';
 import fs from 'fs';
 import path from 'path';
+import { defaultLocale, type AppLocale } from '../i18n/utils';
 
-interface BlogData extends CollectionEntry<'blogs'> {
-  data: {
-    draft?: boolean;
-    lang: string;
-    layout: string;
-    title: string;
-    subtitle?: string;
-    poster: string;
-    permalink: string;
-    createdAt: string;
+type BlogData = CollectionEntry<'blogs'> & {
+  data: CollectionEntry<'blogs'>['data'] & {
     lastModified?: Date;
-    category: BlogCategory;
   };
-}
+};
 
 export type BlogCategory = 'tech' | 'note';
 
@@ -34,21 +25,19 @@ export interface Blog {
   slug: string;
 }
 
-export async function getBlogs(category?: BlogCategory) {
+export async function getBlogs(locale: AppLocale = defaultLocale, category?: BlogCategory) {
   const isDev = process.env.NODE_ENV === 'development';
   const localizedBlogs = await getCollection('blogs', ({ data }) => {
     return isDev || !data.draft;
   });
 
-  const locale = astroI18n.locale;
-  const fallbackLocale = astroI18n.fallbackLocale;
-  const primaryLocale = astroI18n.primaryLocale;
-  const secondaryLocales = astroI18n.secondaryLocales;
+  const fallbackLocale = defaultLocale;
+  const locales: AppLocale[] = ['en', defaultLocale];
 
-  const blogs = [...secondaryLocales, primaryLocale].map(locale => {
+  const blogs = locales.map(localeName => {
     return {
-      locale,
-      blogs: localizedBlogs.filter(blog => blog.data.lang === locale),
+      locale: localeName,
+      blogs: localizedBlogs.filter(blog => blog.data.lang === localeName),
     };
   });
 
@@ -69,11 +58,13 @@ export async function getBlogs(category?: BlogCategory) {
     }
   };
 
-  [...fallbackLocaleBlogs, ...primaryLocaleBlogs].forEach(
+  [...primaryLocaleBlogs, ...fallbackLocaleBlogs].forEach(
     (blog: CollectionEntry<'blogs'>) => {
       const id = blog.id;
       if (!finalBlogMap.has(id)) {
-        const filePath = path.join(process.cwd(), 'src/content/blogs', blog.id);
+        const filePath = blog.filePath
+          ? path.resolve(process.cwd(), blog.filePath)
+          : path.join(process.cwd(), 'src/content/blogs', `${blog.id}.mdx`);
         const lastModified = getLastModifiedTime(filePath);
         finalBlogMap.set(id, {
           ...blog,

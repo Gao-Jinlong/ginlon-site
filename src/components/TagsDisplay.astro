@@ -1,5 +1,6 @@
 ---
 import { tagToSlug } from '../utils/getTags';
+import { getLocaleFromUrl, getLocalizedPath } from '../i18n/utils';
 
 interface Props {
   tags?: string[];
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { tags = [], className = '' } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url);
 
 if (tags.length === 0) {
   return null;
@@ -18,7 +20,7 @@ if (tags.length === 0) {
     const slug = tagToSlug(tag);
     return (
       <a
-        href={`/tags/${slug}`}
+        href={getLocalizedPath(locale, `tags/${slug}`)}
         class="tag"
         aria-label={`查看标签: ${tag}`}
       >
@@ -30,6 +32,8 @@ if (tags.length === 0) {
 </div>
 
 <style>
+  @reference "../styles/styles.css";
+
   .tags {
     @apply flex flex-wrap gap-2;
   }

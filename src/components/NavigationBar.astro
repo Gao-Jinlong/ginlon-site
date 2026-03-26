@@ -1,18 +1,22 @@
 ---
 import ThemeToggler from '../components/ThemeToggler.astro';
-import { t } from 'astro-i18n';
+import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
 
 const links = [
-  { href: '', label: t('navigation.home') },
-  { href: 'blogs', label: t('navigation.blogs') },
-  { href: 'tags', label: t('navigation.tags') },
-  { href: 'about', label: t('navigation.about') },
+  { href: getLocalizedPath(locale, ''), label: t('navigation.home') },
+  { href: getLocalizedPath(locale, 'blogs'), label: t('navigation.blogs') },
+  { href: getLocalizedPath(locale, 'tags'), label: t('navigation.tags') },
+  { href: getLocalizedPath(locale, 'about'), label: t('navigation.about') },
 ];
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
-  const url = `${import.meta.env.BASE_URL}${href}`.replace(/\/*$/, '');
-  return url === pathname || url === pathname.replace(/\/*$/, '');
+  const normalizedHref = href.replace(/\/*$/, '') || '/';
+  const normalizedPathname = pathname.replace(/\/*$/, '') || '/';
+  return normalizedHref === normalizedPathname;
 };
 ---
 
@@ -23,7 +27,7 @@ const isActive = (href: string) => {
         links.map(({ href, label }) => (
           <li class="nav-item">
             <a
-              href={`${import.meta.env.BASE_URL}${href}`}
+              href={href}
               class:list={['nav-link', isActive(href) && 'nav-link-active']}
             >
               {label}
@@ -38,6 +42,8 @@ const isActive = (href: string) => {
 </nav>
 
 <style>
+  @reference "../styles/styles.css";
+
   .nav-container {
     @apply sticky top-0 z-50;
   }

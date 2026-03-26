@@ -4,7 +4,7 @@
     "target": "ES6",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "module": "ESNext",
     "jsx": "preserve"
   }

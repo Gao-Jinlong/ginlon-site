@@ -1,7 +1,9 @@
 ---
 import { getAllTags } from '../utils/getTags';
+import { getLocaleFromUrl, getLocalizedPath } from '../i18n/utils';
 
-const tags = await getAllTags();
+const locale = getLocaleFromUrl(Astro.url);
+const tags = await getAllTags(locale);
 const maxCount = Math.max(...tags.map(t => t.count));
 
 // 计算标签大小（按热度）
@@ -18,7 +20,7 @@ function getTagSize(count: number) {
   <div class="tag-cloud-list">
     {tags.map(tag => (
       <a
-        href={`/tags/${tag.slug}`}
+        href={getLocalizedPath(locale, `tags/${tag.slug}`)}
         class={`tag-cloud-item ${getTagSize(tag.count)}`}
         style={`--tag-count: ${tag.count}`}
       >
@@ -30,6 +32,8 @@ function getTagSize(count: number) {
 </div>
 
 <style>
+  @reference "../styles/styles.css";
+
   .tag-cloud {
     @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm;
     @apply dark:border-gray-800 dark:bg-gray-900/90;

@@ -1,22 +1,25 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
-
-import netlify from '@astrojs/netlify';
 import { remarkModifiedTime } from './src/plugins/remark-modified-time';
 
 // https://docs.astro.build/en/reference/configuration-reference/
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'http://www.ginlon.site',
+  site: 'https://www.ginlon.site',
   base: '/',
   trailingSlash: 'never',
   output: 'static',
-  functionPerRoute: false,
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   integrations: [
-    tailwind(),
     mdx({
       syntaxHighlight: 'shiki',
     }),
@@ -34,6 +37,7 @@ export default defineConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       noExternal: ['viewerjs'],
     },
@@ -42,9 +46,7 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkModifiedTime],
   },
-  adapter: netlify(),
-  devToolbar:{
+  devToolbar: {
     enabled: false,
   },
-
 });

@@ -4,14 +4,16 @@ import TagsDisplay from '../components/TagsDisplay.astro'
 import Main from './Main.astro'
 import { Image } from 'astro:assets'
 import { getBlogs } from '../utils/getBlogs'
-import { t } from 'astro-i18n'
 import TableOfContents from '../components/TableOfContents.astro'
 import { dayjs, format } from '../utils/dayjs'
+import { getLocaleFromUrl, useTranslations } from '../i18n/utils'
 
 const { title, subtitle, poster, posterDescription, createdAt, lastModified, tags } =
   Astro.props.frontmatter
+const locale = getLocaleFromUrl(Astro.url)
+const t = useTranslations(locale)
 
-const blogs = await getBlogs()
+const blogs = await getBlogs(locale)
 const otherBlogs = blogs.filter(({ data }) => {
   return title !== data.title && !data.draft
 })
@@ -30,7 +32,7 @@ const headings = await Astro.props.headings
             {subtitle && <h2 class="article-subtitle">{subtitle}</h2>}
             <div class="article-meta">
               <time class="article-date">
-                {t('blogs.createdAt')}: {dayjs(createdAt).format(format)}
+                {t('blogs.createdAt')}: {dayjs(createdAt, locale).format(format)}
               </time>
             </div>
             {tags && tags.length > 0 && (
@@ -66,7 +68,7 @@ const headings = await Astro.props.headings
             {
               lastModified && (
                 <div class="last-modified">
-                  {t('blogs.lastModified')}:{dayjs(lastModified).format(format)}
+                  {t('blogs.lastModified')}:{dayjs(lastModified, locale).format(format)}
                 </div>
               )
             }
@@ -84,6 +86,8 @@ const headings = await Astro.props.headings
 </Main>
 
 <style>
+  @reference "../styles/styles.css";
+
   .blog-article {
     @apply relative mx-auto;
     @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;

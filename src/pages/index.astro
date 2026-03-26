@@ -1,10 +1,13 @@
 ---
-import { t } from 'astro-i18n';
 import Main from '../layouts/Main.astro';
 import BriefText from '../components/BriefText.vue';
 import { getBlogs } from '../utils/getBlogs';
 import BlogCard from '../components/BlogCard.astro';
-const sortedBlogs = await getBlogs();
+import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const sortedBlogs = await getBlogs(locale);
 ---
 
 <Main pageTitle="Home">
@@ -56,14 +59,16 @@ const sortedBlogs = await getBlogs();
     </div>
 
     <div class="view-more">
-      <a href={`${import.meta.env.BASE_URL}blogs`} class="view-more-link">
-        查看更多
+      <a href={getLocalizedPath(locale, 'blogs')} class="view-more-link">
+        {t('homepage.featuredBlogs.more')}
       </a>
     </div>
   </div>
 </Main>
 
 <style>
+  @reference "../styles/styles.css";
+
   .profile-section {
     @apply my-6 mx-auto;
     @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;

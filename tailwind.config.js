@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class', // Enable dark mode with class strategy
@@ -22,12 +24,12 @@ export default {
         'grey-600-dark': '#ffffff',
         'grey-900-light': '#111111',
         'grey-900-dark': '#fafafa',
-        rose: '#e11d48',
+        'rose-accent': '#e11d48',
       },
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    typography,
     function ({ addBase, theme }) {
       addBase({
         ':root': {
@@ -37,7 +39,7 @@ export default {
           '--grey-400': theme('colors.grey-400-light'),
           '--grey-600': theme('colors.grey-600-light'),
           '--grey-900': theme('colors.grey-900-light'),
-          '--clr-rose': theme('colors.rose'), // Add the rose color variable for dark mode
+          '--clr-rose': theme('colors.rose-accent'), // Add the rose color variable for dark mode
 
           '--active-link-bg': theme('colors.grey-200-dark'),
           '--active-link-color': theme('colors.grey-900-light'),
@@ -50,7 +52,7 @@ export default {
           '--grey-400': theme('colors.grey-400-dark'),
           '--grey-600': theme('colors.grey-600-dark'),
           '--grey-900': theme('colors.grey-900-dark'),
-          '--clr-rose': theme('colors.rose'), // Add the rose color variable for dark mode
+          '--clr-rose': theme('colors.rose-accent'), // Add the rose color variable for dark mode
 
           '--active-link-bg': theme('colors.grey-900-light'),
           '--active-link-color': theme('colors.grey-200-dark'),

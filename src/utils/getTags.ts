@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { defaultLocale, type AppLocale } from '../i18n/utils';
 
 export interface Tag {
   name: string;
@@ -19,11 +20,8 @@ export function tagToSlug(tag: string): string {
 /**
  * 获取所有标签及其文章数量
  */
-export async function getAllTags(): Promise<Tag[]> {
-  const blogs = await getCollection('blogs', ({ data }) => {
-    const isDev = process.env.NODE_ENV === 'development';
-    return isDev || !data.draft;
-  });
+export async function getAllTags(locale: AppLocale = defaultLocale): Promise<Tag[]> {
+  const blogs = await getLocalizedBlogs(locale);
 
   const tagMap = new Map<string, number>();
 
@@ -47,13 +45,24 @@ export async function getAllTags(): Promise<Tag[]> {
 /**
  * 根据标签筛选博客文章
  */
-export async function getBlogsByTag(tagName: string) {
-  const blogs = await getCollection('blogs', ({ data }) => {
-    const isDev = process.env.NODE_ENV === 'development';
-    const isDraft = data.draft;
-    const hasTag = data.tags?.includes(tagName);
-    return (isDev || !isDraft) && hasTag;
+export async function getBlogsByTag(tagName: string, locale: AppLocale = defaultLocale) {
+  const blogs = await getLocalizedBlogs(locale);
+
+  return blogs.filter(blog => blog.data.tags?.includes(tagName));
+}
+
+async function getLocalizedBlogs(locale: AppLocale) {
+  const isDev = process.env.NODE_ENV === 'development';
+  const blogs = await getCollection('blogs', ({ data }) => isDev || !data.draft);
+  const fallbackBlogs = blogs.filter(blog => blog.data.lang === defaultLocale);
+  const localizedBlogs = blogs.filter(blog => blog.data.lang === locale);
+  const merged = new Map<string, (typeof blogs)[number]>();
+
+  [...localizedBlogs, ...fallbackBlogs].forEach(blog => {
+    if (!merged.has(blog.id)) {
+      merged.set(blog.id, blog);
+    }
   });
 
-  return blogs;
+  return [...merged.values()];
 }

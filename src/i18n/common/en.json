@@ -19,7 +19,8 @@
     "personalMission": "The value of an individual life lies in whether it can serve as the spark for another life",
     "featuredBlogs": {
       "title": "Recent Posts",
-      "brief": "All experiences are sparks that can be passed on"
+      "brief": "All experiences are sparks that can be passed on",
+      "more": "View more"
     }
   },
   "navigation": {

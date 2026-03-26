@@ -1,8 +1,20 @@
 ---
-import Page from "../../../blogs/[slug].astro"
-import { getStaticPaths as proxyGetStaticPaths } from "../../../blogs/[slug].astro"
-/* @ts-ignore */
-export const getStaticPaths = (props) => proxyGetStaticPaths({ ...props, astroI18n: { locale: "en", route: "/blogs/[slug]", primaryLocale: "zh", secondaryLocales: ["en"] } })
-const { props } = Astro
+import { render, type CollectionEntry } from 'astro:content';
+import { getBlogs } from '../../../../utils/getBlogs';
+
+export async function getStaticPaths() {
+  const blogs = await getBlogs('en');
+
+  return blogs.map(blog => ({
+    params: { slug: blog.data.permalink },
+    props: { article: blog },
+  }));
+}
+
+const { article } = Astro.props as {
+  article: CollectionEntry<'blogs'>;
+};
+const { Content } = await render(article);
 ---
-<Page {...props} />
+
+<Content />

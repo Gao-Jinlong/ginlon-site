@@ -30,6 +30,8 @@ const { tabs, defaultTab = tabs?.[0]?.id, urlParam = 'tab' } = Astro.props
 </div>
 
 <style>
+  @reference "../styles/styles.css";
+
   .tabs {
     @apply mb-8 flex gap-4;
     @apply border-b border-gray-200 dark:border-gray-700;

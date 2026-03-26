@@ -19,7 +19,8 @@
     "personalMission": "个体生命的全部意义，在于它能否成为另一段生命的火引",
     "featuredBlogs": {
       "title": "最近文章",
-      "brief": "所有经验，都是可以传递的火种"
+      "brief": "所有经验，都是可以传递的火种",
+      "more": "查看更多"
     }
   },
   "navigation": {

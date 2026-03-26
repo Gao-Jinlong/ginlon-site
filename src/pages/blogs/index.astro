@@ -3,6 +3,7 @@ import Main from '../../layouts/Main.astro'
 import { getBlogs, type BlogCategory } from '../../utils/getBlogs'
 import Tabs from '../../components/Tabs.astro'
 import BlogCard from '../../components/BlogCard.astro'
+import { getLocaleFromUrl } from '../../i18n/utils'
 
 interface BlogData {
   data: {
@@ -18,7 +19,8 @@ interface BlogData {
   }
 }
 
-const blogs = (await getBlogs()) as BlogData[]
+const locale = getLocaleFromUrl(Astro.url)
+const blogs = (await getBlogs(locale)) as BlogData[]
 const techBlogs = blogs.filter(blog => blog.data.category === 'tech')
 const lifeBlogs = blogs.filter(blog => blog.data.category === 'note')
 
@@ -78,6 +80,8 @@ const categories = [
 </Main>
 
 <style>
+  @reference "../../styles/styles.css";
+
   .page-header {
     @apply my-6;
     @apply flex flex-wrap items-center gap-8 border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;

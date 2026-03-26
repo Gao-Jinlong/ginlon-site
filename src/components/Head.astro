@@ -1,7 +1,9 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { t } from 'astro-i18n';
+import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
 const { pageTitle } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
 ---
 
 <head>
@@ -27,14 +29,14 @@ const { pageTitle } = Astro.props;
 
   <!-- open graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={t('og.url')} />
+  <meta property="og:url" content={Astro.url.href} />
   <meta property="og:title" content={t('og.title')} />
   <meta property="og:description" content={t('og.description')} />
   <meta property="og:image" content={t('og.image')} />
 
   <!-- twitter -->
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content={t('og.url')} />
+  <meta property="twitter:url" content={Astro.url.href} />
   <meta property="twitter:title" content={t('og.title')} />
   <meta property="twitter:description" content={t('og.description')} />
   <meta property="twitter:image" content={t('og.image')} />

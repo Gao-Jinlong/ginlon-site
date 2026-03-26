@@ -1,32 +1,22 @@
 ---
-import { createGetStaticPaths } from 'astro-i18n';
+import { render, type CollectionEntry } from 'astro:content';
 import { getBlogs } from '../../utils/getBlogs';
+import type { AppLocale } from '../../i18n/utils';
 
-interface BlogData {
-  data: {
-    title: string;
-    subtitle?: string;
-    permalink: string;
-    createdAt: string;
-    lastModified?: string;
-    tags?: string[];
-  };
-}
-
-export const getStaticPaths = createGetStaticPaths(async () => {
-  const blogs = await getBlogs();
+export async function getStaticPaths() {
+  const locale: AppLocale = 'zh';
+  const blogs = await getBlogs(locale);
 
   return blogs.map(blog => ({
     params: { slug: blog.data.permalink },
     props: { article: blog },
   }));
-});
+}
 
 const { article } = Astro.props as {
-  article: BlogData;
+  article: CollectionEntry<'blogs'>;
 };
-// @ts-ignore
-const { Content } = await article.render();
+const { Content } = await render(article);
 ---
 
 <Content />

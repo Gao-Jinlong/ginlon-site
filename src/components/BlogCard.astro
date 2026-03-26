@@ -1,23 +1,24 @@
 ---
 import { dayjs } from '../utils/dayjs'
 import TagsDisplay from './TagsDisplay.astro'
+import { getLocaleFromUrl, getLocalizedPath } from '../i18n/utils'
 
 interface Props {
   blog: {
     data: {
-      draft?: boolean
+      draft?: boolean | undefined
       title: string
       permalink: string
       createdAt: string
-      description?: string
-      tags?: string[]
-      poster?: string
-      subtitle?: string
+      tags?: string[] | undefined
+      poster?: string | undefined
+      subtitle?: string | undefined
     }
-  }
+  };
 }
 
 const { blog } = Astro.props
+const locale = getLocaleFromUrl(Astro.url)
 
 // 判断是否为外部URL
 const isExternalUrl = (url: string) => url.startsWith('http://') || url.startsWith('https://')
@@ -46,7 +47,7 @@ const getColorFromTitle = (title: string): { bg: string; text: string } => {
 const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
 ---
 
-<a href={`/blogs/${blog.data.permalink}`} class="blog-card">
+<a href={getLocalizedPath(locale, `blogs/${blog.data.permalink}`)} class="blog-card">
   <div class="blog-card-inner">
     {
       blog.data.poster && isExternalUrl(blog.data.poster) ? (
@@ -87,7 +88,7 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
         {blog.data.title}
       </h3>
       <time class="blog-date">
-        {dayjs(blog.data.createdAt).format('YYYY-MM-DD')}
+        {dayjs(blog.data.createdAt, locale).format('YYYY-MM-DD')}
       </time>
       {blog.data.tags && (
         <div class="blog-tags">
@@ -99,6 +100,8 @@ const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
 </a>
 
 <style>
+  @reference "../styles/styles.css";
+
   .blog-card {
     @apply block;
     @apply transition-all duration-300;

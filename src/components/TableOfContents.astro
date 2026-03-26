@@ -1,5 +1,5 @@
 ---
-import { t } from 'astro-i18n';
+import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
 
 interface Props {
   headings: {
@@ -10,6 +10,8 @@ interface Props {
 }
 
 const { headings } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
 
 // 只显示前三级标题
 const filteredHeadings = headings.filter(heading => heading.depth <= 4);
@@ -33,6 +35,8 @@ const filteredHeadings = headings.filter(heading => heading.depth <= 4);
 </nav>
 
 <style>
+  @reference "../styles/styles.css";
+
   .toc {
     @apply fixed top-24 z-10 hidden translate-x-[67ch] lg:block;
     max-height: calc(100vh - 12rem);

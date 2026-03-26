@@ -1,14 +1,12 @@
 ---
-import Main from '../../layouts/Main.astro';
-import { getBlogsByTag, getAllTags, type Tag } from '../../utils/getTags';
-import BlogCard from '../../components/BlogCard.astro';
-import { getLocaleFromUrl, getLocalizedPath, type AppLocale } from '../../i18n/utils';
+import Main from '../../../../layouts/Main.astro';
+import { getBlogsByTag, getAllTags } from '../../../../utils/getTags';
+import BlogCard from '../../../../components/BlogCard.astro';
 
 export async function getStaticPaths() {
-  const locale: AppLocale = 'zh';
-  const tags = await getAllTags(locale);
+  const tags = await getAllTags('en');
 
-  return tags.map((tag) => ({
+  return tags.map(tag => ({
     params: { tag: tag.slug },
     props: { tagName: tag.name },
   }));
@@ -18,9 +16,8 @@ interface Props {
   tagName: string;
 }
 
-const { tagName } = Astro.props;
-const locale = getLocaleFromUrl(Astro.url);
-const blogs = await getBlogsByTag(tagName, locale);
+const { tagName } = Astro.props as Props;
+const blogs = await getBlogsByTag(tagName, 'en');
 ---
 
 <Main pageTitle={`标签: ${tagName}`}>
@@ -44,14 +41,14 @@ const blogs = await getBlogsByTag(tagName, locale);
     ) : (
       <div class="empty-state">
         <p>该标签下暂无文章</p>
-        <a href={getLocalizedPath(locale, 'blogs')} class="back-link">返回博客列表</a>
+        <a href="/en/blogs" class="back-link">返回博客列表</a>
       </div>
     )}
   </section>
 </Main>
 
 <style>
-  @reference "../../styles/styles.css";
+  @reference "../../../../styles/styles.css";
 
   .tag-page {
     @apply mx-auto;
@@ -78,17 +75,15 @@ const blogs = await getBlogsByTag(tagName, locale);
   }
 
   .tag-count {
-    @apply text-gray-600 dark:text-gray-400;
-    @apply text-lg;
+    @apply text-lg text-gray-600 dark:text-gray-400;
   }
 
   .blog-list {
-    @apply grid gap-6;
-    @apply grid-cols-1;
+    @apply grid grid-cols-1 gap-6;
   }
 
   .empty-state {
-    @apply text-center py-12;
+    @apply py-12 text-center;
   }
 
   .empty-state p {
@@ -96,8 +91,7 @@ const blogs = await getBlogsByTag(tagName, locale);
   }
 
   .back-link {
-    @apply inline-block text-blue-600 hover:text-blue-800;
+    @apply font-medium text-blue-600 hover:text-blue-800;
     @apply dark:text-blue-400 dark:hover:text-blue-300;
-    @apply font-medium;
   }
 </style>

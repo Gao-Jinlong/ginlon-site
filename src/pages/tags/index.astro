@@ -1,9 +1,11 @@
 ---
 import Main from '../../layouts/Main.astro';
 import { getAllTags } from '../../utils/getTags';
-import { t } from 'astro-i18n';
+import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../../i18n/utils';
 
-const tags = await getAllTags();
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const tags = await getAllTags(locale);
 ---
 
 <Main pageTitle={t('tags.title')}>
@@ -17,7 +19,7 @@ const tags = await getAllTags();
       <div class="tags-grid">
         {tags.map(tag => (
           <a
-            href={`/tags/${tag.slug}`}
+            href={getLocalizedPath(locale, `tags/${tag.slug}`)}
             class="tag-card"
           >
             <div class="tag-card-header">
@@ -33,6 +35,8 @@ const tags = await getAllTags();
 </Main>
 
 <style>
+  @reference "../../styles/styles.css";
+
   .tags-page {
     @apply mx-auto;
     @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;

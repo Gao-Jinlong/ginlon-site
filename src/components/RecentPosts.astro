@@ -1,6 +1,6 @@
 ---
-import { t } from 'astro-i18n';
 import { dayjs, format } from '../utils/dayjs';
+import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
 
 interface BlogData {
   data: {
@@ -13,7 +13,8 @@ interface BlogData {
 const { blogs } = Astro.props as {
   blogs: BlogData[];
 };
-const routeName = 'blogs';
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
 ---
 
 <aside class="recent-posts">
@@ -26,13 +27,13 @@ const routeName = 'blogs';
         blogs.slice(0, 5).map(({ data: { permalink, title, createdAt } }) => (
           <li class="recent-post-item">
             <a
-              href={`${import.meta.env.BASE_URL}${routeName}/${permalink}`}
+              href={getLocalizedPath(locale, `blogs/${permalink}`)}
               class="recent-post-link"
             >
               <span class="recent-post-title">{title}</span>
               {createdAt && (
                 <span class="recent-post-date">
-                  {dayjs(createdAt).format(format)}
+                  {dayjs(createdAt, locale).format(format)}
                 </span>
               )}
             </a>
@@ -44,6 +45,8 @@ const routeName = 'blogs';
 </aside>
 
 <style>
+  @reference "../styles/styles.css";
+
   .recent-posts {
     @apply mt-16 w-full;
   }
