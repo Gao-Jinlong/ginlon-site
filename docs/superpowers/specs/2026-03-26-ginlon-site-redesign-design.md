@@ -1,459 +1,386 @@
-# Ginlon Site Redesign Design
+# Ginlon Site Unified Redesign Spec
 
 Date: 2026-03-26
 Project: `ginlon-site`
-Status: Approved for spec drafting
+Status: Approved for planning
 
-## 1. Goal
+## 1. Objective
 
-Refactor the site from a blog-first personal site into a personal-brand site with writing as proof of depth.
+Rebuild the presentation layer of the site from the root so the public-facing experience reads as one coherent system instead of a partially redesigned collection of pages.
 
-Primary intent:
+This redesign is specifically intended to fix three active problems:
 
-- Personal brand first
-- Modern product-oriented tone
-- Simple, sharp, professional presentation
-- Stronger mobile responsiveness
-- Page-level SEO and OG strategy
+1. Residual legacy blue styling still appears in some pages and components even though the site theme has already moved to green.
+2. Navigation still exposes too many destinations and makes the site feel busier than necessary.
+3. The article detail layout does not treat reading as the primary activity because the table of contents still competes with the article body for the center of the page.
 
-Non-goals:
+The redesign must solve those issues at the system level rather than through isolated page patches.
 
-- Rewriting the content system
-- Replacing Astro, MDX, or the current i18n structure
-- Building a CMS or changing the content source format
-- Adding aggressive sales or lead-generation behavior
+## 2. Product Intent
 
-## 2. Current State Summary
+The site should present Ginlon as a calm, modern engineer-writer whose writing is the strongest proof of depth.
 
-The current site already has:
+The intended impression is:
 
-- Astro-based static architecture
-- Chinese and English routes
-- Blog content in MDX
-- Basic SEO and OG metadata in a shared `Head` component
-- A lightweight visual language built around white cards, grid background, and a blog-style layout
+- clear
+- focused
+- quietly technical
+- consistent across pages
+- designed with restraint rather than decoration
 
-Current problems:
+The site should feel simpler after the redesign, not more feature-rich.
 
-- The site reads as a personal blog with scattered page styles rather than a unified personal brand system
-- Homepage hierarchy is too light to establish identity quickly
-- Navigation promotes too many equally weighted destinations
-- About page is structurally weak and visually dated relative to the desired tone
-- Blog list and article page experience are functional but not brand-defining
-- SEO/OG metadata are too global and not sufficiently page-specific
-- Responsive behavior is mostly layout compression, not priority-aware restructuring
+## 3. Current-State Findings
 
-## 3. Design Direction
+The current codebase already contains a partially updated green token system in `src/styles/styles.css`, but the redesign is incomplete.
 
-Chosen direction: `Soft Product Minimal`
+Observed issues from the current implementation:
 
-Reference interpretation:
+- Several pages and components still hard-code legacy `blue-*` styles and blue-purple gradients, especially in tag-related surfaces, older page sections, and the current tabs UI.
+- The navigation is split into primary and secondary groups, which visually promotes too many destinations.
+- `techStack` still exists as a top-level concept even though it is no longer important to the desired site identity.
+- The article layout still treats the table of contents as part of the main centered content flow instead of as an auxiliary navigation layer.
+- Mobile article navigation is currently embedded in the reading flow instead of being a separate on-demand navigation affordance.
+- Light mode has already moved toward the new palette, but dark mode still needs to be treated as a first-class redesign target rather than a follow-up color inversion pass.
 
-- Keep the calm and approachable feel of the “Soft Tech Minimal” direction
-- Preserve professional clarity and structural discipline
-- Avoid heavy glassmorphism, flashy gradients, or startup-like sales energy
-- Borrow some editorial restraint in spacing and typography so the site does not feel like a generic SaaS landing page
+## 4. Scope
 
-Desired impression:
+This redesign covers the public-facing presentation layer:
 
-- Modern
-- Quietly confident
-- Clear-headed
-- Technical but not cold
-- Designed, not decorated
+- global visual tokens
+- navigation
+- homepage shell
+- writing index page
+- article detail layout
+- about page
+- tags pages
+- shared content-display components
+- light mode and dark mode parity
 
-## 4. Brand and Visual System
+This redesign does not cover:
 
-### 4.1 Visual Principles
-
-- Soft, low-noise interface
-- Strong typography and spacing over ornament
-- Lightweight depth, subtle borders, restrained shadows
-- Brand consistency across homepage, writing, about, and article pages
-- Motion used for entrance and state feedback only
-
-### 4.2 Color and Material
-
-Base direction:
-
-- Light-first interface
-- Soft cool gray / mist green / desaturated slate palette
-- Minimal gradient usage for page atmosphere only
-- Surface cards should feel stable and readable, not translucent or decorative
-
-Rules:
-
-- Background may use a gentle atmospheric gradient
-- Main reading surfaces remain high contrast and mostly solid
-- Borders should be finer and more deliberate than the current card-heavy look
-- Shadows should be weaker and cleaner than the current implementation
-
-### 4.3 Typography
-
-Typography should carry more of the brand feeling than it does now.
-
-Rules:
-
-- Headings should feel product-grade and modern
-- Body text should optimize for reading comfort and scanability
-- Large headings should be concise and declarative
-- Metadata, tags, and small labels should use clear hierarchy rather than visual noise
-
-### 4.4 Motion
-
-Allowed motion:
-
-- Hero fade/slide on initial page load
-- Small hover lift for cards
-- Smooth navigation state transitions
-- Gentle section reveal where it helps orientation
-
-Not allowed:
-
-- Excessive staggered animation across every screen
-- Decorative motion without informational value
-- Motion that weakens perceived performance
+- Astro architecture changes
+- MDX content model changes
+- i18n routing model changes
+- CMS or backend work
+- content migration
+- taxonomy redesign beyond navigation and presentation
 
 ## 5. Information Architecture
 
-The site should move from “collection of pages” to “clear brand system.”
-
 ### 5.1 Top-Level Navigation
 
-Recommended primary navigation:
+Top-level navigation must be reduced to:
 
 - Home
 - Writing
 - About
 
-De-emphasized or secondary destinations:
+Navigation principles:
 
-- Tags
-- Tech Stack
+- The main nav is a brand-entry mechanism, not a complete sitemap.
+- Only the most important entry points should appear at the top level.
+- Secondary discovery should happen inside content flows, not through a crowded header.
 
-Rationale:
+### 5.2 Tags
 
-- Primary navigation should answer what a new visitor expects first
-- Tags and technical taxonomy are useful but should not compete with core brand entry points
-- The top nav should feel curated rather than exhaustive
-
-### 5.2 Content Model Positioning
-
-Page roles:
-
-- Homepage: brand establishment and guided entry
-- Writing page: content index and credibility proof
-- Article page: deepest trust-building surface
-- About page: personal narrative and values
-- Tags page: support navigation, not identity
-- Tech stack page: optional supporting page, not top-level anchor
-
-## 6. Page Design
-
-### 6.1 Homepage
-
-Purpose:
-
-- Let a first-time visitor understand who Ginlon is
-- Show focus areas without overexplaining
-- Guide users into writing and about content
-
-Structure:
-
-1. Hero
-2. Focus Areas
-3. Selected Writing
-4. About Snapshot
-5. Contact / external links
-
-Hero rules:
-
-- One concise identity statement
-- One supporting line
-- Two restrained CTAs: `Read Writing` and `About`
-- No overloaded badges, no noisy stats wall, no heavy self-description
-
-Focus Areas:
-
-- 3 short cards
-- Each card represents a durable theme such as frontend engineering, architecture thinking, technical writing
-- Copy should be compact and directional
-
-Selected Writing:
-
-- Curated content, not just latest posts
-- Emphasize representative writing quality
-- Card density lower than writing index page
-
-About Snapshot:
-
-- Short summary that gives personality without turning the homepage into the full about page
-
-Contact area:
-
-- Lightweight links only
-- No hard “hire me” conversion framing
-
-### 6.2 Writing Index Page
-
-Purpose:
-
-- Provide a stable content index
-- Help visitors scan and choose content quickly
-
-Structure:
-
-- Compact page intro
-- Lightweight category or filter control
-- Dense but clean article list/grid
+The tags system remains in the product, but its role changes.
 
 Rules:
 
-- Reduce app-like loading state feeling
-- Avoid over-styled tabs that feel like an admin UI
-- Maintain consistent card treatment with homepage but optimized for higher density
-- Metadata should be easier to scan than it is now
+- Keep the tags routes and pages.
+- Remove tags from the primary site navigation.
+- Allow users to reach tags through article metadata, tag links, and lower-priority discovery surfaces.
+- Treat tags as a support mechanism for exploration, not as part of the main identity of the site.
 
-### 6.3 Article Page
+### 5.3 Tech Stack
 
-Purpose:
+The tech stack page is removed.
 
-- Be the strongest page type on the site
-- Maximize long-form reading quality
-- Carry article-level SEO and OG value
+Required fallout cleanup:
 
-Structure:
+- remove the Chinese route
+- remove the English route
+- remove all navigation references
+- remove footer or internal links that point to it
+- remove any page metadata references if present
 
-- Article header
-- Optional summary / subtitle
-- Publish date and tags
-- Main content
-- Table of contents where useful
-- Previous/next or related navigation
+## 6. Design-System Direction
 
-Rules:
+This redesign should be implemented as a design-system refactor with three layers.
 
-- Article pages should not render as raw MDX-only output
-- Reading width, heading rhythm, code blocks, images, and spacing should be standardized
-- Mobile code blocks must scroll cleanly
-- Header metadata should be integrated into the layout rather than implied by content only
+### 6.1 Layer 1: Design Tokens
 
-### 6.4 About Page
+The site must use semantic visual variables instead of page-level hard-coded colors.
 
-Purpose:
+Core token categories:
 
-- Turn scattered profile content into a clear narrative
-
-Structure:
-
-- Intro
-- Working style / values
-- Focus areas / interests
-- Contact
+- page background
+- content surface
+- strong surface
+- border
+- primary text
+- muted text
+- accent
+- accent-soft
+- shadow
 
 Rules:
 
-- Fewer sections, higher clarity
-- Remove the feeling of a text dump
-- Use strong section hierarchy and cleaner pacing
+- Green is the only accent family for emphasis and interaction.
+- Legacy blue and blue-purple gradients must be removed from interactive states and decorative surfaces.
+- Light and dark themes must use the same semantic token model.
+- Dark mode must be intentionally tuned rather than mechanically mirrored from light mode.
 
-### 6.5 Tags and Supporting Pages
+### 6.2 Layer 2: Shell Components
 
-Purpose:
+Shared shell components should define the visual grammar of the site.
 
-- Support discovery without competing with primary pages
+Examples:
+
+- navigation bar
+- page container
+- page intro/header
+- card surface
+- section framing
+
+Principle:
+
+- Pages should inherit a common shell language instead of rebuilding their own visual identity locally.
+
+### 6.3 Layer 3: Content Components
+
+Content-specific interactions should be shared across page types.
+
+Examples:
+
+- article filter controls
+- metadata rows
+- tags and pills
+- table of contents
+- article body surface
+- related-content blocks
+
+Principle:
+
+- Content interactions should feel related to each other, but clearly distinct from top-level site navigation.
+
+## 7. Theme Rules
+
+### 7.1 Accent System
+
+Accent usage must be narrowed and made consistent.
+
+Use accent tokens for:
+
+- active navigation state
+- link emphasis
+- current table-of-contents item
+- selected article filter
+- inline article emphasis surfaces
+- tag hover or active states where appropriate
+
+Do not use accent tokens for:
+
+- large decorative fills
+- broad page backgrounds
+- unrelated gradients
+
+### 7.2 Light Mode
+
+Light mode should feel airy, calm, and structured:
+
+- soft atmospheric page background
+- high-contrast reading surfaces
+- subtle border definition
+- restrained shadows
+- low-noise interaction states
+
+### 7.3 Dark Mode
+
+Dark mode must remain fully supported and redesigned at the same time as light mode.
 
 Rules:
 
-- Follow the same shared design system
-- Stay simpler than homepage and article pages
-- Avoid custom one-off visual language
+- keep the same green accent family with reduced glare
+- preserve reading comfort and hierarchy
+- tune hover and selected states separately for dark surfaces
+- avoid bright cyan-like states that feel detached from the rest of the interface
 
-## 7. Responsive Strategy
+## 8. Navigation Design
 
-This redesign must be mobile-aware at the information level, not just at the CSS breakpoint level.
+### 8.1 Header Behavior
 
-### 7.1 Mobile Principles
+The header should become a single-layer navigation shell.
 
-- Shorter hero copy
-- Faster access to selected writing
-- Reduced vertical waste
-- Simplified nav presentation
-- Cleaner card stacking rules
+Required changes:
 
-### 7.2 Desktop Principles
+- remove the current secondary link group
+- keep only the simplified primary destinations
+- preserve current-page highlighting
+- keep the theme toggle
+- maintain a calm, compact, sticky header pattern
 
-- More breathing room
-- Better modular rhythm
-- Potential two-column balance where useful
-- Stronger visual pacing between sections
+### 8.2 Mobile Navigation
 
-### 7.3 Article Responsiveness
+Mobile navigation should stay simple.
 
-Special care required for:
+Rules:
 
-- Code blocks
-- Images
-- Heading spacing
-- Table of contents behavior
-- Paragraph width
+- do not introduce a heavy app-style menu system unless implementation makes it necessary
+- preserve direct access to the three top-level destinations
+- keep visual weight low so the header does not dominate the page
 
-## 8. SEO Strategy
+## 9. Writing Index Design
 
-The metadata system should move from “one shared default” to “layout default + page override.”
+### 9.1 Page Role
 
-### 8.1 Required Metadata Model
+The writing index is the structured archive and discovery page for the site.
 
-Each page type should support:
+It should feel like a stable content index, not an application dashboard.
 
-- `title`
-- `description`
-- `canonical`
-- `og:title`
-- `og:description`
-- `og:type`
-- `og:image`
+### 9.2 Filtering Model
 
-Article pages should additionally support:
+Article category switching should remain available, but the current tabs treatment should be replaced.
 
-- Publish date
-- Tags
-- Article-specific OG values
-- Language-aware alternates
+Required changes:
 
-### 8.2 Page-Level SEO Rules
+- remove the strong tab-strip mental model
+- replace it with lightweight filter controls
+- preserve URL-param-based filtering behavior if possible for shareability and refresh persistence
+- place filters below the page intro and above the article list
 
-Homepage:
+Visual rules:
 
-- Brand-oriented title and description
-- Canonical root URL per locale
+- filter controls should be lighter than top-level navigation
+- selected state uses the green accent system
+- controls should feel like content filters, not page routing
 
-Writing page:
+## 10. Article Detail Design
 
-- Writing/archive-specific title and description
+### 10.1 Primary Goal
 
-About page:
+The article detail page should become the strongest reading surface on the site.
 
-- Profile-oriented title and description
+The article body must be the true visual center of the page.
 
-Tags page:
+### 10.2 Desktop Layout
 
-- Tag-specific title and description if practical
+Desktop article behavior:
 
-Article page:
+- center the reading column independently
+- place the table of contents in a dedicated right-side support column
+- ensure the table of contents does not shift the perceived center of the article body
+- keep the table of contents narrower and visually lighter than the article surface
+- allow the table of contents to behave like auxiliary navigation rather than a second article card
 
-- Article title as page title basis
-- Article description or excerpt
-- Canonical permalink
-- Locale-specific alternate links
+### 10.3 Mobile Layout
 
-### 8.3 International SEO
+Mobile article behavior:
 
-Because the site has Chinese and English routes, the redesign should include:
+- remove the always-visible in-flow mobile table of contents block
+- provide a drawer-based table of contents that can expand and collapse on demand
+- keep the drawer available without interrupting continuous reading
+- close the drawer after selecting a heading target
 
-- Locale-aware canonical handling
-- `hreflang` alternates between corresponding localized routes when they exist
-- Avoiding accidental duplication between localized pages with generic metadata
+### 10.4 Article Surface Rules
 
-## 9. OG Strategy
+Reading-surface rules:
 
-Current OG support is too generic. The redesign should introduce page-type-aware social sharing behavior.
+- article header, body, metadata, and TOC should share the same token system
+- code blocks must remain scrollable on mobile
+- inline code, quotes, links, and heading anchors must all use the new accent and surface rules
+- the article layout must work in both light and dark themes without visual drift
 
-### 9.1 OG Types
+## 11. About and Tags Pages
 
-- Homepage/static page OG image
-- Article-specific OG image
+### 11.1 About Page
 
-### 9.2 OG Content Rules
+The about page should be pulled fully into the shared site system.
 
-Homepage/static page OG:
+Required outcome:
 
-- Brand name
-- Short positioning statement
-- Stable visual template
+- remove residual legacy blue styling
+- preserve content intent while aligning section hierarchy, spacing, and surfaces with the rest of the site
 
-Article OG:
+### 11.2 Tags Pages
 
-- Article title
-- Optional category/date
-- Brand mark
-- Consistent visual layout
+Both the tags index and tag detail pages must stay available, but visually they should become clearly secondary to the main pages.
 
-Initial phase can use static assets if necessary, but the metadata system must be designed so dynamic generation can be added later without redesigning the interface contract.
+Rules:
 
-## 10. Implementation Boundaries
+- remove legacy blue and purple treatments
+- align cards, typography, spacing, and hover states with the shared token system
+- keep tag discovery useful without making these pages feel like separate products
+
+## 12. Component Refactor Targets
+
+The redesign should primarily be executed through shared components rather than page-by-page one-off styling.
+
+Primary targets:
+
+- `src/styles/styles.css`
+- `src/components/NavigationBar.astro`
+- existing tabs/filter UI
+- `src/components/TableOfContents.astro`
+- `src/layouts/Blog.astro`
+- tag display and tag page components
+- about page styling
+- any shared metadata or content surface components needed to unify behavior
+
+Recommended direction:
+
+- convert the current tabs component into a lighter filter control or replace it with a dedicated filter component
+- split table-of-contents presentation into shared content plus separate desktop and mobile containers if needed
+- keep article layout logic in the blog layout rather than scattering it across pages
+
+## 13. Implementation Constraints
 
 Keep:
 
 - Astro
 - MDX content source
-- Existing i18n routing structure
-- Existing blog retrieval and content loading model where possible
+- locale-aware routes
+- current blog retrieval approach
 
-Refactor:
+Do not introduce:
 
-- Main layout
-- Navigation
-- Shared page shell
-- Shared content section patterns
-- Blog cards and metadata presentation
-- Article reading template
-- Head/SEO API
-- Global visual tokens and page-level layout styles
+- new content storage systems
+- backend dependencies
+- unnecessary routing changes
+- scope expansion into unrelated refactors
 
-Do not expand scope into:
+Compatibility expectations:
 
-- CMS work
-- Backend work
-- Content migration
-- Major taxonomy redesign
+- if legacy article filter URL parameters exist, the new filter UI should continue to honor them where practical
+- route removals for `techStack` must be accompanied by internal-link cleanup
 
-## 11. Component Strategy
+## 14. Risks
 
-The redesign should consolidate UI into reusable primitives instead of per-page styling.
+- The redesign could drift into superficial recoloring if hard-coded component styles are not actually removed.
+- Navigation simplification could feel incomplete if secondary links survive in the footer or other shell surfaces without reconsideration.
+- The article page could still feel off-center if the layout is only adjusted at breakpoint level instead of structurally separating reading and navigation columns.
+- Dark mode could lag behind light mode if token work is not treated as foundational.
 
-Suggested shared pieces:
+## 15. Acceptance Criteria
 
-- Site shell / page container
-- Section header
-- Hero block
-- Article card
-- Metadata row
-- Page intro/header block
-- Reading layout
-- SEO head interface
+The redesign is successful when all of the following are true:
 
-Principle:
+1. No public-facing page relevant to this redesign still relies on legacy blue accent styling as its primary interaction language.
+2. The top-level navigation contains only Home, Writing, and About.
+3. The `techStack` page and its user-facing references are removed.
+4. The tags pages remain available but are no longer linked from the main navigation.
+5. The writing index uses lightweight filter controls instead of visually heavy tabs.
+6. On desktop, the article body reads as centered while the table of contents sits clearly to the right as an auxiliary navigation layer.
+7. On mobile, the article table of contents is available through a drawer-based expand/collapse interaction.
+8. Light mode and dark mode both present a coherent green-centered theme with consistent surfaces, states, and hierarchy.
+9. About, writing, article, and tags pages feel like parts of one system rather than partially matched templates.
 
-- Shared visual language should come from tokens and reusable structures, not repeated custom CSS in each page
+## 16. Suggested Implementation Order
 
-## 12. Risks
-
-- The design may drift back toward a generic SaaS look if the product-style structure is not balanced with editorial restraint
-- The homepage may become too soft and lose clarity if the typography hierarchy is not strong enough
-- SEO work may stay superficial if metadata contracts are not redesigned alongside templates
-- Article pages may remain visually disconnected if they are treated as content-only outputs
-
-## 13. Acceptance Criteria
-
-The redesign is successful when:
-
-1. The site reads as a unified personal brand across homepage, writing, article, and about pages.
-2. New visitors can understand identity, focus, and next step within a few seconds on the homepage.
-3. Mobile layouts feel intentionally prioritized rather than merely compressed.
-4. Article pages become the highest-quality reading surface on the site.
-5. Each page type exposes appropriate page-level SEO and OG metadata.
-6. The visual system feels modern, calm, and professional without becoming corporate or sales-heavy.
-
-## 14. Delivery Plan for Implementation
-
-Recommended implementation order:
-
-1. Global visual tokens and shared layout shell
-2. Navigation and homepage redesign
-3. Writing index and article template redesign
-4. About page redesign
-5. Page-level SEO/OG API refactor
-6. Responsive polish and verification
-
-This sequencing keeps the visual foundation and metadata contract stable before page-by-page polish.
+1. Finalize and normalize global tokens for both light and dark themes.
+2. Simplify the navigation shell and remove `techStack`.
+3. Replace the writing-page tabs treatment with lightweight filter controls.
+4. Refactor the article layout and table-of-contents behavior for desktop and mobile.
+5. Align about and tags pages with the shared system and remove residual legacy colors.
+6. Run responsive and theme verification across the homepage, writing index, article detail, about, and tags pages.
