@@ -31,6 +31,7 @@ const { pageMeta } = Astro.props as { pageMeta: PageMeta };
   <meta name="author" content={siteConfig.name} />
   <meta name="description" content={pageMeta.description} />
   {pageMeta.keywords && <meta name="keywords" content={pageMeta.keywords} />}
+  {pageMeta.robots && <meta name="robots" content={pageMeta.robots} />}
 
   <meta property="og:site_name" content={siteConfig.name} />
   <meta property="og:type" content={pageMeta.ogType ?? 'website'} />

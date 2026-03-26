@@ -16,4 +16,5 @@ export interface PageMeta {
   publishedTime?: string;
   modifiedTime?: string;
   tags?: string[];
+  robots?: string;
 }

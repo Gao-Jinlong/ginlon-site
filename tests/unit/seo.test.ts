@@ -52,4 +52,23 @@ describe('seo helpers', () => {
       tags: ['frontend'],
     });
   });
+
+  it('allows pages to disable alternates and set robots directives', () => {
+    expect(
+      mergePageMeta(
+        {
+          title: 'Default',
+          description: 'Default description',
+          alternates: [{ hrefLang: 'zh-CN', href: 'https://www.ginlon.site/resume' }],
+        },
+        {
+          alternates: [],
+          robots: 'noindex, nofollow',
+        },
+      ),
+    ).toMatchObject({
+      alternates: [],
+      robots: 'noindex, nofollow',
+    });
+  });
 });
