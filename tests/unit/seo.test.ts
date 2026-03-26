@@ -5,7 +5,6 @@ import {
   buildLocaleAlternates,
   mergePageMeta,
 } from '../../src/utils/seo';
-import type { PageMeta } from '../../src/types/seo';
 
 describe('seo helpers', () => {
   it('builds the canonical URL from the Astro site URL and pathname', () => {
