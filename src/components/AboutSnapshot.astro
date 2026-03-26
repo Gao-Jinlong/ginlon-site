@@ -1,0 +1,116 @@
+---
+type Props = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  points: string[];
+  cta: {
+    href: string;
+    label: string;
+  };
+};
+
+const { cta, description, eyebrow, points, title } = Astro.props as Props;
+---
+
+<section class="snapshot-shell animate">
+  <div class="snapshot-copy">
+    <p class="snapshot-eyebrow">{eyebrow}</p>
+    <h2 class="snapshot-title">{title}</h2>
+    <p class="snapshot-description">{description}</p>
+    <a href={cta.href} class="snapshot-link">{cta.label}</a>
+  </div>
+
+  <div class="snapshot-points">
+    {
+      points.map((point) => (
+        <div class="snapshot-point">
+          <span></span>
+          <p>{point}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .snapshot-shell {
+    display: grid;
+    gap: 1rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg);
+    padding: 1.4rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .snapshot-eyebrow {
+    margin: 0 0 0.8rem;
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .snapshot-title {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(1.7rem, 1.25rem + 1vw, 2.5rem);
+    line-height: 1.1;
+  }
+
+  .snapshot-description {
+    margin: 0.9rem 0 0;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 34rem;
+  }
+
+  .snapshot-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.25rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .snapshot-link:hover {
+    text-decoration: underline;
+  }
+
+  .snapshot-points {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .snapshot-point {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    border-top: 1px solid var(--surface-border);
+    padding-top: 0.9rem;
+  }
+
+  .snapshot-point span {
+    display: inline-flex;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0.45rem;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .snapshot-point p {
+    margin: 0;
+    color: var(--text-strong);
+    line-height: 1.75;
+  }
+
+  @media (min-width: 900px) {
+    .snapshot-shell {
+      grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+      gap: 1.5rem;
+    }
+  }
+</style>

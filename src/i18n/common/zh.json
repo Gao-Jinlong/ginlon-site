@@ -9,18 +9,55 @@
     "subtitle": "好记性不如烂...键盘~"
   },
   "homepage": {
-    "hello": "你好，我是 Ginlon",
-    "briefs": [
-      "一名全干工程师",
-      "没入门的产品经理",
-      "功利的读书爱好者"
-    ],
-    "slogan": "绝知此事，定要躬行",
-    "personalMission": "个体生命的全部意义，在于它能否成为另一段生命的火引",
-    "featuredBlogs": {
-      "title": "最近文章",
-      "brief": "所有经验，都是可以传递的火种",
-      "more": "查看更多"
+    "hero": {
+      "eyebrow": "ENGINEERING + WRITING",
+      "title": "构建克制的界面，写出清晰的系统。",
+      "description": "前端工程师，关注产品质量、系统边界与技术写作，希望把复杂经验整理成更容易传递的形式。",
+      "primaryCta": "阅读写作",
+      "secondaryCta": "了解我"
+    },
+    "focusAreas": {
+      "eyebrow": "FOCUS AREAS",
+      "title": "我长期投入的三条主线",
+      "description": "把页面体验、工程结构和表达方式放在同一套标准里迭代，是我最舒服也最有效的工作方式。",
+      "items": {
+        "engineering": {
+          "title": "前端交互与产品质感",
+          "description": "从信息层级、组件边界到阅读体验，我会把界面当成一个需要持续打磨的产品表面。",
+          "meta": "Frontend craft"
+        },
+        "systems": {
+          "title": "系统设计与可维护性",
+          "description": "我喜欢把零散需求整理成可复用的结构，让页面、内容模型和元数据约束彼此协作。",
+          "meta": "System thinking"
+        },
+        "writing": {
+          "title": "写作、沉淀与知识传递",
+          "description": "通过文章记录软件工程、阅读与实践，把经验变成未来自己和他人都能复用的上下文。",
+          "meta": "Writing practice"
+        }
+      }
+    },
+    "selectedWriting": {
+      "eyebrow": "SELECTED WRITING",
+      "title": "最近更新",
+      "description": "持续整理工程、阅读与实践中的问题意识，保留一份可回看的思考档案。"
+    },
+    "aboutSnapshot": {
+      "eyebrow": "ABOUT SNAPSHOT",
+      "title": "我在意的，不只是把需求做完。",
+      "description": "我更在意一个系统是否足够清晰、页面是否足够好读，以及团队是否能在现有基础上继续往前推进。",
+      "points": [
+        "偏爱能长期维护的结构，而不是短期堆砌出来的复杂度。",
+        "相信技术写作是工程能力的一部分，它能帮助团队共享判断。",
+        "希望把个人网站也当成一个持续演进的产品来经营。"
+      ],
+      "cta": "查看完整介绍"
+    },
+    "contact": {
+      "eyebrow": "CONTACT",
+      "title": "保持连接",
+      "description": "如果你想聊工程、写作、个人品牌网站，或者只是想交换一些阅读和实践经验，欢迎联系我。"
     }
   },
   "navigation": {

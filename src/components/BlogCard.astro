@@ -1,211 +1,147 @@
 ---
-import { dayjs } from '../utils/dayjs'
-import TagsDisplay from './TagsDisplay.astro'
-import { getLocaleFromUrl, getLocalizedPath } from '../i18n/utils'
+import { dayjs } from '../utils/dayjs';
+import MetadataRow from './MetadataRow.astro';
+import { getLocaleFromUrl, getLocalizedPath } from '../i18n/utils';
 
 interface Props {
   blog: {
     data: {
-      draft?: boolean | undefined
-      title: string
-      permalink: string
-      createdAt: string
-      tags?: string[] | undefined
-      poster?: string | undefined
-      subtitle?: string | undefined
-    }
+      draft?: boolean | undefined;
+      title: string;
+      permalink: string;
+      createdAt: string;
+      tags?: string[] | undefined;
+      poster?: string | undefined;
+      subtitle?: string | undefined;
+      category?: string | undefined;
+    };
   };
 }
 
-const { blog } = Astro.props
-const locale = getLocaleFromUrl(Astro.url)
-
-// 判断是否为外部URL
-const isExternalUrl = (url: string) => url.startsWith('http://') || url.startsWith('https://')
-
-// 获取第一个字符作为图标
-const getFirstChar = (title: string) => title.charAt(0).toUpperCase()
-
-// 生成基于标题的随机颜色
-const getColorFromTitle = (title: string): { bg: string; text: string } => {
-  const colors = [
-    { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
-    { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
-    { bg: 'bg-green-50 dark:bg-green-900/30', text: 'text-green-600 dark:text-green-400' },
-    { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-yellow-600 dark:text-yellow-400' },
-    { bg: 'bg-pink-50 dark:bg-pink-900/30', text: 'text-pink-600 dark:text-pink-400' },
-    { bg: 'bg-indigo-50 dark:bg-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' },
-    { bg: 'bg-teal-50 dark:bg-teal-900/30', text: 'text-teal-600 dark:text-teal-400' },
-    { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-600 dark:text-orange-400' },
-  ]
-
-  // 根据标题长度选择颜色
-  const index = title.length % colors.length
-  return colors[index] as { bg: string; text: string }
-}
-
-const { bg: bgColor, text: textColor } = getColorFromTitle(blog.data.title)
+const { blog } = Astro.props as Props;
+const locale = getLocaleFromUrl(Astro.url);
+const previewText = blog.data.subtitle ?? (locale === 'zh' ? '继续阅读这篇文章' : 'Continue reading this article');
+const categoryLabel =
+  blog.data.category === 'note'
+    ? locale === 'zh'
+      ? 'Notes'
+      : 'Notes'
+    : locale === 'zh'
+      ? 'Engineering'
+      : 'Engineering';
 ---
 
 <a href={getLocalizedPath(locale, `blogs/${blog.data.permalink}`)} class="blog-card">
-  <div class="blog-card-inner">
-    {
-      blog.data.poster && isExternalUrl(blog.data.poster) ? (
-        // 外部URL - 使用img标签
-        <div class="blog-image">
-          <img
-            src={blog.data.poster}
-            alt={blog.data.title}
-            class="poster-image"
-            loading="lazy"
-            onerror="this.parentElement.parentElement.classList.add('image-error')"
-          />
-          <div class="image-fallback">
-            <span class={`fallback-text ${textColor}`}>
-              {getFirstChar(blog.data.title)}
-            </span>
-          </div>
-        </div>
-      ) : blog.data.poster ? (
-        // 本地路径 - 使用占位图（因为博客目录下没有poster图片）
-        <div class={`blog-image ${bgColor}`}>
-          <span class={`placeholder-icon ${textColor}`}>
-            {getFirstChar(blog.data.title)}
-          </span>
-        </div>
-      ) : (
-        // 无封面 - 使用占位图
-        <div class={`blog-image ${bgColor}`}>
-          <span class={`placeholder-icon ${textColor}`}>
-            {getFirstChar(blog.data.title)}
-          </span>
-        </div>
-      )
-    }
-    <div class="blog-content">
-      <h3 class="blog-title">
-        {blog.data.draft ? '🚧' : ''}
-        {blog.data.title}
-      </h3>
-      <time class="blog-date">
-        {dayjs(blog.data.createdAt, locale).format('YYYY-MM-DD')}
-      </time>
-      {blog.data.tags && (
-        <div class="blog-tags">
-          <TagsDisplay tags={blog.data.tags} />
-        </div>
-      )}
-    </div>
+  <div class="blog-visual">
+    {blog.data.poster ? (
+      <img src={blog.data.poster} alt={blog.data.title} class="blog-poster" loading="lazy" />
+    ) : (
+      <div class="blog-placeholder">
+        <span>{categoryLabel}</span>
+        <strong>{dayjs(blog.data.createdAt, locale).format('YYYY')}</strong>
+      </div>
+    )}
+  </div>
+
+  <div class="blog-copy">
+    <p class="blog-category">{categoryLabel}</p>
+    <h3 class="blog-title">
+      {blog.data.draft ? 'Draft · ' : ''}
+      {blog.data.title}
+    </h3>
+    <p class="blog-preview">{previewText}</p>
+    <MetadataRow date={dayjs(blog.data.createdAt, locale).format('YYYY-MM-DD')} tags={blog.data.tags} />
   </div>
 </a>
 
 <style>
-  @reference "../styles/styles.css";
-
   .blog-card {
-    @apply block;
-    @apply transition-all duration-300;
-    @apply hover:scale-[1.01];
+    display: grid;
+    gap: 1rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 1rem;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   }
 
-  .blog-card-inner {
-    @apply flex flex-col md:flex-row;
-    @apply overflow-hidden rounded-lg;
-    @apply bg-white dark:bg-gray-900;
-    @apply border border-gray-200 dark:border-gray-700;
-    @apply shadow-sm;
-    @apply transition-all duration-300;
-    @apply hover:shadow-lg;
-    @apply hover:border-gray-300 dark:hover:border-gray-600;
+  .blog-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(31, 118, 103, 0.26);
+    box-shadow: 0 20px 36px rgba(15, 23, 42, 0.08);
   }
 
-  /* 图片区域 - 左侧 */
-  .blog-image {
-    @apply relative overflow-hidden;
-    @apply flex items-center justify-center;
-    /* 移动端：高度 192px，宽度 100% */
-    @apply h-48 w-full;
-    /* 桌面端：宽度 192px，高度自动跟随宽度（通过 flex 或 aspect-ratio） */
+  .blog-visual {
+    min-height: 12rem;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    background: linear-gradient(135deg, rgba(31, 118, 103, 0.1), rgba(114, 140, 168, 0.06));
   }
 
-  @media (min-width: 768px) {
-    .blog-image {
-      /* 桌面端：固定宽度 192px，高度也设为 192px 形成正方形 */
-      @apply w-48 h-48;
-      @apply flex-shrink-0;
-    }
+  .blog-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .poster-image {
-    @apply h-full w-full object-cover;
-    @apply transition-transform duration-300;
-    @apply absolute inset-0;
+  .blog-placeholder {
+    display: flex;
+    height: 100%;
+    min-height: 12rem;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
   }
 
-  .blog-card:hover .poster-image {
-    @apply scale-110;
+  .blog-placeholder span {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
-  /* 图片加载失败时的fallback */
-  .image-fallback {
-    @apply absolute inset-0;
-    @apply flex items-center justify-center;
-    @apply hidden;
-    @apply w-full h-full;
+  .blog-placeholder strong {
+    color: var(--text-strong);
+    font-size: clamp(2.4rem, 1.6rem + 1vw, 3.6rem);
+    line-height: 1;
   }
 
-  .blog-image.image-error .poster-image {
-    @apply hidden;
+  .blog-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
-  .blog-image.image-error .image-fallback {
-    @apply flex;
-  }
-
-  .fallback-text {
-    @apply text-6xl font-bold;
-  }
-
-  .placeholder-icon {
-    @apply text-6xl font-bold;
-  }
-
-  /* 内容区域 - 右侧 */
-  .blog-content {
-    @apply flex flex-col justify-between;
-    @apply p-6 md:p-8;
-    @apply flex-1;
+  .blog-category {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .blog-title {
-    @apply text-xl font-bold;
-    @apply text-gray-900 dark:text-gray-100;
-    @apply mb-3;
-    @apply line-clamp-2;
-    @apply leading-snug;
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.25rem;
+    line-height: 1.25;
   }
 
-  .blog-date {
-    @apply text-sm text-gray-500 dark:text-gray-400;
-    @apply mb-3;
+  .blog-preview {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.75;
   }
 
-  .blog-tags {
-    @apply mt-auto;
-  }
-
-  /* 移动端适配 */
-  @media (max-width: 767px) {
-    .blog-card-inner {
-      @apply flex-col;
-    }
-
-    .blog-content {
-      @apply p-6;
-    }
-
-    .blog-title {
-      @apply text-lg;
+  @media (min-width: 900px) {
+    .blog-card {
+      grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr);
+      align-items: stretch;
+      padding: 1.1rem;
     }
   }
 </style>

@@ -13,6 +13,7 @@ const dictionaries: Record<AppLocale, Dictionary> = {
 };
 
 export const defaultLocale: AppLocale = 'zh';
+export const appLocales: AppLocale[] = ['zh', 'en'];
 
 export function getLocaleFromUrl(url: URL): AppLocale {
   return url.pathname === '/en' || url.pathname.startsWith('/en/') ? 'en' : 'zh';

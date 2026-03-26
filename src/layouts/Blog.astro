@@ -1,198 +1,415 @@
 ---
-import RecentPosts from '../components/RecentPosts.astro'
-import TagsDisplay from '../components/TagsDisplay.astro'
-import Main from './Main.astro'
-import { Image } from 'astro:assets'
-import { getBlogs } from '../utils/getBlogs'
-import TableOfContents from '../components/TableOfContents.astro'
-import { dayjs, format } from '../utils/dayjs'
-import { getLocaleFromUrl, useTranslations } from '../i18n/utils'
+import { siteConfig } from '../data/site';
+import type { PageMeta } from '../types/seo';
+import MetadataRow from '../components/MetadataRow.astro';
+import PageContainer from '../components/PageContainer.astro';
+import RecentPosts from '../components/RecentPosts.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
+import { dayjs, format } from '../utils/dayjs';
+import { getBlogs } from '../utils/getBlogs';
+import Main from './Main.astro';
 
-const { title, subtitle, poster, posterDescription, createdAt, lastModified, tags } =
-  Astro.props.frontmatter
-const locale = getLocaleFromUrl(Astro.url)
-const t = useTranslations(locale)
+type Heading = {
+  depth: number;
+  slug: string;
+  text: string;
+};
 
-const blogs = await getBlogs(locale)
+type Frontmatter = {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  poster?: string;
+  posterDescription?: string;
+  createdAt: string;
+  lastModified?: string | Date;
+  tags?: string[];
+  permalink?: string;
+};
+
+type Props = {
+  currentSlug?: string;
+  frontmatter: Frontmatter;
+  headings?: Heading[];
+  pageMeta?: Partial<PageMeta>;
+};
+
+const { currentSlug, frontmatter, headings = [], pageMeta } = Astro.props as Props;
+const {
+  createdAt,
+  description,
+  lastModified,
+  permalink,
+  poster,
+  posterDescription,
+  subtitle,
+  tags,
+  title,
+} = frontmatter;
+
+const locale = getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+
+const blogs = await getBlogs(locale);
 const otherBlogs = blogs.filter(({ data }) => {
-  return title !== data.title && !data.draft
-})
+  return (currentSlug ?? permalink ?? title) !== data.permalink && !data.draft;
+});
 
-// 获取文章中的所有标题
-const headings = await Astro.props.headings
+const filteredHeadings = headings.filter((heading) => heading.depth <= 4);
+const summary = description ?? subtitle;
+const publishedLabel = dayjs(createdAt, locale).format(format);
+const publishedTime = new Date(createdAt).toISOString();
+const lastModifiedValue =
+  typeof lastModified === 'string' ? lastModified : lastModified?.toISOString();
+const lastModifiedLabel = lastModifiedValue
+  ? dayjs(lastModifiedValue, locale).format(format)
+  : undefined;
+const articleMeta = {
+  title: `${title} | ${siteConfig.name}`,
+  description: summary || siteConfig[locale].description,
+  ogType: 'article',
+  ogImage: siteConfig.articleOgImage,
+  ...(tags ? { tags } : {}),
+  ...(publishedTime ? { publishedTime } : {}),
+  ...(lastModifiedValue ? { modifiedTime: lastModifiedValue } : {}),
+} satisfies Partial<PageMeta>;
+const mainProps = {
+  pageTitle: title,
+  pageMeta: pageMeta ? { ...articleMeta, ...pageMeta } : articleMeta,
+};
 ---
 
-<Main pageTitle={title}>
-  <article class="blog-article">
-    <div class="article-container">
-      <div class="article-main">
-        <header class="article-header">
-          <div class="header-text">
-            <h1 class="article-title">{title}</h1>
-            {subtitle && <h2 class="article-subtitle">{subtitle}</h2>}
-            <div class="article-meta">
-              <time class="article-date">
-                {t('blogs.createdAt')}: {dayjs(createdAt, locale).format(format)}
-              </time>
-            </div>
-            {tags && tags.length > 0 && (
-              <div class="article-tags">
-                <TagsDisplay tags={tags} />
-              </div>
-            )}
-          </div>
-          {
-            poster && (
-              <div class="cover-container">
-                <div class="cover-image">
-                  <Image
-                    src={`${poster}`}
-                    alt="Poster image"
-                    width={1024}
-                    height={480}
-                    class="poster-image"
-                  />
-                </div>
-
-                {posterDescription && (
-                  <div class="cover-description">{posterDescription}</div>
-                )}
-              </div>
-            )
-          }
-        </header>
-
-        <div class="content-wrapper">
-          <div class="article-content prose dark:prose-invert">
-            <slot />
+<Main {...mainProps}>
+  <PageContainer class="article-page">
+    <article class="article-shell">
+      <header class="article-hero">
+        <div class="article-hero-copy">
+          <p class="article-eyebrow">WRITING</p>
+          <h1 class="article-title">{title}</h1>
+          {summary && <p class="article-summary">{summary}</p>}
+          <div class="article-meta-group">
+            <MetadataRow date={publishedLabel} tags={tags} />
             {
-              lastModified && (
-                <div class="last-modified">
-                  {t('blogs.lastModified')}:{dayjs(lastModified, locale).format(format)}
-                </div>
+              lastModifiedLabel && (
+                <p class="article-updated">
+                  {t('blogs.lastModified')}: {lastModifiedLabel}
+                </p>
               )
             }
           </div>
         </div>
 
+        {
+          poster && (
+            <figure class="article-cover">
+              <img
+                src={poster}
+                alt={posterDescription ?? title}
+                class="article-cover-image"
+                loading="eager"
+              />
+              {posterDescription && <figcaption>{posterDescription}</figcaption>}
+            </figure>
+          )
+        }
+      </header>
+
+      <div class="article-layout">
+        <div class="article-main-column">
+          {filteredHeadings.length > 0 && (
+            <div class="article-toc-mobile">
+              <TableOfContents headings={filteredHeadings} />
+            </div>
+          )}
+
+          <div class="article-body-surface">
+            <div class="article-content">
+              <slot />
+            </div>
+
+            {
+              lastModifiedLabel && (
+                <footer class="article-body-footer">
+                  <span>{t('blogs.lastModified')}</span>
+                  <time>{lastModifiedLabel}</time>
+                </footer>
+              )
+            }
+          </div>
+        </div>
+
+        {filteredHeadings.length > 0 && (
+          <aside class="article-sidebar" aria-label={t('blogs.tableOfContents')}>
+            <TableOfContents headings={filteredHeadings} />
+          </aside>
+        )}
+      </div>
+
+      {otherBlogs.length > 0 && (
         <footer class="article-footer">
           <RecentPosts blogs={otherBlogs} />
         </footer>
-      </div>
-    </div>
-
-    {headings.length > 0 && <TableOfContents headings={headings} />}
-  </article>
+      )}
+    </article>
+  </PageContainer>
 </Main>
 
 <style>
-  @reference "../styles/styles.css";
-
-  .blog-article {
-    @apply relative mx-auto;
-    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
+  .article-page {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
   }
 
-  .article-container {
-    @apply relative flex gap-8;
+  .article-shell {
+    display: grid;
+    gap: 1.5rem;
   }
 
-  .article-main {
-    @apply mt-6 w-full rounded-lg border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/90;
+  .article-hero {
+    display: grid;
+    gap: 1.5rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 1.3rem;
+    box-shadow: var(--shadow-soft);
   }
 
-  .article-header {
-    @apply mb-6;
+  .article-hero-copy {
+    display: grid;
+    gap: 1rem;
+    max-width: 46rem;
   }
 
-  .header-text {
-    @apply mb-6 border-b border-gray-100 pb-4 dark:border-gray-800;
+  .article-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
   }
 
   .article-title {
-    @apply text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100;
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(2.2rem, 1.4rem + 2.5vw, 4.2rem);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
   }
 
-  .article-subtitle {
-    @apply mt-2 text-xl font-normal leading-relaxed text-gray-600 dark:text-gray-400;
+  .article-summary {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.9;
+    max-width: 42rem;
   }
 
-  .article-meta {
-    @apply mt-2 text-sm text-gray-500 dark:text-gray-500;
+  .article-meta-group {
+    display: grid;
+    gap: 0.65rem;
   }
 
-  .article-date {
-    @apply flex items-center gap-1;
+  .article-updated {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
   }
 
-  .article-tags {
-    @apply mt-4;
+  .article-cover {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
   }
 
-  .cover-container {
-    @apply overflow-hidden rounded-sm border border-gray-100 dark:border-gray-800;
+  .article-cover-image {
+    display: block;
+    width: 100%;
+    max-height: 34rem;
+    object-fit: cover;
+    border: 1px solid var(--surface-border);
+    background: linear-gradient(135deg, rgba(31, 118, 103, 0.08), rgba(114, 140, 168, 0.06));
   }
 
-  .cover-image {
-    @apply relative h-64 w-full overflow-hidden bg-gray-800;
+  .article-cover figcaption {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
   }
 
-  .poster-image {
-    @apply h-full w-full object-cover transition-all duration-300 hover:scale-105;
+  .article-layout {
+    display: grid;
+    gap: 1.5rem;
   }
 
-  .cover-description {
-    @apply border-t border-gray-100 bg-white/50 p-3 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-400;
+  .article-main-column {
+    display: grid;
+    gap: 1rem;
   }
 
-  .content-wrapper {
-    @apply mt-8;
+  .article-toc-mobile {
+    display: block;
+  }
+
+  .article-sidebar {
+    display: none;
+  }
+
+  .article-body-surface {
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 1.2rem;
+    box-shadow: var(--shadow-soft);
   }
 
   .article-content {
-    @apply prose prose-lg mx-auto w-full text-[1rem] dark:prose-invert;
+    max-width: 46rem;
+    margin: 0 auto;
+    color: var(--text-strong);
+    font-size: 1rem;
+    line-height: 1.9;
   }
 
-  .last-modified {
-    @apply mt-8 text-right text-sm text-gray-500 dark:text-gray-500;
+  .article-content :global(h2),
+  .article-content :global(h3),
+  .article-content :global(h4),
+  .article-content :global(h5) {
+    margin-top: 2.6rem;
+    margin-bottom: 0.9rem;
+    color: var(--text-strong);
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+  }
+
+  .article-content :global(h2) {
+    font-size: clamp(1.6rem, 1.2rem + 1vw, 2.25rem);
+  }
+
+  .article-content :global(h3) {
+    font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.7rem);
+  }
+
+  .article-content :global(p),
+  .article-content :global(ul),
+  .article-content :global(ol),
+  .article-content :global(blockquote),
+  .article-content :global(pre),
+  .article-content :global(table) {
+    margin-block: 1rem;
+  }
+
+  .article-content :global(ul),
+  .article-content :global(ol) {
+    padding-left: 1.4rem;
+  }
+
+  .article-content :global(li) {
+    margin-block: 0.45rem;
+  }
+
+  .article-content :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .article-content :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-content :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    margin-inline: 0;
+    padding: 0.2rem 0 0.2rem 1rem;
+    color: var(--text-muted);
+  }
+
+  .article-content :global(code):not(:global(pre code)) {
+    border: 1px solid var(--surface-border);
+    background: var(--accent-soft);
+    padding: 0.15rem 0.35rem;
+    font-size: 0.9em;
+  }
+
+  .article-content :global(pre) {
+    overflow-x: auto;
+    border: 1px solid var(--surface-border);
+    background: rgba(15, 23, 42, 0.96);
+    padding: 1rem;
+    color: #f8fafc;
+  }
+
+  .article-content :global(pre code) {
+    display: block;
+    min-width: max-content;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  .article-content :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--surface-border);
+    margin: 2.5rem 0;
+  }
+
+  .article-body-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.45rem;
+    border-top: 1px solid var(--surface-border);
+    margin-top: 2rem;
+    padding-top: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
   }
 
   .article-footer {
-    @apply mt-12;
+    margin-top: 0.5rem;
   }
 
-  /* 移动端适配 */
-  @media (max-width: 768px) {
-    .article-main {
-      @apply p-4;
+  @media (min-width: 1024px) {
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      align-items: start;
     }
 
-    .header-text {
-      @apply mb-4 pb-3;
+    .article-toc-mobile {
+      display: none;
     }
 
-    .article-title {
-      @apply text-2xl;
+    .article-sidebar {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .article-hero {
+      grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
+      align-items: start;
+      padding: 1.6rem;
     }
 
-    .article-subtitle {
-      @apply text-lg;
+    .article-body-surface {
+      padding: 1.6rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .article-page {
+      padding-top: 1rem;
     }
 
-    .article-meta {
-      @apply mt-3;
+    .article-hero,
+    .article-body-surface {
+      padding: 1rem;
     }
 
-    .cover-image {
-      @apply h-48;
-    }
-
-    .cover-description {
-      @apply p-2 text-xs;
-    }
-
-    .content-wrapper {
-      @apply mt-6;
+    .article-summary,
+    .article-content {
+      font-size: 0.97rem;
     }
   }
 </style>
