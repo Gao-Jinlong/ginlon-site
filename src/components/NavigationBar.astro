@@ -1,98 +1,219 @@
 ---
 import ThemeToggler from '../components/ThemeToggler.astro';
-import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+import { getLocaleFromUrl, getLocalizedPath } from '../i18n/utils';
 
 const locale = getLocaleFromUrl(Astro.url);
-const t = useTranslations(locale);
 
-const links = [
-  { href: getLocalizedPath(locale, ''), label: t('navigation.home') },
-  { href: getLocalizedPath(locale, 'blogs'), label: t('navigation.blogs') },
-  { href: getLocalizedPath(locale, 'tags'), label: t('navigation.tags') },
-  { href: getLocalizedPath(locale, 'about'), label: t('navigation.about') },
+const primaryLinks = [
+  { href: getLocalizedPath(locale, ''), label: locale === 'zh' ? '首页' : 'Home' },
+  { href: getLocalizedPath(locale, 'blogs'), label: locale === 'zh' ? '写作' : 'Writing' },
+  { href: getLocalizedPath(locale, 'about'), label: locale === 'zh' ? '关于' : 'About' },
+];
+
+const secondaryLinks = [
+  { href: getLocalizedPath(locale, 'tags'), label: locale === 'zh' ? '标签' : 'Tags' },
+  { href: getLocalizedPath(locale, 'techStack'), label: locale === 'zh' ? '技术栈' : 'Tech Stack' },
 ];
 
 const { pathname } = Astro.url;
+
 const isActive = (href: string) => {
   const normalizedHref = href.replace(/\/*$/, '') || '/';
   const normalizedPathname = pathname.replace(/\/*$/, '') || '/';
+
   return normalizedHref === normalizedPathname;
 };
 ---
 
-<nav class="nav-container">
-  <div class="nav-content">
-    <ul class="nav-links">
-      {
-        links.map(({ href, label }) => (
-          <li class="nav-item">
-            <a
-              href={href}
-              class:list={['nav-link', isActive(href) && 'nav-link-active']}
-            >
-              {label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    <ThemeToggler />
+<nav class="nav-shell">
+  <div class="nav-card">
+    <a href={getLocalizedPath(locale, '')} class="brand-link" aria-label="Ginlon home">
+      <span class="brand-mark">G</span>
+      <span class="brand-copy">
+        <strong>Ginlon</strong>
+        <span>{locale === 'zh' ? '工程与写作' : 'Engineering and writing'}</span>
+      </span>
+    </a>
+
+    <div class="nav-groups">
+      <ul class="primary-links">
+        {
+          primaryLinks.map(({ href, label }) => (
+            <li>
+              <a href={href} class:list={['nav-link', isActive(href) && 'nav-link-active']}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <ul class="secondary-links">
+        {
+          secondaryLinks.map(({ href, label }) => (
+            <li>
+              <a href={href} class:list={['secondary-link', isActive(href) && 'secondary-link-active']}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="nav-actions">
+      <ThemeToggler />
+    </div>
   </div>
-  <div class="nav-backdrop"></div>
 </nav>
 
 <style>
   @reference "../styles/styles.css";
 
-  .nav-container {
-    @apply sticky top-0 z-50;
+  .nav-shell {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 1rem 0 0;
   }
 
-  .nav-content {
-    @apply relative z-10 mx-auto flex items-center justify-between bg-white/80 px-4 py-4 dark:bg-gray-900/80;
-    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
+  .nav-card {
+    margin: 0 auto;
+    display: flex;
+    width: min(100% - 2rem, 76rem);
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 0.95rem 1rem;
+    backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-soft);
   }
 
-  .nav-backdrop {
-    @apply absolute inset-0 backdrop-blur-sm transition-all duration-200;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+  .brand-link {
+    display: inline-flex;
+    min-width: fit-content;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
   }
 
-  .nav-links {
-    @apply flex flex-wrap gap-2;
+  .brand-mark {
+    display: inline-flex;
+    height: 2.5rem;
+    width: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), #2d8d7d);
+    color: white;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
   }
 
-  .nav-item {
-    @apply list-none;
+  .brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    color: var(--text-strong);
+  }
+
+  .brand-copy strong {
+    font-size: 0.98rem;
+    line-height: 1.1;
+  }
+
+  .brand-copy span {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+
+  .nav-groups {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .primary-links,
+  .secondary-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link,
+  .secondary-link {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: all 180ms ease;
   }
 
   .nav-link {
-    @apply rounded-lg border border-transparent px-3 py-1.5 text-sm text-gray-600 transition-all duration-200 hover:border-gray-200 hover:bg-white/90 hover:text-blue-600 hover:shadow-sm dark:text-gray-400 dark:hover:border-gray-700 dark:hover:bg-gray-800/60 dark:hover:text-blue-400;
+    background: transparent;
+    color: var(--text-strong);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.92rem;
+    font-weight: 600;
   }
 
+  .secondary-link {
+    color: var(--text-muted);
+    padding: 0.2rem 0.1rem;
+    font-size: 0.78rem;
+  }
+
+  .nav-link:hover,
   .nav-link-active {
-    @apply border-gray-200 bg-white/90 text-blue-600 shadow-sm dark:border-gray-700 dark:bg-gray-800/60 dark:text-blue-400;
+    border-color: var(--surface-border);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .secondary-link:hover,
+  .secondary-link-active {
+    color: var(--accent);
+  }
+
+  .nav-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .nav-card {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .nav-groups {
+      order: 3;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nav-shell {
+      padding-top: 0.75rem;
+    }
+
+    .nav-card {
+      width: min(100% - 1rem, 76rem);
+      padding: 0.85rem 0.9rem;
+    }
+
+    .brand-copy span {
+      display: none;
+    }
   }
 </style>
-
-<script>
-  // import gsap from 'gsap';
-  // import { ScrollTrigger } from 'gsap/all';
-
-  // document.addEventListener('astro:page-load', () => {
-  //   const navBackdrop = document.querySelector('.nav-backdrop');
-  //   gsap.registerPlugin(ScrollTrigger);
-
-  //   ScrollTrigger.create({
-  //     trigger: 'body',
-  //     start: '+=10',
-  //     end: '+=90',
-  //     onUpdate: self => {
-  //       if (navBackdrop instanceof HTMLElement) {
-  //         navBackdrop.style.opacity = String(self.progress);
-  //         navBackdrop.style.backdropFilter = `blur(${self.progress * 8}px)`;
-  //       }
-  //     },
-  //   });
-  // });
-</script>

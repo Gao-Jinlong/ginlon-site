@@ -1,20 +1,16 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { getLocaleFromUrl, useTranslations } from '../i18n/utils';
-const { pageTitle } = Astro.props;
-const locale = getLocaleFromUrl(Astro.url);
-const t = useTranslations(locale);
+
+import { siteConfig } from '../data/site';
+import type { PageMeta } from '../types/seo';
+
+const { pageMeta } = Astro.props as { pageMeta: PageMeta };
 ---
 
 <head>
-  <!-- site meta -->
   <meta charset="utf-8" />
-  <title>Ginlon | {pageTitle}</title>
-  <link
-    rel="icon"
-    type="image/svg+xml"
-    href={`${import.meta.env.BASE_URL}favicon.svg`}
-  />
+  <title>{pageMeta.title}</title>
+  <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content={Astro.generator} />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -23,30 +19,35 @@ const t = useTranslations(locale);
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
 
-  <!-- open graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={Astro.url.href} />
-  <meta property="og:title" content={t('og.title')} />
-  <meta property="og:description" content={t('og.description')} />
-  <meta property="og:image" content={t('og.image')} />
+  {pageMeta.canonical && <link rel="canonical" href={pageMeta.canonical} />}
+  {pageMeta.alternates?.map((link) => (
+    <link rel="alternate" hreflang={link.hrefLang} href={link.href} />
+  ))}
 
-  <!-- twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content={Astro.url.href} />
-  <meta property="twitter:title" content={t('og.title')} />
-  <meta property="twitter:description" content={t('og.description')} />
-  <meta property="twitter:image" content={t('og.image')} />
+  <meta name="author" content={siteConfig.name} />
+  <meta name="description" content={pageMeta.description} />
+  {pageMeta.keywords && <meta name="keywords" content={pageMeta.keywords} />}
 
-  <!-- seo -->
-  <meta name="author" content="Ginlon" />
-  <meta name="description" content={t('seo.description')} />
-  <meta name="keywords" content={t('seo.keywords')} />
+  <meta property="og:site_name" content={siteConfig.name} />
+  <meta property="og:type" content={pageMeta.ogType ?? 'website'} />
+  {pageMeta.canonical && <meta property="og:url" content={pageMeta.canonical} />}
+  <meta property="og:title" content={pageMeta.title} />
+  <meta property="og:description" content={pageMeta.description} />
+  {pageMeta.ogImage && <meta property="og:image" content={pageMeta.ogImage} />}
+  {pageMeta.publishedTime && <meta property="article:published_time" content={pageMeta.publishedTime} />}
+  {pageMeta.modifiedTime && <meta property="article:modified_time" content={pageMeta.modifiedTime} />}
+  {pageMeta.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
 
-  <!-- clarity -->
+  <meta name="twitter:card" content="summary_large_image" />
+  {pageMeta.canonical && <meta name="twitter:url" content={pageMeta.canonical} />}
+  <meta name="twitter:title" content={pageMeta.title} />
+  <meta name="twitter:description" content={pageMeta.description} />
+  {pageMeta.ogImage && <meta name="twitter:image" content={pageMeta.ogImage} />}
+
   <script is:inline type="text/javascript">
     (function (c, l, a, r, i, t, y) {
       c[a] =

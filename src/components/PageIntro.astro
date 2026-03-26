@@ -1,0 +1,73 @@
+---
+type Props = {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+  class?: string;
+};
+
+const {
+  align = 'left',
+  class: className = '',
+  description,
+  eyebrow,
+  title,
+} = Astro.props as Props;
+---
+
+<header
+  class:list={[
+    'page-intro',
+    align === 'center' && 'page-intro-center',
+    className,
+  ]}
+>
+  {eyebrow && <p class="page-intro-eyebrow">{eyebrow}</p>}
+  <h1 class="page-intro-title">{title}</h1>
+  {description && <p class="page-intro-description">{description}</p>}
+</header>
+
+<style>
+  .page-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-width: 46rem;
+  }
+
+  .page-intro-center {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .page-intro-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .page-intro-title {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(2.2rem, 1.4rem + 2.4vw, 4.8rem);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+  }
+
+  .page-intro-description {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  @media (min-width: 768px) {
+    .page-intro-description {
+      font-size: 1.08rem;
+    }
+  }
+</style>
