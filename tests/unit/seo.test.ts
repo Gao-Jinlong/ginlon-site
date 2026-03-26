@@ -21,6 +21,14 @@ describe('seo helpers', () => {
     ]);
   });
 
+  it('normalizes english paths before building locale alternates', () => {
+    expect(buildLocaleAlternates('https://www.ginlon.site', '/en/tags')).toEqual([
+      { hrefLang: 'zh-CN', href: 'https://www.ginlon.site/tags' },
+      { hrefLang: 'en', href: 'https://www.ginlon.site/en/tags' },
+      { hrefLang: 'x-default', href: 'https://www.ginlon.site/tags' },
+    ]);
+  });
+
   it('lets page-level values override layout defaults', () => {
     expect(
       mergePageMeta(

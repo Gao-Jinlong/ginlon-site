@@ -13,10 +13,13 @@ function normalizePathname(pathname: string): string {
     return '/';
   }
 
-  const withoutDefaultLocale = normalizedPath.replace(
-    new RegExp(`^${defaultLocale}(?=\\/|$)`),
-    '',
-  );
+  const segments = normalizedPath.split('/');
+
+  if (appLocales.includes(segments[0] as AppLocale)) {
+    segments.shift();
+  }
+
+  const withoutDefaultLocale = segments.join('/');
 
   return withoutDefaultLocale ? `/${withoutDefaultLocale}` : '/';
 }
