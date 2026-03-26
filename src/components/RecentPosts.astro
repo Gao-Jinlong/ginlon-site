@@ -4,6 +4,7 @@ import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/uti
 
 interface BlogData {
   data: {
+    subtitle?: string;
     permalink: string;
     title: string;
     createdAt: string;
@@ -18,64 +19,97 @@ const t = useTranslations(locale);
 ---
 
 <aside class="recent-posts">
-  <div class="recent-posts-container">
-    <h3 class="recent-posts-title">
-      {t('blogs.recentPosts')}
-    </h3>
-    <ul class="recent-posts-list">
-      {
-        blogs.slice(0, 5).map(({ data: { permalink, title, createdAt } }) => (
-          <li class="recent-post-item">
-            <a
-              href={getLocalizedPath(locale, `blogs/${permalink}`)}
-              class="recent-post-link"
-            >
-              <span class="recent-post-title">{title}</span>
-              {createdAt && (
-                <span class="recent-post-date">
-                  {dayjs(createdAt, locale).format(format)}
-                </span>
-              )}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <div class="recent-posts-header">
+    <p class="recent-posts-eyebrow">MORE WRITING</p>
+    <h2 class="recent-posts-title">{t('blogs.recentPosts')}</h2>
+  </div>
+
+  <div class="recent-posts-grid">
+    {
+      blogs.slice(0, 4).map(({ data: { permalink, title, createdAt, subtitle } }) => (
+        <a href={getLocalizedPath(locale, `blogs/${permalink}`)} class="recent-post-card">
+          <span class="recent-post-date">{dayjs(createdAt, locale).format(format)}</span>
+          <h3 class="recent-post-link-title">{title}</h3>
+          <p class="recent-post-description">
+            {subtitle || (locale === 'zh' ? '继续阅读这篇文章。' : 'Continue reading this article.')}
+          </p>
+        </a>
+      ))
+    }
   </div>
 </aside>
 
 <style>
-  @reference "../styles/styles.css";
-
   .recent-posts {
-    @apply mt-16 w-full;
+    display: grid;
+    gap: 1.25rem;
   }
 
-  .recent-posts-container {
-    @apply overflow-hidden rounded-lg border border-gray-100 bg-white/90 p-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
+  .recent-posts-header {
+    display: grid;
+    gap: 0.45rem;
+    max-width: 34rem;
+  }
+
+  .recent-posts-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
   }
 
   .recent-posts-title {
-    @apply mb-3 text-base font-medium text-gray-900 dark:text-gray-100;
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.9rem);
+    line-height: 1.15;
   }
 
-  .recent-posts-list {
-    @apply space-y-1.5;
+  .recent-posts-grid {
+    display: grid;
+    gap: 1rem;
   }
 
-  .recent-post-item {
-    @apply text-sm transition-colors;
+  .recent-post-card {
+    display: grid;
+    gap: 0.7rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    padding: 1rem;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   }
 
-  .recent-post-link {
-    @apply block rounded px-2 py-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-gray-800/60 dark:hover:text-blue-400;
-  }
-
-  .recent-post-title {
-    @apply block font-medium;
+  .recent-post-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(31, 118, 103, 0.26);
+    box-shadow: 0 20px 36px rgba(15, 23, 42, 0.08);
   }
 
   .recent-post-date {
-    @apply mt-1 block text-xs text-gray-500 dark:text-gray-500;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  .recent-post-link-title {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.02rem;
+    line-height: 1.4;
+  }
+
+  .recent-post-description {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 768px) {
+    .recent-posts-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>

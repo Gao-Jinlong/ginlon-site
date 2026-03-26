@@ -1,20 +1,52 @@
 ---
-import { render, type CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import { siteConfig } from '../../../../data/site';
+import type { PageMeta } from '../../../../types/seo';
 import { getBlogs } from '../../../../utils/getBlogs';
+
+type BlogEntry = Awaited<ReturnType<typeof getBlogs>>[number];
+
+function toIsoString(value?: string | Date) {
+  if (!value) {
+    return undefined;
+  }
+
+  const parsed = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return undefined;
+  }
+
+  return parsed.toISOString();
+}
 
 export async function getStaticPaths() {
   const blogs = await getBlogs('en');
 
-  return blogs.map(blog => ({
+  return blogs.map((blog) => ({
     params: { slug: blog.data.permalink },
     props: { article: blog },
   }));
 }
 
 const { article } = Astro.props as {
-  article: CollectionEntry<'blogs'>;
+  article: BlogEntry;
 };
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
+const publishedTime = toIsoString(article.data.createdAt);
+const modifiedTime = toIsoString(article.data.lastModified);
+const pageMeta = {
+  title: `${article.data.title} | ${siteConfig.name}`,
+  description:
+    article.data.description ??
+    article.data.subtitle ??
+    siteConfig[article.data.lang].description,
+  ogType: 'article',
+  ogImage: siteConfig.articleOgImage,
+  ...(article.data.tags ? { tags: article.data.tags } : {}),
+  ...(publishedTime ? { publishedTime } : {}),
+  ...(modifiedTime ? { modifiedTime } : {}),
+} satisfies Partial<PageMeta>;
 ---
 
-<Content />
+<Content currentSlug={article.data.permalink} headings={headings} pageMeta={pageMeta} />

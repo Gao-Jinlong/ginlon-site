@@ -33,4 +33,23 @@ describe('seo helpers', () => {
       ogType: 'profile',
     });
   });
+
+  it('keeps article metadata when merged with layout defaults', () => {
+    expect(
+      mergePageMeta(
+        { title: 'Default', description: 'Default', ogType: 'website' },
+        {
+          title: 'Post title',
+          description: 'Post desc',
+          ogType: 'article',
+          tags: ['frontend'],
+        },
+      ),
+    ).toMatchObject({
+      title: 'Post title',
+      description: 'Post desc',
+      ogType: 'article',
+      tags: ['frontend'],
+    });
+  });
 });
