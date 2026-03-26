@@ -54,16 +54,6 @@ describe('seo helpers', () => {
     });
   });
 
-  it('types hidden-page meta with robots directives', () => {
-    const hiddenPageMeta = {
-      title: 'Hidden resume',
-      description: 'Only Chinese content',
-      robots: 'noindex, nofollow',
-    } satisfies PageMeta;
-
-    expect(hiddenPageMeta.robots).toBe('noindex, nofollow');
-  });
-
   it('allows pages to disable alternates and set robots directives', () => {
     expect(
       mergePageMeta(
