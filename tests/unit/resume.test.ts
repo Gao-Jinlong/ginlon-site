@@ -7,6 +7,7 @@ describe('resume page content', () => {
     expect(resumePageContent.header.name).toBe('高金龙');
     expect(resumePageContent.header.email).toBe('ginlon5241@gmail.com');
     expect(resumePageContent.header.website.label).toBe('ginlon.site');
+    expect(resumePageContent.header.website.href).toBe('https://www.ginlon.site');
     expect(resumePageContent.header).not.toHaveProperty('phone');
     expect(resumePageContent.header).not.toHaveProperty('photo');
   });
@@ -22,5 +23,7 @@ describe('resume page content', () => {
     expect(serialized).not.toContain('136');
     expect(serialized).not.toContain('接龙管家');
     expect(serialized).not.toContain('面训');
+    expect(serialized).not.toContain('"phone"');
+    expect(serialized).not.toContain('"photo"');
   });
 });
