@@ -1,128 +1,123 @@
 ---
-import Main from '../layouts/Main.astro';
-import BriefText from '../components/BriefText.vue';
-import { getBlogs } from '../utils/getBlogs';
+import AboutSnapshot from '../components/AboutSnapshot.astro';
 import BlogCard from '../components/BlogCard.astro';
+import FocusAreaGrid from '../components/FocusAreaGrid.astro';
+import HomeHero from '../components/HomeHero.astro';
+import PageContainer from '../components/PageContainer.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { siteConfig } from '../data/site';
 import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
+import Main from '../layouts/Main.astro';
+import { getBlogs } from '../utils/getBlogs';
 
 const locale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const sortedBlogs = await getBlogs(locale);
+
+const homePageMeta = {
+  title: locale === 'zh' ? 'Ginlon | 工程、写作与长期主义实践' : 'Ginlon | Engineering, writing, and calm systems',
+  description: t('homepage.hero.description'),
+  ogType: 'website' as const,
+};
+
+const heroContent = {
+  eyebrow: t('homepage.hero.eyebrow'),
+  title: t('homepage.hero.title'),
+  description: t('homepage.hero.description'),
+  primaryCta: {
+    href: getLocalizedPath(locale, 'blogs'),
+    label: t('homepage.hero.primaryCta'),
+  },
+  secondaryCta: {
+    href: getLocalizedPath(locale, 'about'),
+    label: t('homepage.hero.secondaryCta'),
+  },
+};
+
+const focusAreaContent = {
+  eyebrow: t('homepage.focusAreas.eyebrow'),
+  title: t('homepage.focusAreas.title'),
+  description: t('homepage.focusAreas.description'),
+  items: [
+    {
+      title: t('homepage.focusAreas.items.engineering.title'),
+      description: t('homepage.focusAreas.items.engineering.description'),
+      meta: t('homepage.focusAreas.items.engineering.meta'),
+    },
+    {
+      title: t('homepage.focusAreas.items.systems.title'),
+      description: t('homepage.focusAreas.items.systems.description'),
+      meta: t('homepage.focusAreas.items.systems.meta'),
+    },
+    {
+      title: t('homepage.focusAreas.items.writing.title'),
+      description: t('homepage.focusAreas.items.writing.description'),
+      meta: t('homepage.focusAreas.items.writing.meta'),
+    },
+  ],
+};
+
+const aboutSnapshotContent = {
+  eyebrow: t('homepage.aboutSnapshot.eyebrow'),
+  title: t('homepage.aboutSnapshot.title'),
+  description: t('homepage.aboutSnapshot.description'),
+  points: [
+    t('homepage.aboutSnapshot.points.0'),
+    t('homepage.aboutSnapshot.points.1'),
+    t('homepage.aboutSnapshot.points.2'),
+  ],
+  cta: {
+    href: getLocalizedPath(locale, 'about'),
+    label: t('homepage.aboutSnapshot.cta'),
+  },
+};
 ---
 
-<Main pageTitle="Home">
-  <div class="profile-section">
-    <img
-      src="/images/avatar.jpg"
-      alt="Avatar"
-      class="profile-avatar"
-      width={124}
-      height={124}
-    />
+<Main pageMeta={homePageMeta}>
+  <PageContainer class="space-y-12 py-10 md:space-y-16 md:py-16">
+    <HomeHero {...heroContent} />
 
-    <div class="profile-info">
-      <h1 class="profile-title">
-        {t('homepage.hello')}
-      </h1>
-      <h2 class="profile-subtitle">
-        <BriefText
-          briefs={[
-            t('homepage.briefs.0'),
-            t('homepage.briefs.1'),
-            t('homepage.briefs.2'),
-          ]}
-          client:load
-        />
-      </h2>
-      <p class="profile-slogan">
-        {t('homepage.personalMission')}
-      </p>
-    </div>
-  </div>
+    <FocusAreaGrid {...focusAreaContent} />
 
-  <div class="featured-blogs-section">
-    <div class="section-header">
-      <h3 class="section-title">
-        {t('homepage.featuredBlogs.title')}
-      </h3>
-      <p class="section-description">
-        {t('homepage.featuredBlogs.brief')}
-      </p>
-    </div>
+    <section class="space-y-6" aria-labelledby="selected-writing">
+      <SectionHeader
+        eyebrow={t('homepage.selectedWriting.eyebrow')}
+        title={t('homepage.selectedWriting.title')}
+        description={t('homepage.selectedWriting.description')}
+      />
 
-    <div class="blogs-container">
-      {
-        sortedBlogs.slice(0, 3).map(blog => (
-          <BlogCard blog={blog} />
-        ))
-      }
-    </div>
+      <div class="grid gap-5">
+        {
+          sortedBlogs.slice(0, 3).map((blog) => (
+            <BlogCard blog={blog} />
+          ))
+        }
+      </div>
+    </section>
 
-    <div class="view-more">
-      <a href={getLocalizedPath(locale, 'blogs')} class="view-more-link">
-        {t('homepage.featuredBlogs.more')}
-      </a>
-    </div>
-  </div>
+    <AboutSnapshot {...aboutSnapshotContent} />
+
+    <section class="space-y-6" aria-labelledby="contact-links">
+      <SectionHeader
+        eyebrow={t('homepage.contact.eyebrow')}
+        title={t('homepage.contact.title')}
+        description={t('homepage.contact.description')}
+      />
+
+      <div class="flex flex-wrap gap-3">
+        {
+          siteConfig.contactLinks.map((link) => (
+            <a
+              href={link.href}
+              class="inline-flex rounded-full border border-[var(--surface-border)] bg-[var(--surface-bg-strong)] px-4 py-2 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noreferrer' : undefined}
+            >
+              {link.label[locale]}
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </PageContainer>
 </Main>
-
-<style>
-  @reference "../styles/styles.css";
-
-  .profile-section {
-    @apply my-6 mx-auto;
-    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
-    @apply flex flex-wrap items-center gap-8 border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-  }
-
-  .profile-avatar {
-    @apply h-32 w-32 rounded-full object-cover transition-transform duration-200 hover:scale-105 max-md:h-24 max-md:w-24;
-  }
-
-  .profile-info {
-    @apply min-w-[300px] flex-1 max-[410px]:mt-4;
-  }
-
-  .profile-title {
-    @apply text-2xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl;
-  }
-
-  .profile-subtitle {
-    @apply mt-2 text-xl text-gray-700 dark:text-gray-300 sm:text-2xl;
-  }
-
-  .profile-slogan {
-    @apply text-wrap pt-1 text-sm text-gray-600 dark:text-gray-400 sm:text-base;
-  }
-
-  .featured-blogs-section {
-    @apply border border-gray-100 bg-white/60 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-    @apply mx-auto mt-6;
-    @apply max-w-4xl lg:max-w-5xl xl:max-w-6xl;
-  }
-
-  .section-header {
-    @apply p-6 transition-all duration-200 dark:border-gray-800;
-  }
-
-  .section-title {
-    @apply text-xl font-medium text-gray-900 dark:text-gray-100;
-  }
-
-  .section-description {
-    @apply mt-2 text-sm text-gray-600 dark:text-gray-400;
-  }
-
-  .blogs-container {
-    @apply grid gap-6;
-    @apply grid-cols-1;
-  }
-
-  .view-more {
-    @apply mt-6 text-right;
-  }
-
-  .view-more-link {
-    @apply inline-block rounded-lg border border-gray-100 bg-white/90 px-4 py-2 text-sm text-gray-600 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:text-blue-600 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-blue-400;
-  }
-</style>

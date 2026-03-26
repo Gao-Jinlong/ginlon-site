@@ -1,0 +1,173 @@
+---
+type Props = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  primaryCta: {
+    href: string;
+    label: string;
+  };
+  secondaryCta: {
+    href: string;
+    label: string;
+  };
+};
+
+const { description, eyebrow, primaryCta, secondaryCta, title } = Astro.props as Props;
+---
+
+<section class="hero-grid animate">
+  <div class="hero-copy">
+    <p class="hero-eyebrow">{eyebrow}</p>
+    <h1 class="hero-title">{title}</h1>
+    <p class="hero-description">{description}</p>
+
+    <div class="hero-actions">
+      <a href={primaryCta.href} class="hero-primary">{primaryCta.label}</a>
+      <a href={secondaryCta.href} class="hero-secondary">{secondaryCta.label}</a>
+    </div>
+  </div>
+
+  <aside class="hero-card">
+    <img src="/images/avatar.jpg" alt="Ginlon avatar" class="hero-avatar" width="144" height="144" />
+    <div class="hero-card-copy">
+      <p>Frontend engineer focused on product quality, maintainable systems, and writing that transfers context.</p>
+    </div>
+    <div class="hero-badges">
+      <span>Frontend</span>
+      <span>Product quality</span>
+      <span>Writing</span>
+    </div>
+  </aside>
+</section>
+
+<style>
+  .hero-grid {
+    display: grid;
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+
+  .hero-copy,
+  .hero-card {
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .hero-copy {
+    padding: 1.4rem;
+  }
+
+  .hero-eyebrow {
+    margin: 0 0 1rem;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  .hero-title {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(2.6rem, 1.8rem + 3vw, 5.8rem);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    max-width: 12ch;
+  }
+
+  .hero-description {
+    margin: 1.25rem 0 0;
+    max-width: 38rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.6rem;
+  }
+
+  .hero-primary,
+  .hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.9rem;
+    padding: 0.65rem 1.15rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all 180ms ease;
+  }
+
+  .hero-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .hero-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 24px rgba(31, 118, 103, 0.18);
+  }
+
+  .hero-secondary {
+    border: 1px solid var(--surface-border);
+    color: var(--text-strong);
+  }
+
+  .hero-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 1.35rem;
+  }
+
+  .hero-avatar {
+    width: 6.5rem;
+    height: 6.5rem;
+    border-radius: 1.5rem;
+    object-fit: cover;
+    border: 1px solid var(--surface-border);
+  }
+
+  .hero-card-copy p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .hero-badges span {
+    display: inline-flex;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    padding: 0.35rem 0.7rem;
+    color: var(--accent);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.85fr);
+    }
+
+    .hero-copy {
+      padding: 2rem;
+    }
+  }
+</style>
