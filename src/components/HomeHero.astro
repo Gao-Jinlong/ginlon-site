@@ -162,12 +162,20 @@ const { description, eyebrow, primaryCta, secondaryCta, title } = Astro.props as
   }
 
   @media (min-width: 900px) {
-    .hero-grid {
-      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.85fr);
-    }
-
     .hero-copy {
       padding: 2rem;
+    }
+
+    .hero-title {
+      max-width: none;
+      font-size: clamp(3rem, 2.2rem + 1.4vw, 4rem);
+      line-height: 0.98;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 20rem);
     }
   }
 </style>
