@@ -1,15 +1,24 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  buildArticleDescription,
   buildCanonicalUrl,
   buildLocaleAlternates,
   mergePageMeta,
 } from '../../src/utils/seo';
+import { siteConfig } from '../../src/data/site';
 
 describe('seo helpers', () => {
   it('builds the canonical URL from the Astro site URL and pathname', () => {
     expect(buildCanonicalUrl('https://www.ginlon.site', '/blogs/abc')).toBe(
       'https://www.ginlon.site/blogs/abc',
+    );
+  });
+
+  it('builds a localized article description when summary is missing', () => {
+    expect(buildArticleDescription('zh', 'CSP内容安全')).toBe('阅读 Ginlon 的文章《CSP内容安全》。');
+    expect(buildArticleDescription('en', 'CSP Content Security')).toBe(
+      'Read "CSP Content Security" on Ginlon.',
     );
   });
 
@@ -59,5 +68,10 @@ describe('seo helpers', () => {
       ogType: 'article',
       tags: ['frontend'],
     });
+  });
+
+  it('uses absolute OG image URLs in site config', () => {
+    expect(siteConfig.defaultOgImage).toBe('https://www.ginlon.site/og/site-default.png');
+    expect(siteConfig.articleOgImage).toBe('https://www.ginlon.site/og/article-default.png');
   });
 });

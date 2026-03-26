@@ -28,6 +28,18 @@ export function buildCanonicalUrl(site: string, pathname: string): string {
   return new URL(pathname, site).toString();
 }
 
+export function buildArticleDescription(
+  locale: AppLocale,
+  title: string,
+  summary?: string,
+): string {
+  if (summary?.trim()) {
+    return summary.trim();
+  }
+
+  return locale === 'zh' ? `阅读 Ginlon 的文章《${title}》。` : `Read "${title}" on Ginlon.`;
+}
+
 export function buildLocaleAlternates(site: string, pathname: string): AlternateLink[] {
   const normalizedPath = normalizePathname(pathname);
 
