@@ -118,4 +118,31 @@ describe('getBlogs', () => {
     expect(firstBlog).toBeDefined();
     expect(firstBlog!.data.lastModified).toBe('2026-01-02T03:04:05.000Z');
   });
+
+  it('returns a non-empty summary when description is missing and subtitle is blank', async () => {
+    getCollectionMock.mockImplementation(async (_name: string, filter: (entry: any) => boolean) =>
+      [
+        {
+          id: 'zh/body-summary',
+          slug: 'body-summary',
+          body: '# 标题\n\n这是正文第一段，用于摘要兜底。\n\n## 第二节\n更多内容',
+          data: {
+            lang: 'zh',
+            title: '正文兜底文章',
+            subtitle: '   ',
+            createdAt: '2025-03-02 00:00:00 +08:00',
+            permalink: 'body-summary',
+            category: 'note',
+            tags: [],
+          },
+        },
+      ].filter(filter),
+    );
+
+    const blogs = await getBlogs('zh');
+
+    expect(blogs).toHaveLength(1);
+    expect(blogs[0]).toBeDefined();
+    expect(blogs[0]!.summary.trim().length).toBeGreaterThan(0);
+  });
 });

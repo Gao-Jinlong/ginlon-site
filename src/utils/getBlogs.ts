@@ -29,7 +29,32 @@ export type Blog = CollectionEntry<'blogs'> & {
 };
 
 function toSummary(entry: CollectionEntry<'blogs'>): string {
-  return entry.data.description?.trim() || entry.data.subtitle?.trim() || '';
+  return (
+    entry.data.description?.trim() ||
+    entry.data.subtitle?.trim() ||
+    deriveSummaryFromBody(entry) ||
+    entry.data.title
+  );
+}
+
+function deriveSummaryFromBody(entry: CollectionEntry<'blogs'>): string {
+  const rawBody = (entry as CollectionEntry<'blogs'> & { body?: string }).body;
+
+  if (!rawBody) {
+    return '';
+  }
+
+  const normalized = rawBody
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+    .replace(/\[[^\]]+\]\([^)]+\)/g, '$1')
+    .replace(/^#+\s+/gm, '')
+    .replace(/[>*_-]{2,}/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return normalized.slice(0, 140);
 }
 
 function resolveLastModified(entry: CollectionEntry<'blogs'>): string | undefined {
