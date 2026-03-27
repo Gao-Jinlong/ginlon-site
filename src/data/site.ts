@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Ginlon 写作档案',
+  name: 'Ginlon',
   url: 'https://www.ginlon.site',
   defaultOgImage: 'https://www.ginlon.site/og/site-default.png',
   articleOgImage: 'https://www.ginlon.site/og/article-default.png',
