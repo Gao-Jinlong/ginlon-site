@@ -1,5 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import dayjs from 'dayjs';
+import fs from 'node:fs';
+import path from 'node:path';
 import { defaultLocale, type AppLocale } from '../i18n/utils';
 
 type BlogData = CollectionEntry<'blogs'>['data'] & {
@@ -30,11 +32,27 @@ function toSummary(entry: CollectionEntry<'blogs'>): string {
   return entry.data.description?.trim() || entry.data.subtitle?.trim() || '';
 }
 
+function resolveLastModified(entry: CollectionEntry<'blogs'>): string | undefined {
+  if (entry.data.updatedAt) {
+    return entry.data.updatedAt;
+  }
+
+  try {
+    const filePath = entry.filePath
+      ? path.resolve(process.cwd(), entry.filePath)
+      : path.join(process.cwd(), 'src/content/blogs', `${entry.id}.mdx`);
+
+    return fs.statSync(filePath).mtime.toISOString();
+  } catch {
+    return undefined;
+  }
+}
+
 function toNormalizedBlog(entry: CollectionEntry<'blogs'>): Blog {
   const publishedAt = entry.data.createdAt;
   const summary = toSummary(entry);
   const tags = entry.data.tags ?? [];
-  const lastModified = entry.data.updatedAt;
+  const lastModified = resolveLastModified(entry);
 
   return {
     ...entry,
