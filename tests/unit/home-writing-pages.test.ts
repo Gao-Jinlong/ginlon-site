@@ -86,6 +86,9 @@ describe('home and writing pages', () => {
 
     expect(homeHtml).toContain('写作');
     expect(homeHtml).not.toContain('tab-panel');
+    expect(homeHtml).not.toContain('Selected Writing');
+    expect(homeHtml).not.toContain('Current Focus');
+    expect(homeHtml).not.toContain('About');
   });
 
   it('renders writing archive with all-articles heading', async () => {
@@ -93,6 +96,7 @@ describe('home and writing pages', () => {
 
     expect(writingHtml).toContain('全部文章');
     expect(writingHtml).toContain('第一篇文章');
+    expect(writingHtml).not.toContain('Writing Archive');
   });
 
   it('filters writing archive by tag query', async () => {
