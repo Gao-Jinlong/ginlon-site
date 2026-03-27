@@ -1,0 +1,84 @@
+---
+import Head from '../components/Head.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import { siteConfig } from '../data/site';
+import { getLocaleFromUrl } from '../i18n/utils';
+import '../styles/styles.css';
+import type { PageMeta } from '../types/seo';
+import { buildCanonicalUrl, buildLocaleAlternates, mergePageMeta } from '../utils/seo';
+
+type Props = {
+  pageTitle?: string;
+  pageMeta?: Partial<PageMeta>;
+  hideFooter?: boolean;
+};
+
+const { pageMeta, pageTitle, hideFooter = false } = Astro.props as Props;
+const locale = getLocaleFromUrl(Astro.url);
+const localizedSite = siteConfig[locale];
+
+const defaultMeta: PageMeta = {
+  title: localizedSite.title,
+  description: localizedSite.description,
+  canonical: buildCanonicalUrl(siteConfig.url, Astro.url.pathname),
+  alternates: buildLocaleAlternates(siteConfig.url, Astro.url.pathname),
+  ogImage: siteConfig.defaultOgImage,
+  ogType: 'website',
+};
+
+const resolvedMeta = mergePageMeta(defaultMeta, {
+  ...(pageTitle ? { title: `${pageTitle} | ${siteConfig.name}` } : {}),
+  ...pageMeta,
+});
+---
+
+<html lang={locale} data-theme="light">
+  <Head pageMeta={resolvedMeta} />
+
+  <body class="editorial-body">
+    <a class="skip-link" href="#main-content">
+      {locale === 'zh' ? '跳到正文' : 'Skip to content'}
+    </a>
+
+    <div class="editorial-shell">
+      <SiteHeader />
+      <main id="main-content" class="editorial-main">
+        <slot />
+      </main>
+      {!hideFooter && <SiteFooter />}
+    </div>
+  </body>
+</html>
+
+<style>
+  .editorial-body {
+    min-height: 100vh;
+    background: var(--page-bg);
+    color: var(--text-strong);
+  }
+
+  .editorial-shell {
+    min-height: 100vh;
+  }
+
+  .editorial-main {
+    padding: 0.9rem 0 2.2rem;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -4rem;
+    z-index: 40;
+    border-radius: 0.5rem;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.55rem 0.75rem;
+    text-decoration: none;
+  }
+
+  .skip-link:focus-visible {
+    top: 0.75rem;
+  }
+</style>

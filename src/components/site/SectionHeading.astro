@@ -1,0 +1,46 @@
+---
+type Props = {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  className?: string;
+};
+
+const { title, description, eyebrow, className } = Astro.props as Props;
+---
+
+<header class:list={['section-heading', className]}>
+  {eyebrow && <p class="section-eyebrow">{eyebrow}</p>}
+  <h2>{title}</h2>
+  {description && <p class="section-description">{description}</p>}
+</header>
+
+<style>
+  .section-heading {
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.35rem, 1rem + 1vw, 2rem);
+    line-height: 1.2;
+    color: var(--text-strong);
+  }
+
+  .section-description {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+</style>

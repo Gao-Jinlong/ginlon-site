@@ -1,35 +1,14 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
+@import "./theme.css";
 
 @layer base {
-  :root {
-    --page-bg: linear-gradient(180deg, #edf6f3 0%, #f8fafc 42%, #fbfcfd 100%);
-    --surface-bg: rgba(255, 255, 255, 0.84);
-    --surface-bg-strong: rgba(255, 255, 255, 0.94);
-    --surface-border: rgba(148, 163, 184, 0.22);
-    --text-strong: #12202b;
-    --text-muted: #51606f;
-    --accent: #1f7667;
-    --accent-soft: rgba(31, 118, 103, 0.12);
-    --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.06);
-    --grid-color: rgba(18, 32, 43, 0.07);
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
-  :root.dark,
-  .dark {
-    --page-bg: linear-gradient(180deg, #0f1720 0%, #131d28 42%, #182432 100%);
-    --surface-bg: rgba(15, 23, 42, 0.76);
-    --surface-bg-strong: rgba(15, 23, 42, 0.9);
-    --surface-border: rgba(148, 163, 184, 0.18);
-    --text-strong: #ecf4f8;
-    --text-muted: #a6b8c6;
-    --accent: #68c0a8;
-    --accent-soft: rgba(104, 192, 168, 0.16);
-    --shadow-soft: 0 20px 55px rgba(2, 6, 23, 0.34);
-    --grid-color: rgba(236, 244, 248, 0.07);
-  }
-
-  /* 目录卡片滚动条样式 */
   *::-webkit-scrollbar {
     width: 3px;
     height: 3px;
@@ -48,44 +27,42 @@
     background-color: rgba(81, 96, 111, 0.72);
   }
 
-  /* Font rendering optimizations */
-  body,
-  p,
-  li,
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--page-bg);
+    color: var(--text-strong);
+    font-family: var(--font-serif);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   h1,
   h2,
   h3,
   h4,
   h5,
-  h6 {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    backface-visibility: hidden;
-    /* 添加标题锚点的滚动边距 */
-    scroll-margin-top: 6rem;
-  }
-
-  body {
-    margin: 0;
-    background: var(--page-bg);
-    color: var(--text-strong);
+  h6,
+  button,
+  input,
+  textarea {
+    font-family: var(--font-sans);
   }
 
   a {
     color: inherit;
+    text-decoration-color: var(--accent-soft);
+    text-underline-offset: 0.16em;
   }
 
   ::selection {
     background: var(--accent-soft);
     color: var(--text-strong);
-  }
-
-  h4 {
-    font-size: 1.125rem;
-    line-height: 1.6;
-  }
-
-  .text-rose-custom {
-    color: var(--clr-rose);
   }
 }

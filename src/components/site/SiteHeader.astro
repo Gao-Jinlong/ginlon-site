@@ -1,0 +1,160 @@
+---
+import ThemeToggleButton from './ThemeToggleButton.astro';
+import { getLocaleFromUrl, getLocalizedPath } from '../../i18n/utils';
+
+const locale = getLocaleFromUrl(Astro.url);
+const navLinks = [
+  { href: getLocalizedPath(locale, ''), label: locale === 'zh' ? '首页' : 'Home' },
+  { href: getLocalizedPath(locale, 'blogs'), label: locale === 'zh' ? '写作' : 'Writing' },
+  { href: getLocalizedPath(locale, 'about'), label: locale === 'zh' ? '关于' : 'About' },
+];
+
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => {
+  const normalizedHref = href.replace(/\/+$/, '') || '/';
+  return normalizedHref === pathname;
+};
+---
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href={getLocalizedPath(locale, '')} class="site-brand">
+      <span class="site-brand-mark">G</span>
+      <span class="site-brand-copy">
+        <strong>Ginlon</strong>
+        <span>{locale === 'zh' ? '写作档案' : 'Writing archive'}</span>
+      </span>
+    </a>
+
+    <nav aria-label={locale === 'zh' ? '主导航' : 'Primary navigation'}>
+      <ul class="site-nav-list">
+        {
+          navLinks.map((item) => (
+            <li>
+              <a href={item.href} class:list={['site-nav-link', isActive(item.href) && 'site-nav-link-active']}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <ThemeToggleButton locale={locale} />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 1rem 0 0.2rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .site-header-inner {
+    width: min(100% - 1.5rem, var(--shell-width));
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    padding: 0.7rem 0.85rem;
+    background: var(--surface-bg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .site-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    min-width: max-content;
+  }
+
+  .site-brand-mark {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  .site-brand-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .site-brand-copy strong {
+    color: var(--text-strong);
+    font-size: 0.95rem;
+  }
+
+  .site-brand-copy span {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .site-nav-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .site-nav-link {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 150ms ease, background-color 150ms ease;
+  }
+
+  .site-nav-link:hover,
+  .site-nav-link-active {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  nav {
+    margin-left: auto;
+    margin-right: 0.35rem;
+  }
+
+  @media (max-width: 720px) {
+    .site-header {
+      padding-top: 0.75rem;
+    }
+
+    .site-header-inner {
+      width: min(100% - 1rem, var(--shell-width));
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    nav {
+      margin: 0;
+      order: 3;
+      width: 100%;
+    }
+
+    .site-nav-list {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+</style>
