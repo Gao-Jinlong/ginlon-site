@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { AppLocale } from '../../src/i18n/utils';
+import { getLocaleFromUrl, getLocalizedPath } from '../../src/i18n/utils';
 import {
   buildCanonicalUrl,
   buildLocaleAlternates,
@@ -18,9 +18,14 @@ describe('seo helpers', () => {
     expect(buildLocaleAlternates('https://www.ginlon.site', '/writing')).toEqual([]);
   });
 
-  it('keeps en as a legacy locale type for compile-time compatibility', () => {
-    const legacyLocale: AppLocale = 'en';
-    expect(legacyLocale).toBe('en');
+  it('detects locale from root and legacy en paths', () => {
+    expect(getLocaleFromUrl(new URL('https://www.ginlon.site/'))).toBe('zh');
+    expect(getLocaleFromUrl(new URL('https://www.ginlon.site/en/about'))).toBe('en');
+  });
+
+  it('builds localized paths for zh and en locales', () => {
+    expect(getLocalizedPath('zh', 'about')).toBe('/about');
+    expect(getLocalizedPath('en', 'about')).toBe('/en/about');
   });
 
   it('lets page-level values override layout defaults', () => {

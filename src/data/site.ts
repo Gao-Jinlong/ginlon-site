@@ -35,7 +35,7 @@ export const siteConfig = {
     description: '记录前端工程、写作实践与长期主义思考的中文站点。',
   },
   en: {
-    title: 'Ginlon 的写作档案',
-    description: '记录前端工程、写作实践与长期主义思考的中文站点。',
+    title: "Ginlon's Writing Archive",
+    description: 'A writing archive about frontend engineering, craft, and long-term practice.',
   },
 } as const;
