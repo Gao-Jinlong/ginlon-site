@@ -18,6 +18,10 @@ describe('Editorial site shell header', () => {
     expect(html).toContain('首页');
     expect(html).toContain('写作');
     expect(html).toContain('关于');
+    expect(html).toContain('href="/writing"');
+    expect(html).not.toContain('href="/blogs"');
+    expect(html).not.toContain('href="/tags"');
+    expect(html).not.toContain('href="/techStack"');
     expect(html).not.toContain('标签');
     expect(html).not.toContain('技术栈');
   });

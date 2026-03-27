@@ -1,12 +1,10 @@
 ---
 import ThemeToggleButton from './ThemeToggleButton.astro';
-import { getLocaleFromUrl, getLocalizedPath } from '../../i18n/utils';
 
-const locale = getLocaleFromUrl(Astro.url);
 const navLinks = [
-  { href: getLocalizedPath(locale, ''), label: locale === 'zh' ? '首页' : 'Home' },
-  { href: getLocalizedPath(locale, 'blogs'), label: locale === 'zh' ? '写作' : 'Writing' },
-  { href: getLocalizedPath(locale, 'about'), label: locale === 'zh' ? '关于' : 'About' },
+  { href: '/', label: '首页' },
+  { href: '/writing', label: '写作' },
+  { href: '/about', label: '关于' },
 ];
 
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -18,15 +16,15 @@ const isActive = (href: string) => {
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a href={getLocalizedPath(locale, '')} class="site-brand">
+    <a href="/" class="site-brand">
       <span class="site-brand-mark">G</span>
       <span class="site-brand-copy">
         <strong>Ginlon</strong>
-        <span>{locale === 'zh' ? '写作档案' : 'Writing archive'}</span>
+        <span>写作档案</span>
       </span>
     </a>
 
-    <nav aria-label={locale === 'zh' ? '主导航' : 'Primary navigation'}>
+    <nav aria-label="主导航">
       <ul class="site-nav-list">
         {
           navLinks.map((item) => (
@@ -40,7 +38,7 @@ const isActive = (href: string) => {
       </ul>
     </nav>
 
-    <ThemeToggleButton locale={locale} />
+    <ThemeToggleButton />
   </div>
 </header>
 

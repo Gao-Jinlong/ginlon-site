@@ -4,6 +4,7 @@
     --accent-soft: rgba(37, 107, 79, 0.14);
     --page-bg: #f7f5ef;
     --surface-bg: rgba(255, 255, 255, 0.8);
+    --surface-bg-strong: rgba(255, 255, 255, 0.92);
     --surface-border: rgba(18, 44, 30, 0.16);
     --text-strong: #1b241f;
     --text-muted: #4f5f56;
@@ -11,6 +12,7 @@
     --shell-width: 72rem;
     --radius-m: 0.875rem;
     --shadow-soft: 0 18px 45px rgba(25, 46, 35, 0.08);
+    --grid-color: rgba(27, 36, 31, 0.07);
     --font-sans:
       "LXGW WenKai", "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
       ui-sans-serif, system-ui, sans-serif;
@@ -24,9 +26,11 @@
     --accent-soft: rgba(99, 181, 143, 0.2);
     --page-bg: #141a16;
     --surface-bg: rgba(23, 31, 26, 0.86);
+    --surface-bg-strong: rgba(23, 31, 26, 0.95);
     --surface-border: rgba(179, 213, 194, 0.24);
     --text-strong: #e8efe9;
     --text-muted: #b1c1b8;
     --shadow-soft: 0 24px 55px rgba(1, 6, 3, 0.45);
+    --grid-color: rgba(232, 239, 233, 0.08);
   }
 }

@@ -1,23 +1,21 @@
 ---
 import { siteConfig } from '../../data/site';
-import { getLocaleFromUrl, getLocalizedPath } from '../../i18n/utils';
 
-const locale = getLocaleFromUrl(Astro.url);
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="site-footer-inner">
     <p class="site-footer-copy">
-      {locale === 'zh' ? '持续记录工程、写作与长期实践。' : 'Documenting engineering, writing, and long-term craft.'}
+      持续记录工程、写作与长期实践。
     </p>
 
     <div class="site-footer-links">
-      <a href={getLocalizedPath(locale, 'blogs')}>{locale === 'zh' ? '写作' : 'Writing'}</a>
+      <a href="/writing">写作</a>
       {
         siteConfig.contactLinks.map((link) => (
           <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-            {link.label[locale]}
+            {link.label.zh}
           </a>
         ))
       }
