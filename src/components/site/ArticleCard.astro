@@ -1,0 +1,128 @@
+---
+import { getLocaleFromUrl, getLocalizedPath } from '../../i18n/utils';
+import { dayjs } from '../../utils/dayjs';
+
+type Article = {
+  slug?: string | undefined;
+  title?: string | undefined;
+  summary?: string | undefined;
+  publishedAt?: string | undefined;
+  tags?: string[] | undefined;
+  data?: {
+    title?: string | undefined;
+    permalink?: string | undefined;
+    summary?: string | undefined;
+    subtitle?: string | undefined;
+    createdAt?: string | undefined;
+    tags?: string[] | undefined;
+  };
+};
+
+type Props = {
+  article: Article;
+};
+
+const { article } = Astro.props as Props;
+const locale = getLocaleFromUrl(Astro.url);
+
+const slug = article.slug ?? article.data?.permalink ?? '';
+const title = article.title ?? article.data?.title ?? '未命名文章';
+const summary =
+  article.summary ??
+  article.data?.summary ??
+  article.data?.subtitle ??
+  (locale === 'zh' ? '点击阅读完整文章。' : 'Read the full article.');
+const publishedAt = article.publishedAt ?? article.data?.createdAt;
+const tags = article.tags ?? article.data?.tags ?? [];
+
+const href = getLocalizedPath(locale, `blogs/${slug}`);
+const archivePath = getLocalizedPath(locale, 'writing');
+---
+
+<article class="article-card">
+  <a href={href} class="article-main-link">
+    <h3>{title}</h3>
+  </a>
+
+  {publishedAt && <p class="article-date">{dayjs(publishedAt, locale).format('YYYY-MM-DD')}</p>}
+
+  <p class="article-summary">{summary}</p>
+
+  {
+    tags.length > 0 && (
+      <ul class="article-tags" aria-label="文章标签">
+        {tags.map((tag) => (
+          <li>
+            <a href={`${archivePath}?tag=${encodeURIComponent(tag)}`}>#{tag}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .article-card {
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    border-radius: var(--radius-m);
+    padding: 1rem 1rem 0.95rem;
+    display: grid;
+    gap: 0.58rem;
+  }
+
+  .article-main-link {
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  h3 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.16rem;
+    line-height: 1.35;
+  }
+
+  .article-main-link:hover h3 {
+    color: var(--accent);
+  }
+
+  .article-date {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .article-summary {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-size: 0.95rem;
+  }
+
+  .article-tags {
+    margin: 0.1rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .article-tags a {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    padding: 0.2rem 0.58rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .article-tags a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+</style>
