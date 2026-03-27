@@ -1,85 +1,69 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import dayjs from 'dayjs';
-import fs from 'fs';
-import path from 'path';
 import { defaultLocale, type AppLocale } from '../i18n/utils';
 
-type BlogData = CollectionEntry<'blogs'> & {
-  data: CollectionEntry<'blogs'>['data'] & {
-    lastModified?: Date;
-  };
+type BlogData = CollectionEntry<'blogs'>['data'] & {
+  summary: string;
+  publishedAt: string;
+  lastModified?: string;
+  tags: string[];
 };
 
 export type BlogCategory = 'tech' | 'note';
 
-export interface Blog {
-  data: {
-    title: string;
-    subtitle?: string;
-    createdAt: string;
-    lastModified?: string;
-    poster?: string;
-    posterDescription?: string;
-    category: BlogCategory;
-  };
+export type Blog = CollectionEntry<'blogs'> & {
+  title: string;
+  summary: string;
+  publishedAt: string;
+  tags: string[];
+  featured: boolean;
   slug: string;
+  data: CollectionEntry<'blogs'>['data'] & {
+    summary: string;
+    publishedAt: string;
+    lastModified?: string;
+    tags: string[];
+  };
+};
+
+function toSummary(entry: CollectionEntry<'blogs'>): string {
+  return entry.data.description?.trim() || entry.data.subtitle?.trim() || '';
 }
 
-export async function getBlogs(locale: AppLocale = defaultLocale, category?: BlogCategory) {
-  const isDev = process.env.NODE_ENV === 'development';
-  const localizedBlogs = await getCollection('blogs', ({ data }) => {
-    return isDev || !data.draft;
-  });
+function toNormalizedBlog(entry: CollectionEntry<'blogs'>): Blog {
+  const publishedAt = entry.data.createdAt;
+  const summary = toSummary(entry);
+  const tags = entry.data.tags ?? [];
+  const lastModified = entry.data.updatedAt;
 
-  const fallbackLocale = defaultLocale;
-  const locales: AppLocale[] = ['en', defaultLocale];
-
-  const blogs = locales.map(localeName => {
-    return {
-      locale: localeName,
-      blogs: localizedBlogs.filter(blog => blog.data.lang === localeName),
-    };
-  });
-
-  const finalBlogMap = new Map<string, BlogData>();
-
-  const fallbackLocaleBlogs =
-    blogs.find(blog => blog.locale === fallbackLocale)?.blogs || [];
-  const primaryLocaleBlogs =
-    blogs.find(blog => blog.locale === locale)?.blogs || [];
-
-  const getLastModifiedTime = (filePath: string) => {
-    try {
-      const stats = fs.statSync(filePath);
-      return stats.mtime;
-    } catch (error) {
-      console.error(`Error getting last modified time for ${filePath}:`, error);
-      return new Date();
-    }
+  return {
+    ...entry,
+    title: entry.data.title,
+    summary,
+    publishedAt,
+    tags,
+    featured: entry.data.featured ?? false,
+    slug: entry.data.permalink,
+    data: {
+      ...entry.data,
+      summary,
+      publishedAt,
+      lastModified,
+      tags,
+    } satisfies BlogData,
   };
+}
 
-  [...primaryLocaleBlogs, ...fallbackLocaleBlogs].forEach(
-    (blog: CollectionEntry<'blogs'>) => {
-      const id = blog.id;
-      if (!finalBlogMap.has(id)) {
-        const filePath = blog.filePath
-          ? path.resolve(process.cwd(), blog.filePath)
-          : path.join(process.cwd(), 'src/content/blogs', `${blog.id}.mdx`);
-        const lastModified = getLastModifiedTime(filePath);
-        finalBlogMap.set(id, {
-          ...blog,
-          data: {
-            ...blog.data,
-            lastModified,
-          },
-        } as BlogData);
-      }
-    },
+export async function getBlogs(_locale: AppLocale = defaultLocale, category?: BlogCategory) {
+  const isDev = process.env.NODE_ENV === 'development';
+  const blogs = await getCollection(
+    'blogs',
+    ({ data }) => data.lang === 'zh' && (isDev || !data.draft),
   );
 
-  const sortedBlogs = Array.from(finalBlogMap.values()).sort((a, b) => {
-    return dayjs(b.data.createdAt).unix() - dayjs(a.data.createdAt).unix();
-  });
+  const sortedBlogs = blogs
+    .map(toNormalizedBlog)
+    .sort((a, b) => dayjs(b.publishedAt).valueOf() - dayjs(a.publishedAt).valueOf());
 
   if (category) {
     return sortedBlogs.filter((blog) => blog.data.category === category);

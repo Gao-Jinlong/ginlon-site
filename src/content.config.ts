@@ -5,7 +5,7 @@ import { z } from 'astro/zod';
 const blogs = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/blogs' }),
   schema: z.object({
-    lang: z.enum(['zh', 'en']),
+    lang: z.literal('zh'),
     layout: z.string(),
     title: z.string(),
     subtitle: z.string().optional(),
@@ -14,9 +14,11 @@ const blogs = defineCollection({
     posterDescription: z.string().optional(),
     permalink: z.string(),
     createdAt: z.string(),
+    updatedAt: z.string().optional(),
+    featured: z.boolean().optional(),
     category: z.enum(['tech', 'note']),
     draft: z.boolean().optional(),
-    tags: z.array(z.string()).optional(),
+    tags: z.array(z.string()).default([]),
   }),
 });
 
