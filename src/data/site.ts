@@ -9,6 +9,7 @@ export const siteConfig = {
       href: 'https://github.com/Gao-Jinlong',
       label: {
         zh: 'GitHub',
+        en: 'GitHub',
       },
       external: true,
     },
@@ -16,6 +17,7 @@ export const siteConfig = {
       href: 'mailto:ginlon5241@gmail.com',
       label: {
         zh: '邮箱',
+        en: 'Email',
       },
       external: true,
     },
@@ -23,6 +25,7 @@ export const siteConfig = {
       href: 'https://juejin.cn/user/2775585439885320',
       label: {
         zh: '掘金',
+        en: 'Juejin',
       },
       external: true,
     },

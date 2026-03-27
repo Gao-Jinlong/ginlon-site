@@ -1,6 +1,7 @@
+import en from './common/en.json';
 import zh from './common/zh.json';
 
-export type AppLocale = 'zh';
+export type AppLocale = 'zh' | 'en';
 
 interface Dictionary {
   [key: string]: string | Dictionary | Array<string | Dictionary>;
@@ -8,6 +9,7 @@ interface Dictionary {
 
 const dictionaries: Record<AppLocale, Dictionary> = {
   zh,
+  en,
 };
 
 export const defaultLocale: AppLocale = 'zh';

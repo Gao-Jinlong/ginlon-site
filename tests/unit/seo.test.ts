@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import type { AppLocale } from '../../src/i18n/utils';
 import {
   buildCanonicalUrl,
   buildLocaleAlternates,
@@ -15,6 +16,11 @@ describe('seo helpers', () => {
 
   it('does not build locale alternates for the single-language baseline', () => {
     expect(buildLocaleAlternates('https://www.ginlon.site', '/writing')).toEqual([]);
+  });
+
+  it('keeps en as a legacy locale type for compile-time compatibility', () => {
+    const legacyLocale: AppLocale = 'en';
+    expect(legacyLocale).toBe('en');
   });
 
   it('lets page-level values override layout defaults', () => {
