@@ -8,17 +8,13 @@ import {
 
 describe('seo helpers', () => {
   it('builds the canonical URL from the Astro site URL and pathname', () => {
-    expect(buildCanonicalUrl('https://www.ginlon.site', '/blogs/abc')).toBe(
-      'https://www.ginlon.site/blogs/abc',
+    expect(buildCanonicalUrl('https://www.ginlon.site', '/writing')).toBe(
+      'https://www.ginlon.site/writing',
     );
   });
 
-  it('builds locale alternates for zh and en pages', () => {
-    expect(buildLocaleAlternates('https://www.ginlon.site', '/about')).toEqual([
-      { hrefLang: 'zh-CN', href: 'https://www.ginlon.site/about' },
-      { hrefLang: 'en', href: 'https://www.ginlon.site/en/about' },
-      { hrefLang: 'x-default', href: 'https://www.ginlon.site/about' },
-    ]);
+  it('does not build locale alternates for the single-language baseline', () => {
+    expect(buildLocaleAlternates('https://www.ginlon.site', '/writing')).toEqual([]);
   });
 
   it('lets page-level values override layout defaults', () => {

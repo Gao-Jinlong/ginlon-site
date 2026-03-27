@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Ginlon',
+  name: 'Ginlon 写作档案',
   url: 'https://www.ginlon.site',
   defaultOgImage: 'https://www.ginlon.site/og/site-default.png',
   articleOgImage: 'https://www.ginlon.site/og/article-default.png',
@@ -9,7 +9,6 @@ export const siteConfig = {
       href: 'https://github.com/Gao-Jinlong',
       label: {
         zh: 'GitHub',
-        en: 'GitHub',
       },
       external: true,
     },
@@ -17,7 +16,6 @@ export const siteConfig = {
       href: 'mailto:ginlon5241@gmail.com',
       label: {
         zh: '邮箱',
-        en: 'Email',
       },
       external: true,
     },
@@ -25,18 +23,16 @@ export const siteConfig = {
       href: 'https://juejin.cn/user/2775585439885320',
       label: {
         zh: '掘金',
-        en: 'Juejin',
       },
       external: true,
     },
   ],
   zh: {
-    title: 'Ginlon 的个人网站',
-    description: 'Ginlon 的个人网站 - 展示前端开发技能和经验。',
+    title: 'Ginlon 的写作档案',
+    description: '记录前端工程、写作实践与长期主义思考的中文站点。',
   },
   en: {
-    title: "Ginlon's Portfolio",
-    description:
-      "Ginlon's Portfolio Website - showcasing skills, and experience in front-end web development.",
+    title: 'Ginlon 的写作档案',
+    description: '记录前端工程、写作实践与长期主义思考的中文站点。',
   },
 } as const;

@@ -27,4 +27,10 @@ describe('Head component', () => {
 
     expect(html).not.toContain('<meta name="robots"');
   });
+
+  it('does not render alternate links when alternates are empty', async () => {
+    const html = await renderHead({ ...basePageMeta, alternates: [] });
+
+    expect(html).not.toContain('rel="alternate"');
+  });
 });
