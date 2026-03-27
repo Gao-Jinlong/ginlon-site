@@ -145,4 +145,33 @@ describe('getBlogs', () => {
     expect(blogs[0]).toBeDefined();
     expect(blogs[0]!.summary.trim().length).toBeGreaterThan(0);
   });
+
+  it('keeps markdown link text in summary fallback instead of literal replacement tokens', async () => {
+    getCollectionMock.mockImplementation(async (_name: string, filter: (entry: any) => boolean) =>
+      [
+        {
+          id: 'zh/link-summary',
+          slug: 'link-summary',
+          body: '参考 [官方文档](https://example.com/docs) 学习更多细节。',
+          data: {
+            lang: 'zh',
+            title: '链接摘要文章',
+            subtitle: '',
+            createdAt: '2025-03-03 00:00:00 +08:00',
+            permalink: 'link-summary',
+            category: 'tech',
+            tags: [],
+          },
+        },
+      ].filter(filter),
+    );
+
+    const blogs = await getBlogs('zh');
+    const firstBlog = blogs[0];
+
+    expect(firstBlog).toBeDefined();
+    expect(firstBlog!.summary).toContain('官方文档');
+    expect(firstBlog!.summary).not.toContain('$1');
+    expect(firstBlog!.summary).toContain('学习更多细节');
+  });
 });

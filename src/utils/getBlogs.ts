@@ -48,7 +48,7 @@ function deriveSummaryFromBody(entry: CollectionEntry<'blogs'>): string {
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/`[^`]*`/g, ' ')
     .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
-    .replace(/\[[^\]]+\]\([^)]+\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/^#+\s+/gm, '')
     .replace(/[>*_-]{2,}/g, ' ')
     .replace(/\s+/g, ' ')
