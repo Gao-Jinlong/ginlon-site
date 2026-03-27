@@ -48,7 +48,7 @@ function toNormalizedBlog(entry: CollectionEntry<'blogs'>): Blog {
       ...entry.data,
       summary,
       publishedAt,
-      lastModified,
+      ...(lastModified ? { lastModified } : {}),
       tags,
     } satisfies BlogData,
   };
