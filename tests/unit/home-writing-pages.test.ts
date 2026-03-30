@@ -102,8 +102,16 @@ describe('home and writing pages', () => {
   it('filters writing archive by tag query', async () => {
     const writingHtml = await renderWriting('/writing?tag=工程');
 
+    // 客户端筛选：所有文章都渲染在 HTML 中，但通过 data-tags 属性和 hidden 属性控制显示
     expect(writingHtml).toContain('第一篇文章');
-    expect(writingHtml).not.toContain('第二篇文章');
+    expect(writingHtml).toContain('第二篇文章');
+    
+    // 检查文章卡片的 data-tags 属性是否正确设置
+    expect(writingHtml).toContain('data-tags="工程"');
+    expect(writingHtml).toContain('data-tags="阅读"');
+    
+    // 检查当前选中的标签在 URL 中高亮
+    expect(writingHtml).toContain('tag-link-active');
   });
 
   it('keeps legacy archive and tags routes as redirects to writing', () => {

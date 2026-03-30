@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "mcp__sentrux__scan",
+      "mcp__sentrux__health",
+      "mcp__sentrux__dsm",
+      "mcp__sentrux__git_stats",
+      "Bash(pnpm build:*)",
+      "Bash(git log:*)",
+      "Bash(git diff-tree:*)",
+      "Bash(find docs:*)"
+    ]
+  }
+}
