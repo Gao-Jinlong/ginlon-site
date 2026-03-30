@@ -15,7 +15,7 @@ const blogs = defineCollection({
     createdAt: z.string(),
     updatedAt: z.string().optional(),
     featured: z.boolean().optional(),
-    category: z.enum(['tech', 'note']),
+    category: z.enum(['tech', 'note']).default('tech'),
     draft: z.boolean().optional(),
     tags: z.array(z.string()).default([]),
   }),

@@ -1,7 +1,6 @@
-import en from './common/en.json';
 import zh from './common/zh.json';
 
-export type AppLocale = 'zh' | 'en';
+export type AppLocale = 'zh';
 
 interface Dictionary {
   [key: string]: string | Dictionary | Array<string | Dictionary>;
@@ -9,15 +8,13 @@ interface Dictionary {
 
 const dictionaries: Record<AppLocale, Dictionary> = {
   zh,
-  en,
 };
 
 export const defaultLocale: AppLocale = 'zh';
-// TODO: Remove legacy en compatibility after redirect-only /en surfaces land (Task 7).
 export const appLocales: AppLocale[] = ['zh'];
 
-export function getLocaleFromUrl(url: URL): AppLocale {
-  return url.pathname === '/en' || url.pathname.startsWith('/en/') ? 'en' : defaultLocale;
+export function getLocaleFromUrl(_url: URL): AppLocale {
+  return defaultLocale;
 }
 
 export function translate(locale: AppLocale, key: string): string {
@@ -34,13 +31,8 @@ export function useTranslations(locale: AppLocale) {
   return (key: string) => translate(locale, key);
 }
 
-export function getLocalizedPath(locale: AppLocale, path = ''): string {
+export function getLocalizedPath(_locale: AppLocale, path = ''): string {
   const normalized = path.replace(/^\/+|\/+$/g, '');
-
-  if (locale === 'en') {
-    return normalized ? `/en/${normalized}` : '/en';
-  }
-
   return normalized ? `/${normalized}` : '/';
 }
 

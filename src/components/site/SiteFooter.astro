@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
       {
         siteConfig.contactLinks.map((link) => (
           <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-            {link.label.zh}
+            {link.label}
           </a>
         ))
       }
@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
 
     <p class="site-footer-meta">
       <span>© {year} Ginlon</span>
-      <span>{siteConfig.recordNumber}</span>
+      <span>{siteConfig.recordNumber ?? ''}</span>
     </p>
   </div>
 </footer>

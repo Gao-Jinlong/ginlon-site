@@ -3,13 +3,15 @@ interface Props {
   title: string;
   summary?: string | undefined;
   publishedLabel: string;
+  publishedAtIso?: string | undefined;
   lastModifiedLabel?: string | undefined;
+  lastModifiedIso?: string | undefined;
   tags?: string[] | undefined;
   poster?: string | undefined;
   posterDescription?: string | undefined;
 }
 
-const { title, summary, publishedLabel, lastModifiedLabel, tags = [], poster, posterDescription } = Astro.props;
+const { title, summary, publishedLabel, publishedAtIso, lastModifiedLabel, lastModifiedIso, tags = [], poster, posterDescription } = Astro.props;
 ---
 
 <header class="article-hero">
@@ -19,7 +21,7 @@ const { title, summary, publishedLabel, lastModifiedLabel, tags = [], poster, po
     {summary && <p class="article-summary">{summary}</p>}
     <div class="article-meta-group">
       <div class="article-meta-row">
-        <time class="article-date">{publishedLabel}</time>
+        <time class="article-date" datetime={publishedAtIso}>{publishedLabel}</time>
         {tags.length > 0 && (
           <div class="article-tags">
             {tags.map((tag) => (
@@ -30,7 +32,7 @@ const { title, summary, publishedLabel, lastModifiedLabel, tags = [], poster, po
       </div>
       {lastModifiedLabel && (
         <p class="article-updated">
-          最后更新: {lastModifiedLabel}
+          最后更新: <time datetime={lastModifiedIso}>{lastModifiedLabel}</time>
         </p>
       )}
     </div>

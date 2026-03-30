@@ -3,12 +3,10 @@ import ArticleCard from '../components/site/ArticleCard.astro';
 import PageSection from '../components/site/PageSection.astro';
 import SectionHeading from '../components/site/SectionHeading.astro';
 import { siteConfig } from '../data/site';
-import { getLocaleFromUrl } from '../i18n/utils';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { getBlogs } from '../utils/getBlogs';
 
-const locale = getLocaleFromUrl(Astro.url);
-const articles = await getBlogs(locale);
+const articles = await getBlogs('zh');
 const selectedWriting = articles.slice(0, 3);
 
 const pageMeta = {
@@ -82,7 +80,7 @@ const pageMeta = {
         {
           siteConfig.contactLinks.map((link) => (
             <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-              {link.label[locale]}
+              {link.label}
             </a>
           ))
         }

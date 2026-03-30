@@ -18,14 +18,12 @@ describe('seo helpers', () => {
     expect(buildLocaleAlternates('https://www.ginlon.site', '/writing')).toEqual([]);
   });
 
-  it('detects locale from root and legacy en paths', () => {
+  it('always returns zh locale', () => {
     expect(getLocaleFromUrl(new URL('https://www.ginlon.site/'))).toBe('zh');
-    expect(getLocaleFromUrl(new URL('https://www.ginlon.site/en/about'))).toBe('en');
   });
 
-  it('builds localized paths for zh and en locales', () => {
+  it('builds zh localized path', () => {
     expect(getLocalizedPath('zh', 'about')).toBe('/about');
-    expect(getLocalizedPath('en', 'about')).toBe('/en/about');
   });
 
   it('lets page-level values override layout defaults', () => {
