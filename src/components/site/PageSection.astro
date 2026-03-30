@@ -1,0 +1,32 @@
+---
+type Props = {
+  className?: string;
+  narrow?: boolean;
+  id?: string;
+};
+
+const { className, narrow = true, id } = Astro.props as Props;
+---
+
+<section id={id} class:list={['page-section', narrow && 'page-section-narrow', className]}>
+  <slot />
+</section>
+
+<style>
+  .page-section {
+    width: min(100% - 1.5rem, var(--shell-width));
+    margin: 0 auto;
+    padding: 1.2rem 0;
+  }
+
+  .page-section-narrow {
+    max-width: calc(var(--reading-width) + 1.5rem);
+  }
+
+  @media (max-width: 640px) {
+    .page-section {
+      width: min(100% - 1rem, var(--shell-width));
+      padding: 1rem 0;
+    }
+  }
+</style>

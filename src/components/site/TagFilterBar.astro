@@ -1,0 +1,73 @@
+---
+import { getLocaleFromUrl, getLocalizedPath } from '../../i18n/utils';
+
+type TagItem = {
+  name: string;
+  count: number;
+};
+
+type Props = {
+  tags: TagItem[];
+  selectedTag?: string | null;
+};
+
+const { tags, selectedTag } = Astro.props as Props;
+const locale = getLocaleFromUrl(Astro.url);
+const archivePath = getLocalizedPath(locale, 'writing');
+
+const isActive = (tagName?: string) => (selectedTag ?? '') === (tagName ?? '');
+---
+
+<nav class="tag-filter-bar" aria-label="文章标签筛选">
+  <a href={archivePath} class:list={['tag-link', isActive('') && 'tag-link-active']}>
+    全部文章
+  </a>
+
+  {
+    tags.map((tag) => (
+      <a
+        href={`${archivePath}?tag=${encodeURIComponent(tag.name)}`}
+        class:list={['tag-link', isActive(tag.name) && 'tag-link-active']}
+      >
+        #{tag.name}
+        <span>{tag.count}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .tag-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .tag-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    padding: 0.35rem 0.72rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+  }
+
+  .tag-link span {
+    font-size: 0.72rem;
+    opacity: 0.8;
+  }
+
+  .tag-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tag-link-active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+---
+
+{filtered.length > 0 && (
+  <nav class="toc-rail" aria-label="文章目录">
+    <p class="toc-rail-title">文章目录</p>
+    <ul class="toc-rail-list">
+      {filtered.map((heading) => (
+        <li class:list={['toc-rail-item', `toc-rail-depth-${heading.depth}`]}>
+          <a href={`#${heading.slug}`} class="toc-rail-link">
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .toc-rail {
+    position: sticky;
+    top: 5rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg);
+    border-radius: var(--radius-m);
+    padding: 1rem;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+  }
+
+  .toc-rail-title {
+    margin: 0 0 0.6rem;
+    color: var(--text-strong);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .toc-rail-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .toc-rail-item {
+    line-height: 1.4;
+  }
+
+  .toc-rail-depth-2 {
+    padding-left: 0;
+  }
+
+  .toc-rail-depth-3 {
+    padding-left: 0.8rem;
+  }
+
+  .toc-rail-depth-4 {
+    padding-left: 1.6rem;
+  }
+
+  .toc-rail-link {
+    display: block;
+    padding: 0.15rem 0;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .toc-rail-link:hover {
+    color: var(--accent);
+  }
+</style>

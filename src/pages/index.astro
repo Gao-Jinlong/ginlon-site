@@ -1,123 +1,227 @@
 ---
-import AboutSnapshot from '../components/AboutSnapshot.astro';
-import BlogCard from '../components/BlogCard.astro';
-import FocusAreaGrid from '../components/FocusAreaGrid.astro';
-import HomeHero from '../components/HomeHero.astro';
-import PageContainer from '../components/PageContainer.astro';
-import SectionHeader from '../components/SectionHeader.astro';
+import ArticleCard from '../components/site/ArticleCard.astro';
+import PageSection from '../components/site/PageSection.astro';
+import SectionHeading from '../components/site/SectionHeading.astro';
 import { siteConfig } from '../data/site';
-import { getLocaleFromUrl, getLocalizedPath, useTranslations } from '../i18n/utils';
-import Main from '../layouts/Main.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 import { getBlogs } from '../utils/getBlogs';
 
-const locale = getLocaleFromUrl(Astro.url);
-const t = useTranslations(locale);
-const sortedBlogs = await getBlogs(locale);
+const articles = await getBlogs('zh');
+const selectedWriting = articles.slice(0, 3);
 
-const homePageMeta = {
-  title: locale === 'zh' ? 'Ginlon | 工程、写作与长期主义实践' : 'Ginlon | Engineering, writing, and calm systems',
-  description: t('homepage.hero.description'),
-  ogType: 'website' as const,
-};
-
-const heroContent = {
-  eyebrow: t('homepage.hero.eyebrow'),
-  title: t('homepage.hero.title'),
-  description: t('homepage.hero.description'),
-  primaryCta: {
-    href: getLocalizedPath(locale, 'blogs'),
-    label: t('homepage.hero.primaryCta'),
-  },
-  secondaryCta: {
-    href: getLocalizedPath(locale, 'about'),
-    label: t('homepage.hero.secondaryCta'),
-  },
-};
-
-const focusAreaContent = {
-  eyebrow: t('homepage.focusAreas.eyebrow'),
-  title: t('homepage.focusAreas.title'),
-  description: t('homepage.focusAreas.description'),
-  items: [
-    {
-      title: t('homepage.focusAreas.items.engineering.title'),
-      description: t('homepage.focusAreas.items.engineering.description'),
-      meta: t('homepage.focusAreas.items.engineering.meta'),
-    },
-    {
-      title: t('homepage.focusAreas.items.systems.title'),
-      description: t('homepage.focusAreas.items.systems.description'),
-      meta: t('homepage.focusAreas.items.systems.meta'),
-    },
-    {
-      title: t('homepage.focusAreas.items.writing.title'),
-      description: t('homepage.focusAreas.items.writing.description'),
-      meta: t('homepage.focusAreas.items.writing.meta'),
-    },
-  ],
-};
-
-const aboutSnapshotContent = {
-  eyebrow: t('homepage.aboutSnapshot.eyebrow'),
-  title: t('homepage.aboutSnapshot.title'),
-  description: t('homepage.aboutSnapshot.description'),
-  points: [
-    t('homepage.aboutSnapshot.points.0'),
-    t('homepage.aboutSnapshot.points.1'),
-    t('homepage.aboutSnapshot.points.2'),
-  ],
-  cta: {
-    href: getLocalizedPath(locale, 'about'),
-    label: t('homepage.aboutSnapshot.cta'),
-  },
+const pageMeta = {
+  title: 'Ginlon | 写作与工程实践',
+  description: '关于工程、写作与长期主义实践的中文写作站点。',
 };
 ---
 
-<Main pageMeta={homePageMeta}>
-  <PageContainer class="space-y-12 py-10 md:space-y-16 md:py-16">
-    <HomeHero {...heroContent} />
+<SiteLayout pageMeta={pageMeta}>
+  <PageSection narrow={false} className="home-hero">
+    <p class="hero-eyebrow">Ginlon</p>
+    <h1>记录工程与写作，保持长期耐心。</h1>
+    <p class="hero-description">
+      这里是我的作者首页。写代码，写文章，也写一些关于成长和系统思考的笔记。
+    </p>
 
-    <FocusAreaGrid {...focusAreaContent} />
+    <div class="hero-actions">
+      <a href="/writing" class="hero-link hero-link-primary">进入写作归档</a>
+      <a href="/about" class="hero-link">了解我在做什么</a>
+    </div>
+  </PageSection>
 
-    <section class="space-y-6" aria-labelledby="selected-writing">
-      <SectionHeader
-        eyebrow={t('homepage.selectedWriting.eyebrow')}
-        title={t('homepage.selectedWriting.title')}
-        description={t('homepage.selectedWriting.description')}
-      />
+  <PageSection narrow={false} id="home-selected-writing">
+    <SectionHeading
+      eyebrow="精选写作"
+      title="写作"
+      description="挑三篇最近的文章，快速进入我这段时间关心的问题。"
+    />
 
-      <div class="grid gap-5">
-        {
-          sortedBlogs.slice(0, 3).map((blog) => (
-            <BlogCard blog={blog} />
-          ))
-        }
-      </div>
-    </section>
+    <div class="article-list">
+      {selectedWriting.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </PageSection>
 
-    <AboutSnapshot {...aboutSnapshotContent} />
+  <PageSection narrow={false} id="home-current-focus">
+    <SectionHeading
+      eyebrow="当前关注"
+      title="当前关注"
+      description="最近在推进的三个长期主题。"
+    />
 
-    <section class="space-y-6" aria-labelledby="contact-links">
-      <SectionHeader
-        eyebrow={t('homepage.contact.eyebrow')}
-        title={t('homepage.contact.title')}
-        description={t('homepage.contact.description')}
-      />
+    <ul class="focus-list">
+      <li>
+        <h3>前端工程质量</h3>
+        <p>把复杂业务拆成稳定模块，持续提升可维护性与协作效率。</p>
+      </li>
+      <li>
+        <h3>写作流程系统化</h3>
+        <p>通过固定节奏积累选题、草稿和复盘，让写作成为长期实践而非灵感事件。</p>
+      </li>
+      <li>
+        <h3>长期主义执行力</h3>
+        <p>关注可持续投入，把注意力放在十年后仍然有价值的能力上。</p>
+      </li>
+    </ul>
+  </PageSection>
 
-      <div class="flex flex-wrap gap-3">
+  <PageSection narrow={false} id="home-about-preview">
+    <SectionHeading
+      eyebrow="关于"
+      title="关于我"
+      description="一位持续写作的前端工程师，关注技术实践、学习系统和长期成长。"
+    />
+
+    <div class="about-preview">
+      <p>
+        我喜欢把复杂问题拆解成可执行步骤，也喜欢把实践经验沉淀成文章。这个站点会持续更新我在工程与生活里的观察。
+      </p>
+      <div class="about-links">
+        <a href="/about">阅读完整介绍</a>
         {
           siteConfig.contactLinks.map((link) => (
-            <a
-              href={link.href}
-              class="inline-flex rounded-full border border-[var(--surface-border)] bg-[var(--surface-bg-strong)] px-4 py-2 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
-              target={link.external ? '_blank' : undefined}
-              rel={link.external ? 'noreferrer' : undefined}
-            >
-              {link.label[locale]}
+            <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
+              {link.label}
             </a>
           ))
         }
       </div>
-    </section>
-  </PageContainer>
-</Main>
+    </div>
+  </PageSection>
+</SiteLayout>
+
+<style>
+  .home-hero {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    background:
+      radial-gradient(circle at top right, rgba(37, 107, 79, 0.16), transparent 52%),
+      var(--surface-bg-strong);
+    padding: 2rem 1.2rem 1.5rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .hero-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(2rem, 1.15rem + 2.6vw, 3.45rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-description {
+    margin: 0;
+    max-width: 44rem;
+    color: var(--text-muted);
+    line-height: 1.85;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .hero-link {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    text-decoration: none;
+    color: var(--text-strong);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .hero-link-primary {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .hero-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .article-list {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .focus-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .focus-list li {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    background: var(--surface-bg);
+    padding: 0.95rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .focus-list h3 {
+    margin: 0;
+    font-size: 1.03rem;
+    color: var(--text-strong);
+  }
+
+  .focus-list p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .about-preview {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    background: var(--surface-bg);
+    padding: 1rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .about-preview p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  .about-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.8rem;
+  }
+
+  .about-links a {
+    color: var(--text-strong);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .about-links a:hover {
+    color: var(--accent);
+  }
+
+  @media (min-width: 768px) {
+    .home-hero {
+      padding: 2.3rem 2rem 1.9rem;
+    }
+  }
+</style>

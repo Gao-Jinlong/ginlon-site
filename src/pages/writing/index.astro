@@ -1,0 +1,63 @@
+---
+import ArticleCard from '../../components/site/ArticleCard.astro';
+import PageSection from '../../components/site/PageSection.astro';
+import SectionHeading from '../../components/site/SectionHeading.astro';
+import TagFilterBar from '../../components/site/TagFilterBar.astro';
+import { getLocaleFromUrl } from '../../i18n/utils';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getBlogs } from '../../utils/getBlogs';
+import { getAllTags } from '../../utils/getTags';
+
+const locale = getLocaleFromUrl(Astro.url);
+const selectedTag = Astro.url.searchParams.get('tag')?.trim() ?? '';
+
+const articles = await getBlogs(locale);
+const tags = await getAllTags(locale);
+
+const visibleArticles = selectedTag
+  ? articles.filter((article) => (article.tags ?? []).includes(selectedTag))
+  : articles;
+
+const pageMeta = {
+  title: '写作归档 | Ginlon',
+  description: '按时间倒序归档的全部文章，可按标签过滤。',
+};
+
+const archiveDescription = selectedTag
+  ? `当前标签：${selectedTag}，共 ${visibleArticles.length} 篇。`
+  : '按发布时间倒序排列，标签仅作为次级过滤入口。';
+---
+
+<SiteLayout pageMeta={pageMeta}>
+  <PageSection narrow={false} id="writing-archive">
+    <SectionHeading eyebrow="写作归档" title="全部文章" description={archiveDescription} />
+    <TagFilterBar tags={tags} selectedTag={selectedTag} />
+
+    {
+      visibleArticles.length > 0 ? (
+        <div class="article-list">
+          {visibleArticles.map((article) => <ArticleCard article={article} />)}
+        </div>
+      ) : (
+        <p class="empty-state">没有匹配的文章，试试切换到“全部文章”。</p>
+      )
+    }
+  </PageSection>
+</SiteLayout>
+
+<style>
+  .article-list {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .empty-state {
+    margin: 1rem 0 0;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    padding: 1rem;
+    color: var(--text-muted);
+    background: var(--surface-bg);
+  }
+</style>

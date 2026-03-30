@@ -1,164 +1,153 @@
 ---
-import Main from '../layouts/Main.astro';
+import PageSection from '../components/site/PageSection.astro';
+import SectionHeading from '../components/site/SectionHeading.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const pageMeta = {
+  title: '关于 | Ginlon',
+  description: 'Ginlon — 关于工程、写作与长期主义实践的中文写作站点。',
+};
 ---
 
-<Main pageTitle="About Me">
-  <!-- 个人简介 -->
-  <section class="profile-section">
-    <img
-      src="/images/avatar.jpg"
-      alt="Avatar"
-      class="profile-avatar"
-      width={120}
-      height={120}
-    />
-    <h1 class="profile-title">Ginlon</h1>
-    <h2 class="profile-subtitle">前端工程师</h2>
-    <p class="profile-description">
-      渴望一切能够实现自我价值和自我成长的事情<br />
-      技术是我实现自我价值的工具之一<br />
-    </p>
-  </section>
-
-  <div class="about-container">
-    <!-- <section class="content-section">
-      <h2 class="section-title">工作经历</h2>
-      <div class="content-block">
-        <h3>2024.09 - 至今</h3>
-        <p>
-          xxx
-        </p>
-      </div>
-      <div class="content-block">
-        <h3>2022.08 - 2024.06</h3>
-        <p> 
-          在一家创业公司担任前端工程师，负责公司官网和内部管理系统的开发。
-          参与了公司官网的开发，负责了官网的搭建和维护。
-        </p>
-      </div>
-    </section> -->
-    <!-- 价值观 -->
-    <section class="content-section">
-      <h2 class="section-title">我的价值观</h2>
-      <div class="content-block">
-        <h3>真诚</h3>
-        <p>真诚是人与人之间相互沟通、了解的基石</p>
-      </div>
-      <div class="content-block">
-        <h3>分享</h3>
-        <p>希望将我的经验分享给他人，能给他人一些启发、共鸣或另一种视角</p>
-      </div>
+<SiteLayout pageMeta={pageMeta}>
+  <div class="about-page">
+    <section class="about-hero">
+      <p class="about-eyebrow">关于</p>
+      <h1 class="about-title">Ginlon</h1>
+      <p class="about-tagline">
+        前端工程师，写作爱好者。<br />
+        相信工程是理解世界的方式，写作是理解自己的方式。
+      </p>
     </section>
 
-    <section class="content-section">
-      <h2 class="section-title">个人兴趣</h2>
-      <div class="content-block">
-        <h3>研究业务架构</h3>
-        <p>探索事物的构成本质，并通过工程手段描述事物的构成和发展过程</p>
-        <p>享受通过工程设计中解决问题，和系统迭代升级的过程</p>
-      </div>
-      <div class="content-block">
-        <h3>丰富人生体验</h3>
-        <p>阅读：享受通过阅读获得不同的人生体验，也通过阅读认识自己</p>
+    <PageSection>
+      <SectionHeading eyebrow="观点" title="工作理念" />
+      <div class="about-body">
         <p>
-          影视、游戏：喜欢极致的视听艺术，层层跌进的戏剧结构，声乐的极致震撼
+          我相信好的工程实践来自于对问题本质的追问，而非对技术趋势的追逐。
+          写代码和写文章一样，都是在寻找最清晰的表达方式。
         </p>
         <p>
-          旅行：感受人文，看跨越时空亘古不变的土地，看太阳底下没有新鲜事的人间
+          我关注业务的本质结构，喜欢通过工程手段描述事物的构成和发展过程，
+          享受系统迭代升级中解决问题的过程。
         </p>
       </div>
-    </section>
+    </PageSection>
 
-    <!-- 联系方式 -->
-    <section class="content-section">
-      <h2 class="section-title">联系方式</h2>
+    <PageSection>
+      <SectionHeading eyebrow="兴趣" title="阅读与生活" />
+      <div class="about-body">
+        <p>
+          阅读是我获得不同人生体验的途径，也是认识自己的方式。
+          喜欢极致的视听艺术，层层跌进的戏剧结构，声乐的极致震撼。
+        </p>
+        <p>
+          旅行让我感受人文，看跨越时空亘古不变的土地，看太阳底下没有新鲜事的人间。
+        </p>
+      </div>
+    </PageSection>
+
+    <PageSection>
+      <SectionHeading eyebrow="联系" title="找到我" />
       <div class="contact-links">
-        <a
-          href="https://github.com/gao-jinlong"
-          target="_blank"
-          class="contact-link"
-        >
+        <a href="https://github.com/gao-jinlong" target="_blank" rel="noreferrer" class="contact-link">
           GitHub
         </a>
-        <a href="mailto:ginlon5241@gmail.com" class="contact-link"> Email </a>
+        <a href="mailto:ginlon5241@gmail.com" class="contact-link">
+          Email
+        </a>
       </div>
-    </section>
+    </PageSection>
   </div>
-</Main>
+</SiteLayout>
 
 <style>
-  @reference "../styles/styles.css";
-
-  .about-container {
-    @apply mx-auto space-y-12 p-6;
-    @apply shadow-sm;
-    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-    @apply max-w-2xl lg:max-w-3xl xl:max-w-4xl;
+  .about-page {
+    max-width: var(--shell-width);
+    margin: 0 auto;
+    padding: 0 0.75rem;
+    display: grid;
+    gap: 2rem;
   }
 
-  .profile-section {
-    @apply flex flex-col flex-wrap items-center text-center;
-    @apply border border-gray-100 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-gray-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:hover:border-gray-700;
-    @apply my-6 mx-auto;
-    @apply max-w-2xl lg:max-w-3xl xl:max-w-4xl;
+  .about-hero {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    box-shadow: var(--shadow-soft);
   }
 
-  .profile-avatar {
-    @apply rounded-full;
-    @apply ring-4 ring-gray-100 dark:ring-gray-800;
+  .about-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
   }
 
-  .profile-title {
-    @apply mt-4 text-3xl font-bold text-gray-900 dark:text-gray-100;
+  .about-title {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: clamp(2rem, 1.2rem + 2vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
-  .profile-subtitle {
-    @apply mt-2 text-xl text-gray-700 dark:text-gray-300;
+  .about-tagline {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.9;
+    max-width: 38rem;
   }
 
-  .profile-description {
-    @apply mt-4 text-gray-600 dark:text-gray-400;
-    @apply leading-relaxed;
+  .about-body {
+    display: grid;
+    gap: 0.75rem;
   }
 
-  .content-section {
-    @apply space-y-6;
-  }
-
-  .content-section:last-child {
-    @apply border-b-0;
-  }
-
-  .section-title {
-    @apply text-2xl font-bold text-gray-900 dark:text-gray-100;
-    @apply border-b-2 border-blue-500 pb-2 dark:border-blue-400;
-    @apply inline-block;
-  }
-
-  .content-block {
-    @apply space-y-3;
-    @apply border-gray-200 pl-4 dark:border-gray-700;
-  }
-
-  .content-block h3 {
-    @apply text-xl font-semibold text-gray-900 dark:text-gray-100;
-    @apply -ml-4;
-  }
-
-  .content-block p {
-    @apply text-gray-600 dark:text-gray-400;
-    @apply leading-relaxed;
+  .about-body p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.9;
+    max-width: var(--reading-width);
   }
 
   .contact-links {
-    @apply flex gap-4;
-    @apply mt-4;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
   }
 
   .contact-link {
-    @apply text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300;
-    @apply rounded-md px-4 py-2;
-    @apply bg-blue-50 dark:bg-blue-900/30;
-    @apply transition-colors duration-200;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    background: var(--surface-bg);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .contact-link:hover {
+    background: var(--accent-soft);
+  }
+
+  @media (max-width: 767px) {
+    .about-page {
+      padding: 0 0.5rem;
+    }
+
+    .about-hero {
+      padding: 1rem;
+    }
   }
 </style>

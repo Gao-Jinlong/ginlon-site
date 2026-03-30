@@ -60,12 +60,10 @@ export default {
         },
         body: {
           fontFamily: "'Inter', sans-serif",
-          padding: '0 0.5rem',
           color: 'var(--grey-600)',
           backgroundColor: 'var(--background)',
         },
         main: {
-          maxWidth: '65ch',
           margin: '0 auto',
         },
         a: {

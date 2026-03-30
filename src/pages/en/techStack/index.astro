@@ -1,5 +1,9 @@
 ---
-import Page from "../../techStack.astro"
-const { props } = Astro
+import RedirectPage from '../../../components/site/RedirectPage.astro';
+import { siteConfig } from '../../../data/site';
 ---
-<Page {...props} />
+
+<RedirectPage
+  target="/writing"
+  canonical={new URL('/en/techStack', siteConfig.url).toString()}
+/>

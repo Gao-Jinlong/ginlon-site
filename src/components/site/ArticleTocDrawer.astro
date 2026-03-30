@@ -1,0 +1,136 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  buttonLabel?: string;
+}
+
+const { headings, buttonLabel = '目录' } = Astro.props;
+const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+---
+
+{filtered.length > 0 && (
+  <div class="toc-drawer-wrapper">
+    <button
+      class="toc-drawer-toggle"
+      aria-expanded="false"
+      aria-controls="article-toc-drawer"
+      type="button"
+    >
+      {buttonLabel}
+    </button>
+
+    <div id="article-toc-drawer" class="toc-drawer" hidden>
+      <nav aria-label="文章目录">
+        <ul class="toc-drawer-list">
+          {filtered.map((heading) => (
+            <li class:list={['toc-drawer-item', `toc-drawer-depth-${heading.depth}`]}>
+              <a href={`#${heading.slug}`} class="toc-drawer-link">
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+)}
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const toggle = document.querySelector('.toc-drawer-toggle') as HTMLButtonElement | null;
+    const drawer = document.getElementById('article-toc-drawer');
+
+    if (!toggle || !drawer) return;
+
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      drawer.hidden = expanded;
+    });
+
+    drawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        toggle.setAttribute('aria-expanded', 'false');
+        drawer.hidden = true;
+      });
+    });
+  });
+</script>
+
+<style>
+  .toc-drawer-wrapper {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-drawer-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    background: var(--surface-bg);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 150ms ease;
+  }
+
+  .toc-drawer-toggle:hover {
+    background: var(--accent-soft);
+  }
+
+  .toc-drawer {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    background: var(--surface-bg);
+  }
+
+  .toc-drawer-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .toc-drawer-item {
+    line-height: 1.4;
+  }
+
+  .toc-drawer-depth-2 {
+    padding-left: 0;
+  }
+
+  .toc-drawer-depth-3 {
+    padding-left: 0.8rem;
+  }
+
+  .toc-drawer-depth-4 {
+    padding-left: 1.6rem;
+  }
+
+  .toc-drawer-link {
+    display: block;
+    padding: 0.15rem 0;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .toc-drawer-link:hover {
+    color: var(--accent);
+  }
+</style>

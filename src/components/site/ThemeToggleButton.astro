@@ -1,0 +1,87 @@
+---
+import type { AppLocale } from '../../i18n/utils';
+
+type Props = {
+  locale?: AppLocale;
+};
+
+const { locale = 'zh' } = Astro.props as Props;
+const lightLabel = locale === 'zh' ? '浅色' : 'Light';
+const darkLabel = locale === 'zh' ? '深色' : 'Dark';
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  data-label-light={lightLabel}
+  data-label-dark={darkLabel}
+  aria-label={locale === 'zh' ? '切换主题' : 'Toggle theme'}
+>
+  <span class="theme-toggle-label" data-theme-toggle-label>{lightLabel}</span>
+</button>
+
+<script>
+  const STORAGE_KEY = 'site-theme';
+  const DARK = 'dark';
+  const LIGHT = 'light';
+
+  function applyTheme(theme = LIGHT) {
+    const resolved = theme === DARK ? DARK : LIGHT;
+    const root = document.documentElement;
+    root.dataset.theme = resolved;
+    root.classList.toggle('dark', resolved === DARK);
+
+    document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+      if (!(button instanceof HTMLElement)) return;
+      const label = button.querySelector('[data-theme-toggle-label]');
+      if (!(label instanceof HTMLElement)) return;
+
+      const darkText = button.getAttribute('data-label-dark') ?? DARK;
+      const lightText = button.getAttribute('data-label-light') ?? LIGHT;
+      label.textContent = resolved === DARK ? darkText : lightText;
+    });
+  }
+
+  const installThemeToggle = () => {
+    const savedTheme = window.localStorage.getItem(STORAGE_KEY);
+    applyTheme(savedTheme === DARK ? DARK : LIGHT);
+
+    document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+      if (!(button instanceof HTMLElement)) return;
+      if (button.getAttribute('data-bound') === 'true') return;
+      button.setAttribute('data-bound', 'true');
+
+      button.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme === DARK ? DARK : LIGHT;
+        const next = current === DARK ? LIGHT : DARK;
+        window.localStorage.setItem(STORAGE_KEY, next);
+        applyTheme(next);
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', installThemeToggle);
+  document.addEventListener('astro:after-swap', installThemeToggle);
+  installThemeToggle();
+</script>
+
+<style>
+  .theme-toggle {
+    border: 1px solid var(--surface-border);
+    border-radius: 999px;
+    background: var(--surface-bg);
+    color: var(--text-muted);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
+  }
+
+  .theme-toggle:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent), var(--surface-border) 68%);
+    transform: translateY(-1px);
+  }
+</style>

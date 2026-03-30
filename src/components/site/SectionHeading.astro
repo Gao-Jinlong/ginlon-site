@@ -1,41 +1,41 @@
 ---
 type Props = {
-  eyebrow?: string;
   title: string;
   description?: string;
-  class?: string;
+  eyebrow?: string;
+  className?: string;
 };
 
-const { class: className = '', description, eyebrow, title } = Astro.props as Props;
+const { title, description, eyebrow, className } = Astro.props as Props;
 ---
 
-<header class:list={['section-header', className]}>
+<header class:list={['section-heading', className]}>
   {eyebrow && <p class="section-eyebrow">{eyebrow}</p>}
-  <h2 class="section-title">{title}</h2>
+  <h2>{title}</h2>
   {description && <p class="section-description">{description}</p>}
 </header>
 
 <style>
-  .section-header {
-    display: flex;
-    flex-direction: column;
+  .section-heading {
+    display: grid;
     gap: 0.55rem;
-    max-width: 38rem;
+    margin-bottom: 1rem;
   }
 
   .section-eyebrow {
     margin: 0;
     color: var(--accent);
-    font-size: 0.76rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
-  .section-title {
+  h2 {
     margin: 0;
+    font-size: clamp(1.35rem, 1rem + 1vw, 2rem);
+    line-height: 1.2;
     color: var(--text-strong);
-    font-size: clamp(1.5rem, 1.15rem + 1vw, 2.3rem);
-    line-height: 1.15;
   }
 
   .section-description {
