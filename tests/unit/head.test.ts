@@ -1,9 +1,11 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 
 import Head from '../../src/components/Head.astro';
-import Main from '../../src/layouts/Main.astro';
 import type { PageMeta } from '../../src/types/seo';
 
 const basePageMeta: PageMeta = {
@@ -14,17 +16,6 @@ const basePageMeta: PageMeta = {
 async function renderHead(pageMeta: PageMeta) {
   const container = await AstroContainer.create();
   return container.renderToString(Head, { props: { pageMeta } });
-}
-
-async function renderMain(url: string, pageTitle: string) {
-  const container = await AstroContainer.create();
-  return container.renderToString(Main, {
-    request: new Request(url),
-    props: { pageTitle },
-    slots: {
-      default: '<p>content</p>',
-    },
-  });
 }
 
 describe('Head component', () => {
@@ -46,15 +37,36 @@ describe('Head component', () => {
     expect(html).not.toContain('rel="alternate"');
   });
 
-  it('keeps legacy en layout rendering internally consistent', async () => {
-    const zhHtml = await renderMain('https://www.ginlon.site/about', 'About Me');
-    const enHtml = await renderMain('https://www.ginlon.site/en/about', 'About Me');
+  it('legacy en routes redirect to Chinese equivalents', () => {
+    const enIndex = readFileSync(resolve(process.cwd(), 'src/pages/en/index.astro'), 'utf8');
+    const enAbout = readFileSync(resolve(process.cwd(), 'src/pages/en/about/index.astro'), 'utf8');
+    const enBlogs = readFileSync(resolve(process.cwd(), 'src/pages/en/blogs/index.astro'), 'utf8');
+    const enBlogSlug = readFileSync(
+      resolve(process.cwd(), 'src/pages/en/blogs/[slug]/index.astro'),
+      'utf8',
+    );
+    const enTags = readFileSync(resolve(process.cwd(), 'src/pages/en/tags/index.astro'), 'utf8');
+    const enTechStack = readFileSync(
+      resolve(process.cwd(), 'src/pages/en/techStack/index.astro'),
+      'utf8',
+    );
 
-    expect(zhHtml).toContain('<html lang="zh"');
-    expect(enHtml).toContain('<html lang="en"');
-    expect(enHtml).toContain('<title>About Me | Ginlon</title>');
-    expect(enHtml).toContain('<link rel="canonical" href="https://www.ginlon.site/en/about"');
-    expect(enHtml).not.toContain('rel="alternate"');
-    expect(enHtml).toContain('href="/en/about"');
+    expect(enIndex).toContain('RedirectPage');
+    expect(enIndex).toContain('"/"');
+
+    expect(enAbout).toContain('RedirectPage');
+    expect(enAbout).toContain('"/about"');
+
+    expect(enBlogs).toContain('RedirectPage');
+    expect(enBlogs).toContain('"/writing"');
+
+    expect(enBlogSlug).toContain('RedirectPage');
+    expect(enBlogSlug).toContain('/blogs/');
+
+    expect(enTags).toContain('RedirectPage');
+    expect(enTags).toContain('"/writing"');
+
+    expect(enTechStack).toContain('RedirectPage');
+    expect(enTechStack).toContain('"/writing"');
   });
 });
