@@ -1,0 +1,22 @@
+---
+interface Props {
+  target: string;
+  canonical: string;
+  delay?: number;
+}
+
+const { target, canonical, delay = 0 } = Astro.props;
+---
+
+<html>
+  <head>
+    <meta http-equiv="refresh" content={`${delay};url=${target}`} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <p>
+      正在跳转到 <a href={target}>{target}</a>
+    </p>
+  </body>
+</html>

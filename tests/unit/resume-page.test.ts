@@ -8,16 +8,21 @@ const resumePageSource = readFileSync(
   'utf8',
 );
 
-describe('resume page content', () => {
-  it('uses Chinese-only visible section kickers', () => {
-    expect(resumePageSource).not.toContain('>Summary<');
-    expect(resumePageSource).not.toContain('>Capabilities<');
-    expect(resumePageSource).not.toContain('>Experience<');
-    expect(resumePageSource).not.toContain('>Projects<');
+const techStackSource = readFileSync(
+  resolve(process.cwd(), 'src/pages/techStack.astro'),
+  'utf8',
+);
 
-    expect(resumePageSource).toContain('>概述<');
-    expect(resumePageSource).toContain('>能力<');
-    expect(resumePageSource).toContain('>经历<');
-    expect(resumePageSource).toContain('>项目<');
+describe('retired legacy routes', () => {
+  it('redirects /resume to /about', () => {
+    expect(resumePageSource).toContain('RedirectPage');
+    expect(resumePageSource).toContain('/about');
+    expect(resumePageSource).not.toContain('Main');
+  });
+
+  it('redirects /techStack to /writing', () => {
+    expect(techStackSource).toContain('RedirectPage');
+    expect(techStackSource).toContain('/writing');
+    expect(techStackSource).not.toContain('Main');
   });
 });
