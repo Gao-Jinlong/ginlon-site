@@ -1,12 +1,16 @@
 # Ginlon Site Rebuild Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
+
+**Status:** ✅ 已完成 (2026-03-30)
 
 **Goal:** Rebuild the public site into a Chinese-only editorial experience with a new shell, new Home/Writing/About pages, a centered article reading surface, and migrated published Chinese articles.
 
 **Architecture:** Keep Astro content collections and low-level utilities as the data backbone, but replace the public page/layout/component layer with a new editorial display system. Preserve existing published article slugs under `/blogs/[slug]`, introduce `/writing` as the archive entry, and convert legacy English and non-core routes into explicit redirect surfaces or retire them when they no longer need public reachability.
 
-**Tech Stack:** Astro 6, MDX content collections, Tailwind CSS v4, TypeScript, Vitest, Astro Container tests
+**Tech Stack:** Astro 5, MDX content collections, CSS custom properties (design tokens), TypeScript, Vitest, Astro Container tests
+
+**Test Results:** 26 tests passing (9 test files), build produces 188 pages
 
 ---
 
@@ -86,7 +90,7 @@
 - Modify: `tests/unit/seo.test.ts`
 - Modify: `tests/unit/head.test.ts`
 
-- [ ] **Step 1: Write failing SEO and locale baseline tests**
+- [x] **Step 1: Write failing SEO and locale baseline tests**
 
 ```ts
 expect(buildCanonicalUrl('https://www.ginlon.site', '/writing')).toBe(
@@ -96,12 +100,12 @@ expect(buildCanonicalUrl('https://www.ginlon.site', '/writing')).toBe(
 expect(buildLocaleAlternates('https://www.ginlon.site', '/writing')).toEqual([]);
 ```
 
-- [ ] **Step 2: Run the targeted baseline tests**
+- [x] **Step 2: Run the targeted baseline tests**
 
 Run: `pnpm test -- --run tests/unit/seo.test.ts tests/unit/head.test.ts`
 Expected: FAIL because current helpers still emit `zh/en` alternates and bilingual defaults.
 
-- [ ] **Step 3: Simplify locale helpers to Chinese-only public behavior**
+- [x] **Step 3: Simplify locale helpers to Chinese-only public behavior**
 
 ```ts
 export type AppLocale = 'zh';
@@ -109,7 +113,7 @@ export const defaultLocale: AppLocale = 'zh';
 export const appLocales: AppLocale[] = ['zh'];
 ```
 
-- [ ] **Step 4: Rewrite site metadata defaults for the editorial Chinese site**
+- [x] **Step 4: Rewrite site metadata defaults for the editorial Chinese site**
 
 ```ts
 export const siteConfig = {
@@ -121,7 +125,7 @@ export const siteConfig = {
 };
 ```
 
-- [ ] **Step 5: Remove locale alternates from SEO helpers and support redirect/noindex pages**
+- [x] **Step 5: Remove locale alternates from SEO helpers and support redirect/noindex pages**
 
 ```ts
 export function buildCanonicalUrl(site: string, pathname: string) {
@@ -129,17 +133,17 @@ export function buildCanonicalUrl(site: string, pathname: string) {
 }
 ```
 
-- [ ] **Step 6: Align `astro.config.mjs` with the single-language public route strategy**
+- [x] **Step 6: Align `astro.config.mjs` with the single-language public route strategy**
 
 Run: update config so build output no longer assumes a live bilingual public surface.
 Expected: local typecheck/build config stays valid.
 
-- [ ] **Step 7: Re-run the targeted baseline tests**
+- [x] **Step 7: Re-run the targeted baseline tests**
 
 Run: `pnpm test -- --run tests/unit/seo.test.ts tests/unit/head.test.ts`
 Expected: PASS
 
-- [ ] **Step 8: Commit the routing/SEO baseline**
+- [x] **Step 8: Commit the routing/SEO baseline**
 
 ```bash
 git add astro.config.mjs src/i18n/utils.ts src/utils/seo.ts src/data/site.ts tests/unit/seo.test.ts tests/unit/head.test.ts
@@ -155,7 +159,7 @@ git commit -m "refactor: simplify public locale and seo baseline"
 - Create: `tests/unit/getBlogs.test.ts`
 - Create: `tests/unit/getTags.test.ts`
 
-- [ ] **Step 1: Write failing tests for normalized article data**
+- [x] **Step 1: Write failing tests for normalized article data**
 
 ```ts
 expect(articles[0]).toMatchObject({
@@ -166,12 +170,12 @@ expect(articles[0]).toMatchObject({
 });
 ```
 
-- [ ] **Step 2: Run the article data tests to capture current gaps**
+- [x] **Step 2: Run the article data tests to capture current gaps**
 
 Run: `pnpm test -- --run tests/unit/getBlogs.test.ts tests/unit/getTags.test.ts`
 Expected: FAIL because no normalized Chinese-only article adapter exists yet.
 
-- [ ] **Step 3: Update the content schema to match rebuild requirements**
+- [x] **Step 3: Update the content schema to match rebuild requirements**
 
 ```ts
 schema: z.object({
@@ -185,7 +189,7 @@ schema: z.object({
 })
 ```
 
-- [ ] **Step 4: Refactor `getBlogs` into one normalized article adapter**
+- [x] **Step 4: Refactor `getBlogs` into one normalized article adapter**
 
 ```ts
 return sortedBlogs.map((blog) => ({
@@ -198,18 +202,18 @@ return sortedBlogs.map((blog) => ({
 }));
 ```
 
-- [ ] **Step 5: Refactor `getTags` to derive secondary filters from normalized articles**
+- [x] **Step 5: Refactor `getTags` to derive secondary filters from normalized articles**
 
 ```ts
 return buildTagCounts(articles).sort((a, b) => b.count - a.count);
 ```
 
-- [ ] **Step 6: Re-run the article data tests**
+- [x] **Step 6: Re-run the article data tests**
 
 Run: `pnpm test -- --run tests/unit/getBlogs.test.ts tests/unit/getTags.test.ts`
 Expected: PASS
 
-- [ ] **Step 7: Commit the normalized article data layer**
+- [x] **Step 7: Commit the normalized article data layer**
 
 ```bash
 git add src/content.config.ts src/utils/getBlogs.ts src/utils/getTags.ts tests/unit/getBlogs.test.ts tests/unit/getTags.test.ts
@@ -229,7 +233,7 @@ git commit -m "refactor: normalize article data for rebuild"
 - Modify: `src/styles/styles.css`
 - Create: `tests/unit/site-shell.test.ts`
 
-- [ ] **Step 1: Write a failing shell test for the simplified header**
+- [x] **Step 1: Write a failing shell test for the simplified header**
 
 ```ts
 expect(html).toContain('首页');
@@ -239,12 +243,12 @@ expect(html).not.toContain('标签');
 expect(html).not.toContain('技术栈');
 ```
 
-- [ ] **Step 2: Run the shell test**
+- [x] **Step 2: Run the shell test**
 
 Run: `pnpm test -- --run tests/unit/site-shell.test.ts`
 Expected: FAIL because the new shell components do not exist yet.
 
-- [ ] **Step 3: Define theme tokens for the editorial rebuild**
+- [x] **Step 3: Define theme tokens for the editorial rebuild**
 
 ```css
 :root {
@@ -254,22 +258,22 @@ Expected: FAIL because the new shell components do not exist yet.
 }
 ```
 
-- [ ] **Step 4: Implement the shared site layout and navigation primitives**
+- [x] **Step 4: Implement the shared site layout and navigation primitives**
 
 Run: create `SiteLayout`, `SiteHeader`, `SiteFooter`, and the lightweight theme toggle with only the approved top-level nav items.
 Expected: pages can render without reusing the old tab-heavy shell.
 
-- [ ] **Step 5: Reduce old global styles to utility and typography support only**
+- [x] **Step 5: Reduce old global styles to utility and typography support only**
 
 Run: move shell-level visual decisions into `theme.css` and keep `styles.css` as the import surface.
 Expected: no old dashboard gradients, heavy cards, or blue-first tokens remain as defaults.
 
-- [ ] **Step 6: Re-run the shell test**
+- [x] **Step 6: Re-run the shell test**
 
 Run: `pnpm test -- --run tests/unit/site-shell.test.ts`
 Expected: PASS
 
-- [ ] **Step 7: Commit the new site shell**
+- [x] **Step 7: Commit the new site shell**
 
 ```bash
 git add src/layouts/SiteLayout.astro src/components/site src/styles/theme.css src/styles/styles.css tests/unit/site-shell.test.ts
@@ -288,7 +292,7 @@ git commit -m "feat: add editorial site shell"
 - Modify: `src/pages/tags/[tag].astro`
 - Create: `tests/unit/home-writing-pages.test.ts`
 
-- [ ] **Step 1: Write a failing route-content test for Home/Writing**
+- [x] **Step 1: Write a failing route-content test for Home/Writing**
 
 ```ts
 expect(homeHtml).toContain('写作');
@@ -296,17 +300,17 @@ expect(homeHtml).not.toContain('tab-panel');
 expect(writingHtml).toContain('全部文章');
 ```
 
-- [ ] **Step 2: Run the focused page test**
+- [x] **Step 2: Run the focused page test**
 
 Run: `pnpm test -- --run tests/unit/home-writing-pages.test.ts`
 Expected: FAIL because Home and Writing are still using the old page structure.
 
-- [ ] **Step 3: Rebuild the homepage as a short author landing page**
+- [x] **Step 3: Rebuild the homepage as a short author landing page**
 
 Run: compose hero, selected writing, current focus, and about preview using the new shell primitives.
 Expected: home is no longer a second archive or a panel grid.
 
-- [ ] **Step 4: Build `/writing` as the canonical chronological archive**
+- [x] **Step 4: Build `/writing` as the canonical chronological archive**
 
 ```ts
 const selectedTag = Astro.url.searchParams.get('tag');
@@ -315,17 +319,17 @@ const visibleArticles = selectedTag
   : articles;
 ```
 
-- [ ] **Step 5: Convert legacy archive/tag routes into redirects**
+- [x] **Step 5: Convert legacy archive/tag routes into redirects**
 
 Run: make `/blogs` redirect to `/writing`, `/tags` redirect to `/writing`, and `/tags/[tag]` redirect to `/writing?tag=<slug or tag>`.
 Expected: no legacy tag or tab page remains a first-class destination.
 
-- [ ] **Step 6: Re-run the focused page/data tests**
+- [x] **Step 6: Re-run the focused page/data tests**
 
 Run: `pnpm test -- --run tests/unit/home-writing-pages.test.ts tests/unit/getBlogs.test.ts tests/unit/getTags.test.ts`
 Expected: PASS
 
-- [ ] **Step 7: Commit the Home/Writing rebuild**
+- [x] **Step 7: Commit the Home/Writing rebuild**
 
 ```bash
 git add src/pages/index.astro src/pages/writing/index.astro src/pages/blogs/index.astro src/pages/tags src/components/site/ArticleCard.astro src/components/site/TagFilterBar.astro tests/unit/home-writing-pages.test.ts
@@ -342,7 +346,7 @@ git commit -m "feat: rebuild home and writing archive"
 - Create: `src/components/site/ArticlePager.astro`
 - Create: `tests/unit/article-toc.test.ts`
 
-- [ ] **Step 1: Write failing TOC component tests**
+- [x] **Step 1: Write failing TOC component tests**
 
 ```ts
 expect(desktopHtml).toContain('文章目录');
@@ -350,17 +354,17 @@ expect(desktopHtml).toContain('position: sticky');
 expect(mobileHtml).toContain('aria-controls="article-toc-drawer"');
 ```
 
-- [ ] **Step 2: Run the TOC tests**
+- [x] **Step 2: Run the TOC tests**
 
 Run: `pnpm test -- --run tests/unit/article-toc.test.ts`
 Expected: FAIL because the new rail/drawer components do not exist yet.
 
-- [ ] **Step 3: Rebuild the article page around a centered reading column**
+- [x] **Step 3: Rebuild the article page around a centered reading column**
 
 Run: render metadata, article body, and related navigation inside `SiteLayout` with a controlled reading width and a right-side desktop support rail.
 Expected: the article column stays visually centered; the TOC no longer steals center alignment.
 
-- [ ] **Step 4: Implement the desktop TOC rail**
+- [x] **Step 4: Implement the desktop TOC rail**
 
 ```astro
 <aside class="hidden xl:block">
@@ -368,23 +372,23 @@ Expected: the article column stays visually centered; the TOC no longer steals c
 </aside>
 ```
 
-- [ ] **Step 5: Implement the mobile TOC drawer**
+- [x] **Step 5: Implement the mobile TOC drawer**
 
 ```astro
 <ArticleTocDrawer headings={headings} buttonLabel="目录" />
 ```
 
-- [ ] **Step 6: Add after-reading navigation instead of pre-reading clutter**
+- [x] **Step 6: Add after-reading navigation instead of pre-reading clutter**
 
 Run: place related/adjacent article navigation after the article body, not beside it.
 Expected: reading flow remains uninterrupted.
 
-- [ ] **Step 7: Re-run the TOC tests**
+- [x] **Step 7: Re-run the TOC tests**
 
 Run: `pnpm test -- --run tests/unit/article-toc.test.ts`
 Expected: PASS
 
-- [ ] **Step 8: Commit the article reading surface**
+- [x] **Step 8: Commit the article reading surface**
 
 ```bash
 git add src/pages/blogs/[slug].astro src/components/site/ArticleHero.astro src/components/site/ArticleTocRail.astro src/components/site/ArticleTocDrawer.astro src/components/site/ArticlePager.astro tests/unit/article-toc.test.ts
@@ -400,34 +404,34 @@ git commit -m "feat: rebuild article reading experience"
 - Create: `src/components/site/RedirectPage.astro`
 - Modify: `tests/unit/resume-page.test.ts`
 
-- [ ] **Step 1: Write a failing test around retired resume-style routes**
+- [x] **Step 1: Write a failing test around retired resume-style routes**
 
 ```ts
 expect(resumeHtml).toContain('http-equiv="refresh"');
 expect(resumeHtml).toContain('/about');
 ```
 
-- [ ] **Step 2: Run the redirect-focused test**
+- [x] **Step 2: Run the redirect-focused test**
 
 Run: `pnpm test -- --run tests/unit/resume-page.test.ts`
 Expected: FAIL because `resume.astro` still renders a full content page.
 
-- [ ] **Step 3: Rebuild About as an author page**
+- [x] **Step 3: Rebuild About as an author page**
 
 Run: replace resume-like sections with personal introduction, working style, writing motivation, and selected links.
 Expected: About supports the site narrative without becoming a portfolio matrix.
 
-- [ ] **Step 4: Convert `/resume` and `/techStack` into hidden legacy redirects**
+- [x] **Step 4: Convert `/resume` and `/techStack` into hidden legacy redirects**
 
 Run: create and use `RedirectPage.astro` so these routes stop acting as primary site destinations.
 Expected: the routes stay harmless if referenced, but the public IA stays `首页 / 写作 / 关于`.
 
-- [ ] **Step 5: Re-run the redirect-focused test**
+- [x] **Step 5: Re-run the redirect-focused test**
 
 Run: `pnpm test -- --run tests/unit/resume-page.test.ts`
 Expected: PASS
 
-- [ ] **Step 6: Commit the About/legacy route cleanup**
+- [x] **Step 6: Commit the About/legacy route cleanup**
 
 ```bash
 git add src/pages/about.astro src/pages/resume.astro src/pages/techStack.astro src/components/site/RedirectPage.astro tests/unit/resume-page.test.ts
@@ -446,7 +450,7 @@ git commit -m "feat: rebuild about and retire legacy profile routes"
 - Modify: `src/pages/en/techStack/index.astro`
 - Modify: `tests/unit/head.test.ts`
 
-- [ ] **Step 1: Write a failing redirect metadata test**
+- [x] **Step 1: Write a failing redirect metadata test**
 
 ```ts
 expect(html).toContain('http-equiv="refresh"');
@@ -454,29 +458,29 @@ expect(html).toContain('canonical');
 expect(html).toContain('/blogs/example-slug');
 ```
 
-- [ ] **Step 2: Run the redirect metadata test**
+- [x] **Step 2: Run the redirect metadata test**
 
 Run: `pnpm test -- --run tests/unit/head.test.ts`
 Expected: FAIL because legacy English routes still present real content pages.
 
-- [ ] **Step 3: Implement a reusable redirect page component**
+- [x] **Step 3: Implement a reusable redirect page component**
 
 ```astro
 <meta http-equiv="refresh" content={`0;url=${target}`} />
 <link rel="canonical" href={canonical} />
 ```
 
-- [ ] **Step 4: Replace each `/en/*` page with a route-specific redirect target**
+- [x] **Step 4: Replace each `/en/*` page with a route-specific redirect target**
 
 Run: map `/en -> /`, `/en/about -> /about`, `/en/blogs -> /writing`, `/en/blogs/[slug] -> /blogs/[slug]`, `/en/tags -> /writing`, `/en/tags/[tag] -> /writing?tag=...`, `/en/techStack -> /about`.
 Expected: legacy public URLs continue to resolve without maintaining an English presentation layer.
 
-- [ ] **Step 5: Re-run the redirect metadata test**
+- [x] **Step 5: Re-run the redirect metadata test**
 
 Run: `pnpm test -- --run tests/unit/head.test.ts`
 Expected: PASS
 
-- [ ] **Step 6: Commit the English-route redirects**
+- [x] **Step 6: Commit the English-route redirects**
 
 ```bash
 git add src/components/site/RedirectPage.astro src/pages/en tests/unit/head.test.ts
@@ -490,32 +494,32 @@ git commit -m "feat: redirect legacy english routes"
 - Modify: `src/content.config.ts` if migration uncovered schema gaps.
 - Modify: `docs/superpowers/specs/2026-03-27-ginlon-site-rebuild-design.md` only if an implementation-discovered constraint must be documented.
 
-- [ ] **Step 1: Audit the published Chinese article set for launch blockers**
+- [x] **Step 1: Audit the published Chinese article set for launch blockers**
 
 Run: inspect all `src/content/blogs/zh/**/index.mdx` files for missing descriptions, malformed tags, or permalink inconsistencies.
 Expected: produce a concrete fix list before touching content.
 
-- [ ] **Step 2: Add only the minimum metadata normalization needed for Phase A**
+- [x] **Step 2: Add only the minimum metadata normalization needed for Phase A**
 
 Run: patch missing descriptions/tags or optional updated dates so every migrated article renders safely in Home, Writing, and Article contexts.
 Expected: no published Chinese article depends on empty summary or broken tag data to render.
 
-- [ ] **Step 3: Run the full test suite**
+- [x] **Step 3: Run the full test suite**
 
 Run: `pnpm test`
 Expected: PASS
 
-- [ ] **Step 4: Run the production build**
+- [x] **Step 4: Run the production build**
 
 Run: `pnpm build`
 Expected: PASS with all rebuilt routes generated successfully.
 
-- [ ] **Step 5: Perform browser acceptance review**
+- [x] **Step 5: Perform browser acceptance review**
 
 Run: `pnpm dev`
 Expected: manually confirm `/`, `/writing`, `/about`, one long-form `/blogs/[slug]`, one `/en/blogs/[slug]` redirect, and one `/tags/[tag]` redirect in Chrome DevTools.
 
-- [ ] **Step 6: Commit the verified rebuild baseline**
+- [x] **Step 6: Commit the verified rebuild baseline**
 
 ```bash
 git add src docs tests
@@ -524,13 +528,13 @@ git commit -m "feat: complete ginlon site rebuild phase a"
 
 ## Acceptance Checklist
 
-- [ ] Primary navigation shows only `首页`, `写作`, and `关于`.
-- [ ] Homepage is concise and writing-first, not an archive clone.
-- [ ] `/writing` is the canonical archive route and defaults to a chronological stream.
-- [ ] Tags appear only as secondary filters or redirect targets.
-- [ ] `/blogs/[slug]` articles keep current public slugs and render inside the new centered reading layout.
-- [ ] Desktop TOC sits in a right-side support rail; mobile TOC opens on demand as a drawer.
-- [ ] `/about` reads like an author page, not a resume dump.
-- [ ] `/en/*`, `/resume`, `/techStack`, `/blogs`, and `/tags*` no longer act as primary destinations.
-- [ ] All currently published Chinese articles render successfully.
-- [ ] `pnpm test`, `pnpm build`, and browser acceptance review all pass.
+- [x] Primary navigation shows only `首页`, `写作`, and `关于`.
+- [x] Homepage is concise and writing-first, not an archive clone.
+- [x] `/writing` is the canonical archive route and defaults to a chronological stream.
+- [x] Tags appear only as secondary filters or redirect targets.
+- [x] `/blogs/[slug]` articles keep current public slugs and render inside the new centered reading layout.
+- [x] Desktop TOC sits in a right-side support rail; mobile TOC opens on demand as a drawer.
+- [x] `/about` reads like an author page, not a resume dump.
+- [x] `/en/*`, `/resume`, `/techStack`, `/blogs`, and `/tags*` no longer act as primary destinations.
+- [x] All currently published Chinese articles render successfully.
+- [x] `pnpm test`, `pnpm build`, and browser acceptance review all pass.
