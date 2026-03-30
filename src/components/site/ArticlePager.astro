@@ -1,0 +1,67 @@
+---
+interface Props {
+  prev?: { slug: string; title: string } | undefined;
+  next?: { slug: string; title: string } | undefined;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class="article-pager" aria-label="文章导航">
+    {prev && (
+      <a href={`/blogs/${prev.slug}`} class="pager-link pager-prev">
+        <span class="pager-direction">上一篇</span>
+        <span class="pager-title">{prev.title}</span>
+      </a>
+    )}
+    {next && (
+      <a href={`/blogs/${next.slug}`} class="pager-link pager-next">
+        <span class="pager-direction">下一篇</span>
+        <span class="pager-title">{next.title}</span>
+      </a>
+    )}
+  </nav>
+)}
+
+<style>
+  .article-pager {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--surface-border);
+  }
+
+  .pager-link {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    background: var(--surface-bg);
+    text-decoration: none;
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .pager-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .pager-direction {
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .pager-title {
+    color: var(--text-strong);
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+</style>
