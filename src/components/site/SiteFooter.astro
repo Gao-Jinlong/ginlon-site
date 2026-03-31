@@ -11,7 +11,6 @@ const year = new Date().getFullYear();
     </p>
 
     <div class="site-footer-links">
-      <a href="/writing">写作</a>
       {
         siteConfig.contactLinks.map((link) => (
           <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>

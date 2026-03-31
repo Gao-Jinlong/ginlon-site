@@ -1,168 +1,40 @@
 ---
-import ArticleCard from '../../components/site/ArticleCard.astro';
 import PageSection from '../../components/site/PageSection.astro';
 import SectionHeading from '../../components/site/SectionHeading.astro';
-import TagFilterBar from '../../components/site/TagFilterBar.astro';
-import { getLocaleFromUrl } from '../../i18n/utils';
+import ArticleList from '../../components/site/ArticleList.vue';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { getBlogs } from '../../utils/getBlogs';
-import { getAllTags } from '../../utils/getTags';
 
-const locale = getLocaleFromUrl(Astro.url);
-const selectedTag = Astro.url.searchParams.get('tag')?.trim() ?? '';
+const articles = await getBlogs('zh');
+const selectedTag = new URL(Astro.url).searchParams.get('tag')?.trim() ?? '';
 
-const articles = await getBlogs(locale);
-const tags = await getAllTags(locale);
+// 为客户端准备文章数据
+const articlesData = articles.map((article) => ({
+  slug: article.slug,
+  title: article.title,
+  summary: article.summary,
+  publishedAt: article.publishedAt,
+  tags: article.tags ?? [],
+  tagSlugs: (article.tags ?? []).map((tag: string) =>
+    tag
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\u4e00-\u9fa5-]/g, ''),
+  ),
+  permalink: `/blogs/${encodeURIComponent(article.data.permalink)}`,
+}));
 
 const pageMeta = {
   title: '写作归档 | Ginlon',
-  description: '按时间倒序归档的全部文章，可按标签过滤。',
+  description: selectedTag
+    ? `当前标签：${selectedTag}，共 ${articlesData.filter((a) => a.tagSlugs.includes(selectedTag)).length} 篇。`
+    : '按时间倒序归档的全部文章，可按标签过滤。',
 };
 ---
 
 <SiteLayout pageMeta={pageMeta}>
   <PageSection narrow={false} id="writing-archive">
-    <SectionHeading eyebrow="写作归档" title="全部文章" description="按发布时间倒序排列，点击标签筛选文章。" />
-    <TagFilterBar tags={tags} selectedTag={selectedTag} />
-
-    <div class="article-list" data-articles={JSON.stringify(articles.map((a) => ({ slug: a.slug, tags: a.tags })))}>
-      {articles.map((article) => (
-        <article class="article-card" data-tags={(article.tags ?? []).join(',')} data-slug={article.slug}>
-          <ArticleCard article={article} />
-        </article>
-      ))}
-    </div>
-
-    <p class="empty-state" hidden>没有匹配的文章，试试切换到"全部文章"。</p>
+    <SectionHeading eyebrow="写作归档" title="全部文章" description={pageMeta.description} />
+    <ArticleList client:only="vue" articles={articlesData} initialTag={selectedTag} />
   </PageSection>
 </SiteLayout>
-
-<style>
-  .article-list {
-    margin-top: 1rem;
-    display: grid;
-    gap: 0.9rem;
-  }
-
-  .empty-state {
-    margin: 1rem 0 0;
-    border: 1px solid var(--surface-border);
-    border-radius: var(--radius-m);
-    padding: 1rem;
-    color: var(--text-muted);
-    background: var(--surface-bg);
-  }
-
-  .article-card[hidden] {
-    display: none;
-  }
-</style>
-
-<script>
-  // 标签筛选功能
-  (function () {
-    const articleList = document.querySelector('.article-list');
-    const emptyState = document.querySelector('.empty-state');
-    const tagFilterBar = document.querySelector('.tag-filter-bar');
-
-    if (!articleList || !emptyState) return;
-
-    const cards = Array.from(articleList.querySelectorAll('.article-card'));
-    const tagLinks = tagFilterBar ? Array.from(tagFilterBar.querySelectorAll('.tag-link')) : [];
-
-    // 获取当前选中的标签
-    function getSelectedTag(): string {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('tag')?.trim() || '';
-    }
-
-    // 更新筛选状态
-    function updateFilter(selectedTag: string) {
-      let visibleCount = 0;
-
-      cards.forEach((card) => {
-        const tagsAttr = card.getAttribute('data-tags') || '';
-        const tags = tagsAttr ? tagsAttr.split(',') : [];
-
-        if (!selectedTag || tags.includes(selectedTag)) {
-          (card as HTMLElement).hidden = false;
-          visibleCount++;
-        } else {
-          (card as HTMLElement).hidden = true;
-        }
-      });
-
-      // 更新空状态显示
-      (emptyState as HTMLElement).hidden = visibleCount > 0;
-
-      // 更新描述文字
-      const descriptionEl = document.querySelector('.section-description');
-      if (descriptionEl) {
-        if (selectedTag) {
-          descriptionEl.textContent = `当前标签：${selectedTag}，共 ${visibleCount} 篇。`;
-        } else {
-          descriptionEl.textContent = '按发布时间倒序排列，点击标签筛选文章。';
-        }
-      }
-
-      // 更新标签链接的激活状态
-      tagLinks.forEach((link) => {
-        const href = link.getAttribute('href') || '';
-        const match = href.match(/[?&]tag=([^&]*)/);
-        const linkTag = match ? decodeURIComponent(match[1] ?? '') : '';
-
-        if (linkTag === selectedTag) {
-          link.classList.add('tag-link-active');
-        } else {
-          link.classList.remove('tag-link-active');
-        }
-      });
-
-      // 更新页面标题
-      const titleEl = document.querySelector('title');
-      if (titleEl && selectedTag) {
-        titleEl.textContent = `${selectedTag} - 写作归档 | Ginlon`;
-      } else if (titleEl) {
-        titleEl.textContent = '写作归档 | Ginlon';
-      }
-    }
-
-    // 处理标签点击
-    function handleTagClick(event: Event) {
-      const link = (event.target as Element).closest('.tag-link');
-      if (!link) return;
-
-      const href = link.getAttribute('href');
-      if (!href || href === window.location.pathname) {
-        return;
-      }
-
-      // 阻止默认跳转，使用 history.pushState
-      event.preventDefault();
-
-      const match = href.match(/[?&]tag=([^&]*)/);
-      const tag = match ? decodeURIComponent(match[1] ?? '') : '';
-
-      // 更新 URL
-      const newUrl = tag ? `${window.location.pathname}?tag=${encodeURIComponent(tag)}` : window.location.pathname;
-      history.pushState({ tag }, '', newUrl);
-
-      // 更新筛选
-      updateFilter(tag);
-    }
-
-    // 处理浏览器后退/前进
-    function handlePopState(event: PopStateEvent) {
-      const tag = event.state?.tag || getSelectedTag();
-      updateFilter(tag);
-    }
-
-    // 初始化
-    const initialTag = getSelectedTag();
-    updateFilter(initialTag);
-
-    // 绑定事件
-    tagFilterBar?.addEventListener('click', handleTagClick);
-    window.addEventListener('popstate', handlePopState);
-  })();
-</script>

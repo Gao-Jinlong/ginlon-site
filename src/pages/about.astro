@@ -11,16 +11,7 @@ const pageMeta = {
 
 <SiteLayout pageMeta={pageMeta}>
   <div class="about-page">
-    <section class="about-hero">
-      <p class="about-eyebrow">关于</p>
-      <h1 class="about-title">Ginlon</h1>
-      <p class="about-tagline">
-        前端工程师，写作爱好者。<br />
-        相信工程是理解世界的方式，写作是理解自己的方式。
-      </p>
-    </section>
-
-    <PageSection>
+    <PageSection narrow={false}>
       <SectionHeading eyebrow="观点" title="工作理念" />
       <div class="about-body">
         <p>
@@ -34,20 +25,19 @@ const pageMeta = {
       </div>
     </PageSection>
 
-    <PageSection>
-      <SectionHeading eyebrow="兴趣" title="阅读与生活" />
+    <PageSection narrow={false}>
+      <SectionHeading eyebrow="价值观" title="真诚、善良" />
       <div class="about-body">
         <p>
-          阅读是我获得不同人生体验的途径，也是认识自己的方式。
-          喜欢极致的视听艺术，层层跌进的戏剧结构，声乐的极致震撼。
+          真诚是人与人之间最基本的信任基础，也是我在写作和工程实践中一直坚持的原则。
         </p>
         <p>
-          旅行让我感受人文，看跨越时空亘古不变的土地，看太阳底下没有新鲜事的人间。
+          善良是我对世界的期待，也是我始终秉持的态度。
         </p>
       </div>
     </PageSection>
 
-    <PageSection>
+    <PageSection narrow={false}>
       <SectionHeading eyebrow="联系" title="找到我" />
       <div class="contact-links">
         <a href="https://github.com/gao-jinlong" target="_blank" rel="noreferrer" class="contact-link">
@@ -70,15 +60,6 @@ const pageMeta = {
     gap: 2rem;
   }
 
-  .about-hero {
-    display: grid;
-    gap: 0.75rem;
-    padding: 1.5rem;
-    border: 1px solid var(--surface-border);
-    background: var(--surface-bg-strong);
-    box-shadow: var(--shadow-soft);
-  }
-
   .about-eyebrow {
     margin: 0;
     color: var(--accent);
@@ -86,22 +67,6 @@ const pageMeta = {
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.14em;
-  }
-
-  .about-title {
-    margin: 0;
-    color: var(--text-strong);
-    font-size: clamp(2rem, 1.2rem + 2vw, 3.2rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
-  }
-
-  .about-tagline {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 1rem;
-    line-height: 1.9;
-    max-width: 38rem;
   }
 
   .about-body {
@@ -144,10 +109,6 @@ const pageMeta = {
   @media (max-width: 767px) {
     .about-page {
       padding: 0 0.5rem;
-    }
-
-    .about-hero {
-      padding: 1rem;
     }
   }
 </style>

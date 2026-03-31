@@ -7,7 +7,9 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { getBlogs } from '../utils/getBlogs';
 
 const articles = await getBlogs('zh');
-const selectedWriting = articles.slice(0, 3);
+// 优先显示精选文章（frontmatter 中 featured: true），如果没有则取最新 3 篇
+const featuredArticles = articles.filter((article) => article.featured);
+const selectedWriting = featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 3);
 
 const pageMeta = {
   title: 'Ginlon | 写作与工程实践',
@@ -16,18 +18,19 @@ const pageMeta = {
 ---
 
 <SiteLayout pageMeta={pageMeta}>
-  <PageSection narrow={false} className="home-hero">
-    <p class="hero-eyebrow">Ginlon</p>
-    <h1>记录工程与写作，保持长期耐心。</h1>
-    <p class="hero-description">
-      这里是我的作者首页。写代码，写文章，也写一些关于成长和系统思考的笔记。
-    </p>
-
-    <div class="hero-actions">
-      <a href="/writing" class="hero-link hero-link-primary">进入写作归档</a>
-      <a href="/about" class="hero-link">了解我在做什么</a>
+  <section class="home-hero">
+    <p class="hero-eyebrow">关于我</p>
+    <div class="hero-profile">
+      <img src="https://bucket.ginlon.site/avatar_512.png" alt="Ginlon" class="hero-avatar" />
+      <div class="hero-profile-content">
+        <h1 class="hero-title">Ginlon</h1>
+        <p class="hero-tagline">
+          全干工程师，写作爱好者。<br />
+          相信工程是理解世界的方式，写作是理解自己的方式。
+        </p>
+      </div>
     </div>
-  </PageSection>
+  </section>
 
   <PageSection narrow={false} id="home-selected-writing">
     <SectionHeading
@@ -50,8 +53,8 @@ const pageMeta = {
 
     <ul class="focus-list">
       <li>
-        <h3>前端工程质量</h3>
-        <p>把复杂业务拆成稳定模块，持续提升可维护性与协作效率。</p>
+        <h3>Harness Engineering</h3>
+        <p>探索在 Agent 优先时代如何有效利用 AI 进行软件工程实践。</p>
       </li>
       <li>
         <h3>写作流程系统化</h3>
@@ -64,16 +67,16 @@ const pageMeta = {
     </ul>
   </PageSection>
 
-  <PageSection narrow={false} id="home-about-preview">
+  <!-- <PageSection narrow={false} id="home-about-preview">
     <SectionHeading
       eyebrow="关于"
       title="关于我"
-      description="一位持续写作的前端工程师，关注技术实践、学习系统和长期成长。"
+      description="期望在 AI 时代实现自我价值的工程师"
     />
 
     <div class="about-preview">
       <p>
-        我喜欢把复杂问题拆解成可执行步骤，也喜欢把实践经验沉淀成文章。这个站点会持续更新我在工程与生活里的观察。
+        我的追求是构建一个对人类有价值的工程，然后将经验传递给后来者。
       </p>
       <div class="about-links">
         <a href="/about">阅读完整介绍</a>
@@ -86,72 +89,64 @@ const pageMeta = {
         }
       </div>
     </div>
-  </PageSection>
+  </PageSection> -->
 </SiteLayout>
 
 <style>
   .home-hero {
     border: 1px solid var(--surface-border);
     border-radius: var(--radius-m);
-    background:
-      radial-gradient(circle at top right, rgba(37, 107, 79, 0.16), transparent 52%),
-      var(--surface-bg-strong);
-    padding: 2rem 1.2rem 1.5rem;
+    background: var(--surface-bg-strong);
+    padding: 1.5rem;
     display: grid;
-    gap: 0.8rem;
+    gap: 0.75rem;
+    max-width: var(--shell-width);
+    margin: 0 auto;
   }
 
   .hero-eyebrow {
     margin: 0;
     color: var(--accent);
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
+    font-size: 0.76rem;
     font-weight: 700;
-    text-transform: uppercase;
+    letter-spacing: 0.14em;
   }
 
-  h1 {
-    margin: 0;
-    max-width: 16ch;
-    font-size: clamp(2rem, 1.15rem + 2.6vw, 3.45rem);
-    line-height: 1.02;
-    letter-spacing: -0.04em;
-  }
-
-  .hero-description {
-    margin: 0;
-    max-width: 44rem;
-    color: var(--text-muted);
-    line-height: 1.85;
-  }
-
-  .hero-actions {
+  .hero-profile {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-
-  .hero-link {
-    display: inline-flex;
     align-items: center;
-    border: 1px solid var(--surface-border);
-    border-radius: 999px;
-    padding: 0.45rem 0.9rem;
-    text-decoration: none;
+    gap: 1.25rem;
+  }
+
+  .hero-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--surface-border);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .hero-profile-content {
+    display: grid;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .hero-title {
+    margin: 0;
     color: var(--text-strong);
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: clamp(2rem, 1.2rem + 2vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
-  .hero-link-primary {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-soft);
-  }
-
-  .hero-link:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+  .hero-tagline {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.9;
+    max-width: 38rem;
   }
 
   .article-list {
@@ -219,9 +214,26 @@ const pageMeta = {
     color: var(--accent);
   }
 
+  @media (max-width: 767px) {
+    .home-hero {
+      padding: 1rem;
+    }
+
+    .hero-profile {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-avatar {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
   @media (min-width: 768px) {
     .home-hero {
-      padding: 2.3rem 2rem 1.9rem;
+      padding: 1.5rem 2rem;
     }
   }
 </style>

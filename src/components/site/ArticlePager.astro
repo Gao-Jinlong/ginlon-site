@@ -10,13 +10,13 @@ const { prev, next } = Astro.props;
 {(prev || next) && (
   <nav class="article-pager" aria-label="文章导航">
     {prev && (
-      <a href={`/blogs/${prev.slug}`} class="pager-link pager-prev">
+      <a href={`/blogs/${encodeURIComponent(prev.slug)}`} class="pager-link pager-prev">
         <span class="pager-direction">上一篇</span>
         <span class="pager-title">{prev.title}</span>
       </a>
     )}
     {next && (
-      <a href={`/blogs/${next.slug}`} class="pager-link pager-next">
+      <a href={`/blogs/${encodeURIComponent(next.slug)}`} class="pager-link pager-next">
         <span class="pager-direction">下一篇</span>
         <span class="pager-title">{next.title}</span>
       </a>

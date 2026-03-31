@@ -3,6 +3,7 @@ import { getLocaleFromUrl, getLocalizedPath } from '../../i18n/utils';
 
 type TagItem = {
   name: string;
+  slug: string;
   count: number;
 };
 
@@ -26,8 +27,8 @@ const isActive = (tagName?: string) => (selectedTag ?? '') === (tagName ?? '');
   {
     tags.map((tag) => (
       <a
-        href={`${archivePath}?tag=${encodeURIComponent(tag.name)}`}
-        class:list={['tag-link', isActive(tag.name) && 'tag-link-active']}
+        href={`${archivePath}?tag=${encodeURIComponent(tag.slug)}`}
+        class:list={['tag-link', isActive(tag.slug) && 'tag-link-active']}
       >
         #{tag.name}
         <span>{tag.count}</span>
