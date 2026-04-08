@@ -21,7 +21,7 @@ const articlesData = articles.map((article) => ({
       .replace(/\s+/g, '-')
       .replace(/[^\w\u4e00-\u9fa5-]/g, ''),
   ),
-  permalink: `/blogs/${encodeURIComponent(article.data.permalink)}`,
+  permalink: `/blogs/${article.data.permalink}`,
 }));
 
 const pageMeta = {

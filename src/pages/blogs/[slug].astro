@@ -112,21 +112,25 @@ const pageMeta = {
     max-width: var(--shell-width);
     margin: 0 auto;
     padding: 0 0.75rem;
+    align-items: start;
   }
 
   .article-layout {
     display: grid;
     gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+    }
   }
 
   .article-main-column {
     display: grid;
     gap: 1rem;
     min-width: 0;
-  }
-
-  .article-sidebar {
-    display: none;
   }
 
   .article-body-surface {
@@ -244,11 +248,16 @@ const pageMeta = {
   @media (min-width: 1024px) {
     .article-layout {
       grid-template-columns: minmax(0, 1fr) 17rem;
-      align-items: start;
     }
 
     .article-sidebar {
       display: block;
+      position: sticky;
+      top: 6.5rem;
+      align-self: start;
+      max-height: calc(100vh - 7.5rem);
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
 

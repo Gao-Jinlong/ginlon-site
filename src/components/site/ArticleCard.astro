@@ -35,7 +35,7 @@ const summary =
 const publishedAt = article.publishedAt ?? article.data?.createdAt;
 const tags = article.tags ?? article.data?.tags ?? [];
 
-const href = getLocalizedPath(locale, `blogs/${encodeURIComponent(slug)}`);
+const href = getLocalizedPath(locale, `blogs/${slug}`);
 const archivePath = getLocalizedPath(locale, 'writing');
 ---
 

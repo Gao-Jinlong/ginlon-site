@@ -1,0 +1,362 @@
+---
+lang: zh
+title: 'Python 学习笔记'
+subtitle: ''
+permalink: 'python-learn'
+
+createdAt: '2026-04-08 12:00 +08:00'
+category: 'tech'
+draft: true
+tags: ['Python', '编程语言', '学习笔记']
+---
+
+## with 语法
+
+### 基本概念
+
+`with` 语句用于简化资源管理，确保资源在使用后被正确释放。最常见的使用场景是文件操作：
+
+```python
+# 传统方式
+f = open('file.txt', 'r')
+try:
+    content = f.read()
+finally:
+    f.close()
+
+# with 语句方式
+with open('file.txt', 'r') as f:
+    content = f.read()
+# 离开 with 块后，文件自动关闭
+```
+
+### 工作原理
+
+`with` 语句的核心是**上下文管理器（Context Manager）**。任何实现了 `__enter__()` 和 `__exit__()` 方法的对象都可以用作上下文管理器：
+
+```python
+class MyContextManager:
+    def __enter__(self):
+        print("进入上下文")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("退出上下文")
+        # 返回 True 表示吞掉异常，False/None 表示传播异常
+        return False
+
+with MyContextManager() as cm:
+    print("在上下文内部")
+```
+
+`with` 语句的执行流程：
+1. 调用 `__enter__()` 方法
+2. 将返回值赋给 `as` 后面的变量
+3. 执行 `with` 块中的代码
+4. 离开 `with` 块时，调用 `__exit__()` 方法
+5. 如果发生异常，`__exit__()` 接收异常信息（`exc_type`, `exc_val`, `exc_tb`）
+
+### contextlib 工具
+
+Python 提供了 `contextlib` 模块来简化上下文管理器的创建：
+
+**使用 contextmanager 装饰器**：
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def file_manager(filename, mode):
+    f = open(filename, mode)
+    try:
+        yield f
+    finally:
+        f.close()
+
+with file_manager('file.txt', 'r') as f:
+    content = f.read()
+```
+
+**使用 ExitStack 管理多个上下文**：
+```python
+from contextlib import ExitStack
+
+with ExitStack() as stack:
+    files = [stack.enter_context(open(fname)) for fname in filenames]
+    # 所有文件会在 ExitStack 退出时自动关闭
+```
+
+### 常见使用场景
+
+- 文件操作（自动关闭）
+- 数据库连接管理
+- 线程锁/进程锁管理
+- 临时修改配置/环境变量
+- 性能计时/性能分析
+
+---
+
+## yield 语法
+
+### 生成器基础
+
+`yield` 是 Python 的生成器（Generator）的核心。生成器是一种特殊的迭代器，可以懒生成数据，节省内存：
+
+```python
+# 列表 - 一次性创建所有元素
+def create_list(n):
+    result = []
+    for i in range(n):
+        result.append(i * i)
+    return result
+
+# 生成器 - 按需生成元素
+def create_generator(n):
+    for i in range(n):
+        yield i * i
+
+# 使用
+gen = create_generator(5)
+for item in gen:
+    print(item)  # 0, 1, 4, 9, 16
+```
+
+### yield vs return
+
+| 特性 | return | yield |
+|------|--------|-------|
+| 函数类型 | 普通函数 | 生成器函数 |
+| 返回值 | 单个值 | 可产生多个值 |
+| 状态保持 | 函数结束后状态丢失 | 暂停并保存状态 |
+| 内存使用 | 一次性加载所有数据 | 按需生成，节省内存 |
+
+### 生成器的执行流程
+
+```python
+def simple_generator():
+    print("开始执行")
+    yield 1
+    print("继续执行")
+    yield 2
+    print("最后执行")
+    yield 3
+
+gen = simple_generator()
+print("创建生成器，尚未执行")
+print(next(gen))  # 开始执行 -> 1
+print(next(gen))  # 继续执行 -> 2
+print(next(gen))  # 最后执行 -> 3
+print(next(gen))  # StopIteration 异常
+```
+
+### send() 方法 - 双向通信
+
+生成器可以通过 `send()` 方法接收外部值：
+
+```python
+def accumulator():
+    total = 0
+    while True:
+        value = yield total
+        if value is not None:
+            total += value
+
+gen = accumulator()
+print(next(gen))      # 启动生成器，输出 0
+print(gen.send(10))   # 发送 10，输出 10
+print(gen.send(5))    # 发送 5，输出 15
+```
+
+### yield from - 委托给子生成器
+
+`yield from` 用于简化嵌套生成器的迭代：
+
+```python
+def chain(*iterables):
+    for it in iterables:
+        for i in it:
+            yield i
+
+# 使用 yield from 简化
+def chain_v2(*iterables):
+    for it in iterables:
+        yield from it
+
+# 使用
+list(chain([1, 2], [3, 4]))  # [1, 2, 3, 4]
+```
+
+### 实际应用场景
+
+- 处理大型文件（逐行读取）
+- 流式数据处理
+- 无限序列生成
+- 协程（Coroutine）实现
+- 管道式数据处理
+
+---
+
+## 异步编程（async/await）
+
+### 核心概念
+
+Python 的异步编程基于 `asyncio` 模块，使用 `async`/`await` 语法：
+
+```python
+import asyncio
+
+async def fetch_data(url):
+    print(f"开始获取 {url}")
+    await asyncio.sleep(1)  # 模拟 IO 操作
+    print(f"获取完成 {url}")
+    return f"data from {url}"
+
+async def main():
+    # 顺序执行
+    result1 = await fetch_data("url1")
+    result2 = await fetch_data("url2")
+
+    # 并发执行
+    results = await asyncio.gather(
+        fetch_data("url1"),
+        fetch_data("url2"),
+        fetch_data("url3")
+    )
+
+asyncio.run(main())
+```
+
+### 关键术语
+
+| 术语 | 说明 |
+|------|------|
+| **Coroutine（协程）** | 使用 `async def` 定义的函数，调用后返回协程对象 |
+| **Event Loop（事件循环）** | 异步编程的核心，负责调度和执行协程 |
+| **Task（任务）** | 包装协程对象，用于并发执行 |
+| **await** | 暂停协程执行，等待可等待对象完成 |
+| **asyncio.gather()** | 并发运行多个协程，等待全部完成 |
+| **asyncio.create_task()** | 创建任务，后台运行 |
+
+### 任务调度模式
+
+```python
+import asyncio
+
+async def worker(name, delay):
+    for i in range(3):
+        await asyncio.sleep(delay)
+        print(f"{name} 工作 {i+1}")
+
+async def main():
+    # 方式 1: 使用 gather
+    await asyncio.gather(
+        worker("A", 1),
+        worker("B", 2),
+        worker("C", 0.5)
+    )
+
+    # 方式 2: 创建任务
+    task1 = asyncio.create_task(worker("X", 1))
+    task2 = asyncio.create_task(worker("Y", 2))
+    await task1
+    await task2
+
+asyncio.run(main())
+```
+
+### 超时控制
+
+```python
+import asyncio
+
+async def long_running_task():
+    await asyncio.sleep(10)
+    return "完成"
+
+async def main():
+    try:
+        result = await asyncio.wait_for(
+            long_running_task(),
+            timeout=5.0
+        )
+    except asyncio.TimeoutError:
+        print("任务超时")
+
+asyncio.run(main())
+```
+
+### 异步上下文管理器
+
+结合 `with` 和 `async/await`：
+
+```python
+class AsyncConnection:
+    async def __aenter__(self):
+        print("异步获取连接")
+        await asyncio.sleep(1)
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print("异步释放连接")
+        await asyncio.sleep(1)
+
+async def main():
+    async with AsyncConnection() as conn:
+        print("使用连接")
+
+asyncio.run(main())
+```
+
+### 异步迭代器
+
+结合 `yield` 和 `async/await`：
+
+```python
+class AsyncRange:
+    def __init__(self, limit):
+        self.limit = limit
+
+    def __aiter__(self):
+        self.current = 0
+        return self
+
+    async def __anext__(self):
+        if self.current >= self.limit:
+            raise StopAsyncIteration
+        await asyncio.sleep(0.1)
+        self.current += 1
+        return self.current - 1
+
+async def main():
+    async for i in AsyncRange(5):
+        print(i)
+
+asyncio.run(main())
+```
+
+### 实际应用场景
+
+- 并发网络请求（API 调用、爬虫）
+- WebSocket 通信
+- 数据库异步驱动（如 `asyncpg`, `aiomysql`）
+- 高并发服务器（如 `aiohttp`, `FastAPI`）
+- 文件 IO（`aiofiles`）
+
+### 最佳实践
+
+1. **避免阻塞事件循环**：不要在 async 函数中使用 `time.sleep()`，用 `asyncio.sleep()`
+2. **CPU 密集型任务**：使用 `asyncio.to_thread()` 或进程池
+3. **错误处理**：在 `gather` 中使用 `return_exceptions=True`
+4. **优雅关闭**：使用 `asyncio.create_task()` 和适当的取消逻辑
+5. **超时控制**：始终为网络请求设置超时
+
+---
+
+## 总结
+
+| 特性 | 核心用途 | 关键方法/语法 |
+|------|----------|---------------|
+| **with** | 资源管理 | `__enter__`, `__exit__`, `contextmanager` |
+| **yield** | 懒生成/迭代器 | `yield`, `send()`, `yield from` |
+| **async/await** | 并发 IO | `async def`, `await`, `asyncio.gather`, `create_task` |
+
+这三个特性都是 Python 中处理"控制流"的重要工具，理解它们的工作原理可以帮助你编写更高效、更优雅的 Python 代码。
