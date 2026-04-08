@@ -1,0 +1,136 @@
+---
+lang: zh
+title: 'LaTeX 和 Mermaid 渲染测试'
+subtitle: '验证博客系统的数学公式和图表渲染能力'
+
+permalink: 'latex-mermaid-test'
+createdAt: '2026-04-08 00:00:00 +08:00'
+category: 'tech'
+tags: ['测试', 'LaTeX', 'Mermaid', '技术']
+---
+
+## 测试目的
+
+验证博客系统对 LaTeX 数学公式和 Mermaid 图表的支持。
+
+## LaTeX 公式测试
+
+### 行内公式
+
+这是一个行内公式：$E = mc^2$，以及另一个：$x^2 + y^2 = z^2$。
+
+二次方程求根公式：$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+
+### 块级公式
+
+$$
+\sum_{i=1}^n i = \frac{n(n+1)}{2}
+$$
+
+$$
+\int_0^\infty x^2 dx
+$$
+
+欧拉公式：
+
+$$
+e^{i\pi} + 1 = 0
+$$
+
+### 复杂公式
+
+矩阵：
+
+$$
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+$$
+
+多重积分：
+
+$$
+\iiint_V f(x,y,z) \,dx\,dy\,dz
+$$
+
+## Mermaid 图表测试
+
+### Flow 流程图
+
+```mermaid
+graph TD
+    A[开始] --> B{条件判断}
+    B -->|是 | C[执行 A]
+    B -->|否 | D[执行 B]
+    C --> E[结束]
+    D --> E
+```
+
+### Sequence 序列图
+
+```mermaid
+sequenceDiagram
+    participant User as 用户
+    participant API as API
+    participant DB as 数据库
+
+    User->>API: 请求数据
+    API->>DB: 查询数据库
+    DB-->>API: 返回结果
+    API-->>User: 响应数据
+```
+
+### Class 类图
+
+```mermaid
+classDiagram
+    class Animal {
+        +String name
+        +int age
+        +makeSound()
+    }
+    class Dog {
+        +bark()
+    }
+    class Cat {
+        +meow()
+    }
+    Animal <|-- Dog
+    Animal <|-- Cat
+```
+
+### State 状态图
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Processing: 开始处理
+    Processing --> [*]: 完成
+    Processing --> Error: 出错
+    Error --> Processing: 重试
+```
+
+## 混合测试
+
+在同一个文章中使用公式和图表：
+
+纳什均衡公式：
+
+$$
+\forall i, \forall s_i \in S_i: u_i(s_i, s_{-i}) \geq u_i(s_i', s_{-i})
+$$
+
+对应的决策流程：
+
+```mermaid
+graph LR
+    A[玩家选择策略] --> B[计算收益]
+    B --> C{是否最优？}
+    C -->|是 | D[纳什均衡]
+    C -->|否 | A
+```
+
+## 结论
+
+如果以上内容都能正常渲染，说明 LaTeX 和 Mermaid 支持工作正常。

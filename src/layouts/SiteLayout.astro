@@ -4,6 +4,7 @@ import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import { siteConfig } from '../data/site';
 import '../styles/styles.css';
+import 'katex/dist/katex.min.css';
 import type { PageMeta } from '../types/seo';
 import { buildCanonicalUrl, buildLocaleAlternates, mergePageMeta } from '../utils/seo';
 
@@ -73,6 +74,30 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
     <meta name="twitter:title" content={resolvedMeta.title} />
     <meta name="twitter:description" content={resolvedMeta.description} />
     {resolvedMeta.ogImage && <meta name="twitter:image" content={resolvedMeta.ogImage} />}
+
+    <!-- KaTeX auto-render -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js"
+      integrity="sha384-eOVlD+hIQ2C7h87SPhKqGLM7fXpMHqRrCqQzLdD16l4d8rL5JhH7S9K0y7TGLh"
+      crossorigin="anonymous"
+    ></script>
+    <script defer is:inline>
+      // KaTeX auto-render on DOMContentLoaded
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.renderMathInElement) {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });
+        }
+      });
+    </script>
 
     <script is:inline type="text/javascript">
       (function (c, l, a, r, i, t, y) {

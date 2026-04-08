@@ -2,7 +2,10 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
+import mermaid from 'astro-mermaid';
 import { remarkModifiedTime } from './src/plugins/remark-modified-time';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://docs.astro.build/en/reference/configuration-reference/
 
@@ -26,6 +29,7 @@ export default defineConfig({
     vue({
       appEntrypoint: '/src/pages/_app',
     }),
+    mermaid(),
   ],
 
   image: {
@@ -44,7 +48,8 @@ export default defineConfig({
   },
 
   markdown: {
-    remarkPlugins: [remarkModifiedTime],
+    remarkPlugins: [remarkModifiedTime, remarkMath],
+    rehypePlugins: [rehypeKatex],
   },
   devToolbar: {
     enabled: false,
