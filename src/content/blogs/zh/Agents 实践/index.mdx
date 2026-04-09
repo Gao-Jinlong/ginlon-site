@@ -6,12 +6,10 @@ permalink: 'Agents 实践'
 
 createdAt: '2026-04-08 12:00 +08:00'
 category: 'tech'
-draft: true
 tags: ['AI', '工程实践', 'Agent', '软件工程']
 ---
 
 
-## 上下文工程
 
 ### 上下文分层
 
@@ -19,17 +17,61 @@ tags: ['AI', '工程实践', 'Agent', '软件工程']
 
 临时性的信息和长期性信息混在一起会使得模型看到的内容过多，导致模型无法聚焦在重要的信息上
 
-上下文分为五层：
+```mermaid
+flowchart TB
+    subgraph Outside[❌ 永不进入层]
+        A1[Hooks 逻辑]
+        A2[明确规则]
+        A3[工具约束]
+    end
+    
+    subgraph Context[✅ 模型上下文]
+        direction TB
+        
+        subgraph Layer1[常驻层 - 每次会话必载]
+            B1[身份定义]
+            B2[项目约定]
+            B3[安全围栏]
+        end
+        
+        subgraph Layer2[按需加载层 - 需要时载入]
+            C1[Skills]
+            C2[领域知识]
+            C3[使用说明]
+        end
+        
+        subgraph Layer3[运行时注入层 - 动态注入]
+            D1[时间/日期]
+            D2[通道 ID]
+            D3[用户偏好]
+        end
+    end
+    
+    subgraph Memory[💾 外部存储]
+        E1[MEMORY.md]
+        E2[跨会话记忆]
+    end
+    
+    Outside -.->|不进入 | Context
+    Memory -.->|按需读取 | Context
+    
+    style Outside fill:#ffe4e1,stroke:#333,stroke-dasharray:5 5
+    style Context fill:#e8f5e9,stroke:#333
+    style Memory fill:#fff3e0,stroke:#333
+    style Layer1 fill:#c8e6c9
+    style Layer2 fill:#dcedc8
+    style Layer3 fill:#f0f4c3
+```
 
-常驻层：身份定义、项目约定、安全围栏，每次会话都必须遵守的内容，
+**五层说明：**
 
-按需加载层：skills、领域知识、使用说明等，需要时才加载的内容
-
-运行时注入层：时间、通道 id、用户偏好等信息，按需注入
-
-记忆层：MEMORY.md 跨会话累计的知识，需要时读取
-
-永不进入层：Hooks 逻辑，明确的规则，不应该进入模型上下文，通过工具来约束
+| 层级 | 内容 | 加载时机 | 示例 |
+|------|------|----------|------|
+| **常驻层** | 身份定义、项目约定、安全围栏 | 每次会话 | "你是资深前端工程师"、"使用 TypeScript" |
+| **按需加载层** | Skills、领域知识、使用说明 | 需要时才加载 | 调用数据库技能时加载 DB 相关文档 |
+| **运行时注入层** | 时间、通道 id、用户偏好 | 每次请求动态注入 | 当前时间、用户 ID、主题偏好 |
+| **记忆层** | MEMORY.md 跨会话累计的知识 | 需要时读取 | 用户工作风格、项目历史决策 |
+| **永不进入层** | Hooks 逻辑、明确的规则 | 永不进入 | 通过工具而非 prompt 约束 |
 
 ### 对话流工程
 
@@ -78,26 +120,48 @@ tags: ['AI', '工程实践', 'Agent', '软件工程']
 
 ```mermaid
 flowchart TD
-    Start([用户输入]) --> Node[创建消息节点]
-    Node --> Check{需要汇总？}
+    A([新消息]) --> B[创建 message 节点]
+    B --> C{是否需要压缩？}
     
-    Check -->|是 | Summary[生成汇总节点]
-    Check -->|否 | Context{构建上下文}
+    C -->|超出 autocompact 阈值 | D[压缩工作流]
+    C -->|否 | E[根据 last_summary_index<br/>获取历史消息]
     
-    Summary --> Persist[持久化到硬盘]
-    Persist --> Pointer[更新 last_summary_index]
-    Pointer --> Context
+    subgraph D [压缩工作流]
+        D1[分级压缩<br/>信息权重评估] --> D2[历史信息处理<br/>关键信息保留]
+        D2 --> D3[压缩策略选择<br/>摘要/删除/合并]
+        D3 --> D4[更新 last_summary_index]
+    end
     
-    Context --> Fetch[从指针位置拉取历史]
-    Fetch --> Window[窗口内上下文组装]
-    Window --> Model[发送给模型]
-    Model --> Response[返回响应]
-    Response --> End([输出给用户])
+    D4 --> E
+    E --> F[构建上下文]
+    F --> G[LLM 对话]
+    G --> H[响应 message 节点]
+    H --> I([输出])
     
-    style Summary fill:#f9f,stroke:#333
-    style Persist fill:#bbf,stroke:#333
-    style Pointer fill:#bbf,stroke:#333
+    style D fill:#ffe4e1,stroke:#333,stroke-dasharray:5 5
+    style D1 fill:#f9f,stroke:#333
+    style D2 fill:#f9f,stroke:#333
+    style D3 fill:#f9f,stroke:#333
+    style D4 fill:#bbf,stroke:#333
+    style E fill:#bbf,stroke:#333
+    style F fill:#bbf,stroke:#333
+    style G fill:#98FB98,stroke:#333
+    style H fill:#ffd,stroke:#333
 ```
+
+**流程说明：**
+
+1. **新消息接入**：用户输入被包装为 message 节点，进入处理管道
+2. **压缩判断**：检查当前上下文是否超出 `autocompact` 阈值
+   - 阈值可基于 token 数、消息条数或时间窗口设定
+3. **压缩工作流**（复杂模块）：
+   - **分级压缩**：根据信息权重评估，决定哪些内容需要保留、压缩或删除
+   - **历史信息处理**：提取关键信息，识别长期有用的上下文
+   - **压缩策略选择**：动态选择摘要生成、内容删除或相似内容合并
+   - 完成后更新 `last_summary_index` 指针
+4. **上下文构建**：从 `last_summary_index` 位置开始拉取历史消息，组装完整上下文
+5. **LLM 对话**：发送上下文至模型，获取响应
+6. **响应输出**：将模型响应包装为 message 节点，返回给用户
 
 #### 上下文加载策略
 

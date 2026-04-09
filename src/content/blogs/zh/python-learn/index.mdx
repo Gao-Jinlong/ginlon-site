@@ -6,8 +6,174 @@ permalink: 'python-learn'
 
 createdAt: '2026-04-08 12:00 +08:00'
 category: 'tech'
-draft: true
 tags: ['Python', '编程语言', '学习笔记']
+---
+
+## 装饰器（@decorator）
+
+### 基本概念
+
+装饰器是一个函数，它接受另一个函数作为输入，并返回一个新的函数。**在不修改原函数代码的情况下，给函数添加额外功能**。
+
+```python
+# 一个简单的装饰器
+def my_decorator(func):
+    def wrapper():
+        print("函数执行前")
+        func()
+        print("函数执行后")
+    return wrapper
+
+# 使用 @ 符号应用装饰器
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# 输出：
+# 函数执行前
+# Hello!
+# 函数执行后
+```
+
+### @ 符号的本质
+
+```python
+# 下面两种写法等价：
+
+# 写法 1：使用 @ 符号（推荐）
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+# 写法 2：不使用 @ 符号
+def say_hello():
+    print("Hello!")
+say_hello = my_decorator(say_hello)  # 等价于 @my_decorator
+```
+
+**理解**：`@decorator` 等价于 `函数 = decorator(函数)`
+
+### 带参数的装饰器
+
+```python
+def repeat(times):
+    """返回一个装饰器，让函数执行指定次数"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(times):
+                func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+@repeat(3)
+def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")
+# 输出：
+# Hello, Alice!
+# Hello, Alice!
+# Hello, Alice!
+```
+
+### functools.wraps - 保留函数信息
+
+```python
+from functools import wraps
+
+def my_decorator(func):
+    @wraps(func)  # 保留原函数的 __name__ 和 __doc__
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+@my_decorator
+def say_hello():
+    """这是 say_hello 的文档"""
+    print("Hello!")
+
+print(say_hello.__name__)  # say_hello（而不是 wrapper）
+```
+
+---
+
+## 解包语法（Unpacking）
+
+### 列表/元组解包
+
+```python
+# 基础解包
+coordinates = [1, 2, 3]
+x, y, z = coordinates
+print(x, y, z)  # 1 2 3
+
+# 等价于：
+# x = coordinates[0]
+# y = coordinates[1]
+# z = coordinates[2]
+```
+
+### * 操作符 - 收集剩余元素
+
+```python
+# 收集剩余元素到列表
+numbers = [1, 2, 3, 4, 5]
+first, *middle, last = numbers
+
+print(first)   # 1
+print(middle)  # [2, 3, 4]
+print(last)    # 5
+
+# 其他用法
+a, *rest = [1, 2, 3, 4, 5]
+print(a)    # 1
+print(rest) # [2, 3, 4, 5]
+
+*a, last = [1, 2, 3, 4, 5]
+print(a)    # [1, 2, 3, 4]
+print(last) # 5
+```
+
+### 字典解包
+
+```python
+# ** 用于解包字典
+person = {"name": "Alice", "age": 25}
+
+def greet(name, age):
+    print(f"{name} is {age} years old")
+
+greet(**person)  # 等价于 greet(name="Alice", age=25)
+
+# 合并字典
+defaults = {"host": "localhost", "port": 8080}
+config = {"port": 9000, "debug": True}
+merged = {**defaults, **config}
+print(merged)  # {'host': 'localhost', 'port': 9000, 'debug': True}
+```
+
+### 函数参数中的解包
+
+```python
+# *args：收集所有位置参数到元组
+def print_all(*args):
+    for arg in args:
+        print(arg)
+
+print_all(1, 2, 3, 4)  # 打印 1 2 3 4
+
+# **kwargs：收集所有关键字参数到字典
+def print_kwargs(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key} = {value}")
+
+print_kwargs(name="Alice", age=25)
+# 输出：
+# name = Alice
+# age = 25
+```
+
 ---
 
 ## with 语法
@@ -76,6 +242,11 @@ with file_manager('file.txt', 'r') as f:
     content = f.read()
 ```
 
+**yield 的工作原理**：
+- `yield` 之前的代码 = `__enter__` 方法（准备资源）
+- `yield` 的值 = 传递给 `as` 变量
+- `yield` 之后的代码 = `__exit__` 方法（清理资源）
+
 **使用 ExitStack 管理多个上下文**：
 ```python
 from contextlib import ExitStack
@@ -83,6 +254,15 @@ from contextlib import ExitStack
 with ExitStack() as stack:
     files = [stack.enter_context(open(fname)) for fname in filenames]
     # 所有文件会在 ExitStack 退出时自动关闭
+```
+
+**suppress() - 忽略特定异常**：
+```python
+from contextlib import suppress
+
+# 等价于 try-except-pass
+with suppress(FileNotFoundError):
+    os.remove('nonexistent.txt')
 ```
 
 ### 常见使用场景
@@ -355,8 +535,16 @@ asyncio.run(main())
 
 | 特性 | 核心用途 | 关键方法/语法 |
 |------|----------|---------------|
+| **装饰器** | 不修改函数添加功能 | `@decorator`, `@wraps`, `*args/**kwargs` |
+| **解包** | 拆解可迭代对象 | `a, b, c = [...]`, `*rest`, `**dict` |
 | **with** | 资源管理 | `__enter__`, `__exit__`, `contextmanager` |
 | **yield** | 懒生成/迭代器 | `yield`, `send()`, `yield from` |
 | **async/await** | 并发 IO | `async def`, `await`, `asyncio.gather`, `create_task` |
 
-这三个特性都是 Python 中处理"控制流"的重要工具，理解它们的工作原理可以帮助你编写更高效、更优雅的 Python 代码。
+这五个特性都是 Python 中处理"控制流"的重要工具：
+- **装饰器**和**解包**是语法糖，让代码更简洁
+- **with**确保资源正确清理
+- **yield**实现懒生成和协程
+- **async/await**实现异步并发
+
+理解它们的工作原理可以帮助你编写更高效、更优雅的 Python 代码。
