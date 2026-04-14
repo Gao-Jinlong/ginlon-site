@@ -1,0 +1,84 @@
+---
+interface Props {
+  company: string;
+  role: string;
+  period: string;
+}
+
+const { company, role, period } = Astro.props;
+---
+
+<div class="entry">
+  <div class="entry-header">
+    <div class="entry-info">
+      <span class="company">{company}</span>
+      <span class="role">{role}</span>
+    </div>
+    <span class="period">{period}</span>
+  </div>
+  <slot />
+</div>
+
+<style>
+  .entry {
+    margin: 1rem 0;
+  }
+
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .entry-info {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: var(--text-strong);
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+  }
+
+  .entry-info .company {
+    font-weight: 600;
+  }
+
+  .entry-info .role {
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .entry-header .period {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .entry > ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.1rem;
+    list-style-type: disc;
+  }
+
+  .entry > ul li {
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.75;
+    margin: 0.25rem 0;
+  }
+
+  @media (max-width: 767px) {
+    .entry-header {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .entry-info {
+      flex-wrap: wrap;
+    }
+  }
+</style>

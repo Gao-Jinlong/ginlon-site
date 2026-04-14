@@ -21,6 +21,15 @@ const blogs = defineCollection({
   }),
 });
 
+const resume = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/resume' }),
+  schema: z.object({
+    // 纯 Markdown 格式，frontmatter 只需要 format 字段
+    format: z.literal('markdown'),
+  }),
+});
+
 export const collections = {
   blogs,
+  resume,
 };

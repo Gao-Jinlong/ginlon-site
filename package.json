@@ -22,6 +22,7 @@
     "gsap": "^3.14.2",
     "katex": "^0.16.45",
     "lodash-es": "^4.17.23",
+    "lucide-astro": "^0.556.0",
     "mermaid": "^11.14.0",
     "reflect-metadata": "^0.2.2",
     "rehype-katex": "^7.0.1",

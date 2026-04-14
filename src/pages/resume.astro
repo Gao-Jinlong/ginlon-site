@@ -1,9 +1,142 @@
 ---
-import RedirectPage from '../components/site/RedirectPage.astro';
-import { siteConfig } from '../data/site';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const pageMeta = {
+  title: '简历 | Ginlon',
+  description: 'Ginlon 的个人简历 — 工程师、写作者。',
+};
+
+// 从 MDX 文件加载简历内容
+const resume = await getEntry('resume', 'zh/profile');
+const { Content } = await render(resume!);
 ---
 
-<RedirectPage
-  target="/about"
-  canonical={new URL('/resume', siteConfig.url).toString()}
-/>
+<SiteLayout pageMeta={pageMeta}>
+  <div class="resume-page">
+    <div class="resume-content">
+      <Content />
+    </div>
+  </div>
+</SiteLayout>
+
+<style>
+  .resume-page {
+    max-width: var(--shell-width);
+    margin: 0 auto;
+    padding: 3rem 0.75rem 4rem;
+  }
+
+  .resume-content {
+    max-width: var(--reading-width);
+    margin: 0 auto;
+    background: var(--surface-bg-strong);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    padding: 2.5rem 3rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* 头部样式 */
+  .resume-content :global(> h1:first-child) {
+    margin: 0;
+    color: var(--text-strong);
+    font-family: var(--font-sans);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .resume-content :global(> h2:first-of-type) {
+    margin: 0.35rem 0 1rem;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+
+  /* 联系方式列表 */
+  .resume-content :global(> h2:first-of-type + ul) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.2rem;
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    border-bottom: 1px solid var(--surface-border);
+    padding-bottom: 1.5rem;
+  }
+
+  .resume-content :global(> h2:first-of-type + ul li) {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+  }
+
+  .resume-content :global(> h2:first-of-type + ul a) {
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 150ms ease;
+  }
+
+  .resume-content :global(> h2:first-of-type + ul a:hover) {
+    opacity: 0.75;
+  }
+
+  /* 章节通用样式 */
+  .resume-content :global(> h3) {
+    color: var(--text-strong);
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  .resume-content :global(> h3:first-of-type) {
+    margin-top: 0;
+  }
+
+  /* 个人简介段落 */
+  .resume-content :global(> h3:nth-of-type(1) + p) {
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    margin: 0 0 1.5rem;
+  }
+
+  /* 专业技能 - 逗号分隔的列表 */
+  .resume-content :global(> h3:last-of-type + p) {
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    line-height: 2;
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .resume-page {
+      padding: 1.5rem 0.5rem 3rem;
+    }
+
+    .resume-content {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .resume-content :global(> h1:first-child) {
+      font-size: 1.5rem;
+    }
+
+    .resume-content :global(> h2:first-of-type + ul) {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem 0.5rem;
+    }
+  }
+</style>
