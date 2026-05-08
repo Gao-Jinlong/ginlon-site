@@ -10,7 +10,15 @@
       "Bash(git diff-tree:*)",
       "Bash(find docs:*)",
       "Bash(pnpm add:*)",
-      "WebFetch(domain:docs.astro.build)"
+      "WebFetch(domain:docs.astro.build)",
+      "WebFetch(domain:docs.nestjs.com)",
+      "WebSearch",
+      "WebFetch(domain:nestjs.bootcss.com)",
+      "WebFetch(domain:www.jsdocs.io)",
+      "Bash(pnpm dev *)",
+      "Bash(Select-String -Pattern \"error|Error|ERROR|warn|ready\")",
+      "Bash(Select-Object -First 5)",
+      "Bash(timeout 15)"
     ],
     "defaultMode": "bypassPermissions"
   }
