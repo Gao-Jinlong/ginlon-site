@@ -153,6 +153,25 @@ merged = {**defaults, **config}
 print(merged)  # {'host': 'localhost', 'port': 9000, 'debug': True}
 ```
 
+### 实际用法：函数返回字典直接解包传参
+
+`**` 不仅可以在调用处解包已有字典，还可以直接解包函数的返回值：
+
+```python
+def build_payload(record):
+    return {
+        "thread_id": record.thread_id,
+        "status": record.status,
+        "metadata": record.metadata or {},
+    }
+
+# 解包返回值作为关键字参数
+store.put(record.run_id, **build_payload(record))
+# 等同于 store.put(record.run_id, thread_id=..., status=..., metadata=...)
+```
+
+好处是新增字段只需改 `build_payload()` 一处。
+
 ### 函数参数中的解包
 
 ```python
@@ -531,6 +550,153 @@ asyncio.run(main())
 
 ---
 
+## \@dataclass 数据类
+
+自动生成 `__init__`、`__repr__`、`__eq__` 等样板方法：
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class RunRecord:
+    run_id: str
+    status: str
+    metadata: dict = field(default_factory=dict)
+    task: object | None = field(default=None, repr=False)
+```
+
+### frozen=True：不可变数据类
+
+```python
+@dataclass(frozen=True)
+class Config:
+    host: str
+    port: int = 8080
+```
+
+- 创建后不能修改字段值（赋值会抛 `FrozenInstanceError`）
+- 自动变为可哈希（可以当 dict 的 key 或放入 set）
+- 适合做"参数捆绑包"——防止在传递过程中被意外篡改
+
+### field(default_factory=...)
+
+可变类型（list、dict）不能用 `= {}` 做默认值（所有实例会共享同一个对象），必须用 `field(default_factory=dict)` 让每个实例创建独立的字典。
+
+---
+
+## 异步上下文管理器进阶
+
+### AsyncExitStack：动态管理多个异步上下文
+
+当需要同时管理多个异步资源时，嵌套 `async with` 会变得很深：
+
+```python
+# 嵌套写法（难维护）
+async with make_stream_bridge(config) as bridge:
+    async with make_checkpointer(config) as cp:
+        async with make_store(config) as store:
+            ...
+```
+
+用 `AsyncExitStack` 可以扁平化：
+
+```python
+from contextlib import AsyncExitStack
+
+async with AsyncExitStack() as stack:
+    bridge = await stack.enter_async_context(make_stream_bridge(config))
+    cp = await stack.enter_async_context(make_checkpointer(config))
+    store = await stack.enter_async_context(make_store(config))
+    # 退出时按后进先出顺序关闭所有资源
+```
+
+---
+
+## \@abc.abstractmethod 抽象基类
+
+定义接口规范，子类必须实现所有抽象方法：
+
+```python
+import abc
+
+class DataStore(abc.ABC):
+    @abc.abstractmethod
+    async def get(self, key: str):
+        """Retrieve a value."""
+
+    @abc.abstractmethod
+    async def put(self, key: str, value: str):
+        """Store a value."""
+
+class RedisStore(DataStore):
+    async def get(self, key: str): ...
+    async def put(self, key: str, value: str): ...
+```
+
+如果子类没有实现某个抽象方法，实例化时会抛 `TypeError`。
+
+---
+
+## TypeVar 和泛型
+
+```python
+from typing import TypeVar, Callable
+
+T = TypeVar("T")
+
+def factory(attr: str) -> Callable[[], T]:
+    def getter() -> T:
+        return getattr(some_object, attr, None)
+    return getter
+
+# T 会根据使用场景被推断为具体类型
+get_db: Callable[[], Database] = factory("db")
+get_cache: Callable[[], Cache] = factory("cache")
+```
+
+一个工厂函数生成多种类型的依赖注入函数——避免重复代码。
+
+---
+
+## ContextVar 上下文变量
+
+类似线程局部存储，但是面向 asyncio 的——每个协程有独立的值：
+
+```python
+from contextvars import ContextVar
+
+_current_user: ContextVar[str | None] = ContextVar("current_user", default=None)
+
+# 在请求中间件中设置
+token = _current_user.set("user-123")
+
+# 在任意异步代码中读取
+user = _current_user.get()
+
+# 请求结束时重置
+_current_user.reset(token)
+```
+
+这在异步 Web 框架中非常有用——无需通过函数参数层层传递，就能在任意深度的协程调用链中访问当前请求的上下文。
+
+---
+
+## lru_cache 缓存
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def compute_expensive(x: int) -> int:
+    return x * x
+```
+
+- 对相同输入自动返回缓存结果
+- `maxsize=128` 最多缓存 128 个不同输入的结果
+- 要求参数是可哈希的（否则会 TypeError）
+
+---
+
 ## 总结
 
 | 特性 | 核心用途 | 关键方法/语法 |
@@ -540,11 +706,18 @@ asyncio.run(main())
 | **with** | 资源管理 | `__enter__`, `__exit__`, `contextmanager` |
 | **yield** | 懒生成/迭代器 | `yield`, `send()`, `yield from` |
 | **async/await** | 并发 IO | `async def`, `await`, `asyncio.gather`, `create_task` |
+| **\@dataclass** | 自动生成样板方法 | `@dataclass`, `field(default_factory=...)` |
+| **\@abc.abstractmethod** | 定义接口规范 | `@abc.abstractmethod`, `abc.ABC` |
+| **TypeVar** | 泛型/类型安全 | `TypeVar`, `Callable[[], T]` |
+| **ContextVar** | 异步上下文变量 | `ContextVar`, `.set()`, `.get()`, `.reset()` |
+| **lru_cache** | 函数结果缓存 | `@lru_cache(maxsize=128)` |
 
-这五个特性都是 Python 中处理"控制流"的重要工具：
+这些特性涵盖了 Python 中"控制流"和"代码组织"的重要工具：
 - **装饰器**和**解包**是语法糖，让代码更简洁
 - **with**确保资源正确清理
 - **yield**实现懒生成和协程
 - **async/await**实现异步并发
+- **\@dataclass**和**\@abc.abstractmethod**帮你更好的组织代码结构
+- **TypeVar**、**ContextVar**、**lru_cache**解决特定场景的问题
 
 理解它们的工作原理可以帮助你编写更高效、更优雅的 Python 代码。
