@@ -1,12 +1,11 @@
 ---
-lang: zh
 title: 'DeerFlow 架构概览 —— 运行时存储层次与请求处理流程'
 subtitle: ''
-permalink: 'deerflow-architecture'
-
+poster: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800'
 createdAt: '2026-06-04 12:00 +08:00'
-category: 'tech'
 tags: ['DeerFlow', 'Python', '架构', 'AI Agent']
+order: 1
+draft: false
 ---
 
 ## 项目分层
@@ -104,18 +103,12 @@ graph TD
         RES["RunEventStore<br/>(SQL/JSONL/Memory)<br/>事件回放、断线重连"]
     end
 
-    GW -->|run_agent(ctx, ...)| LG["LangGraph Agent 执行"]
+    GW -->|"run_agent(ctx, ...)"| LG["LangGraph Agent 执行"]
 
     subgraph Agent["LangGraph Agent 执行"]
         CP["Checkpointer<br/>(SQLite/Postgres)<br/>对话状态快照<br/>自动保存/恢复"]
         ST["Store<br/>(ThreadMeta 底层)<br/>跨线程共享数据"]
     end
-
-    style TMS fill:#e1f5fe,stroke:#0288d1
-    style RM fill:#e1f5fe,stroke:#0288d1
-    style RES fill:#e1f5fe,stroke:#0288d1
-    style CP fill:#fff3e0,stroke:#f57c00
-    style ST fill:#fff3e0,stroke:#f57c00
 ```
 
 ### 为什么不合并成一个数据库？
