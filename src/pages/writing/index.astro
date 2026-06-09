@@ -2,9 +2,12 @@
 import PageSection from '../../components/site/PageSection.astro';
 import SectionHeading from '../../components/site/SectionHeading.astro';
 import ArticleList from '../../components/site/ArticleList.vue';
+import ColumnCard from '../../components/site/ColumnCard.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { getBlogs } from '../../utils/getBlogs';
+import { getColumns } from '../../utils/getColumns';
 
+const columns = await getColumns();
 const articles = await getBlogs('zh');
 const selectedTag = new URL(Astro.url).searchParams.get('tag')?.trim() ?? '';
 
@@ -35,6 +38,65 @@ const pageMeta = {
 <SiteLayout pageMeta={pageMeta}>
   <PageSection narrow={false} id="writing-archive">
     <SectionHeading eyebrow="写作归档" title="全部文章" description={pageMeta.description} />
+    {columns.length > 0 && (
+      <div class="columns-section">
+        <div class="columns-section-header">
+          <h3 class="columns-section-title">技术专栏</h3>
+          <a href="/columns" class="columns-section-link">查看全部 →</a>
+        </div>
+        <div class="columns-scroll">
+          {columns.map((column) => (
+            <div class="columns-scroll-item">
+              <ColumnCard column={column} compact={true} />
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
     <ArticleList client:only="vue" articles={articlesData} initialTag={selectedTag} />
   </PageSection>
 </SiteLayout>
+
+<style>
+  .columns-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .columns-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .columns-section-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+
+  .columns-section-link {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .columns-section-link:hover {
+    text-decoration: underline;
+  }
+
+  .columns-scroll {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .columns-scroll-item {
+    min-width: 15rem;
+    flex-shrink: 0;
+  }
+</style>
