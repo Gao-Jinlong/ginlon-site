@@ -1,0 +1,250 @@
+<h2>专栏功能 — 页面布局原型</h2>
+<p class="subtitle">展示 4 个关键页面的结构，点击可放大查看</p>
+
+<div class="split">
+  <!-- 专栏列表页 -->
+  <div class="mockup">
+    <div class="mockup-header">📋 /columns — 专栏列表页</div>
+    <div class="mockup-body" style="min-height: 420px;">
+      <div class="mock-nav" style="display:flex;gap:20px;padding:8px 16px;border-bottom:1px solid #333;font-size:13px;">
+        <span style="font-weight:700;color:#6366f1;">Ginlon</span>
+        <span>首页</span>
+        <span>写作</span>
+        <span style="color:#6366f1;font-weight:600;">专栏</span>
+        <span style="margin-left:auto;">🌙</span>
+      </div>
+      <div style="padding:24px;">
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:2px;">COLUMN</div>
+          <h3 style="margin:4px 0;font-size:18px;">技术专栏</h3>
+          <p style="color:#888;font-size:12px;">系统化学习，深入掌握每一项技术</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <!-- 卡片1 -->
+          <div style="border:1px solid #333;border-radius:8px;overflow:hidden;">
+            <div style="height:80px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:600;">LangGraph 学习之路</div>
+            <div style="padding:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:600;">LangGraph 学习之路</span>
+                <span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:4px;">连载中</span>
+              </div>
+              <p style="font-size:11px;color:#888;margin:4px 0;">从零开始学习 LangGraph 框架，构建 AI Agent 应用</p>
+              <div style="font-size:10px;color:#666;">📝 6 篇文章</div>
+            </div>
+          </div>
+          <!-- 卡片2 -->
+          <div style="border:1px solid #333;border-radius:8px;overflow:hidden;">
+            <div style="height:80px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:600;">Rust 从零到一</div>
+            <div style="padding:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:600;">Rust 从零到一</span>
+                <span style="font-size:10px;background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:4px;">已完结</span>
+              </div>
+              <p style="font-size:11px;color:#888;margin:4px 0;">系统学习 Rust 编程语言，从入门到实战项目</p>
+              <div style="font-size:10px;color:#666;">📝 12 篇文章</div>
+            </div>
+          </div>
+          <!-- 卡片3 -->
+          <div style="border:1px solid #333;border-radius:8px;overflow:hidden;">
+            <div style="height:80px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:600;">Node.js 全栈</div>
+            <div style="padding:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:600;">Node.js 全栈开发</span>
+                <span style="font-size:10px;background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:4px;">连载中</span>
+              </div>
+              <p style="font-size:11px;color:#888;margin:4px 0;">Node.js 后端开发到全栈部署的完整指南</p>
+              <div style="font-size:10px;color:#666;">📝 3 篇文章</div>
+            </div>
+          </div>
+          <!-- 卡片4 placeholder -->
+          <div style="border:1px dashed #444;border-radius:8px;display:flex;align-items:center;justify-content:center;height:140px;color:#555;font-size:12px;">
+            更多专栏...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 专栏详情页 -->
+  <div class="mockup">
+    <div class="mockup-header">📖 /columns/langgraph-learning — 专栏详情页</div>
+    <div class="mockup-body" style="min-height: 420px;">
+      <div class="mock-nav" style="display:flex;gap:20px;padding:8px 16px;border-bottom:1px solid #333;font-size:13px;">
+        <span style="font-weight:700;color:#6366f1;">Ginlon</span>
+        <span>首页</span>
+        <span>写作</span>
+        <span style="color:#6366f1;font-weight:600;">专栏</span>
+        <span style="margin-left:auto;">🌙</span>
+      </div>
+      <!-- Hero -->
+      <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:20px;color:white;">
+        <div style="font-size:10px;opacity:0.8;margin-bottom:4px;">LangGraph 学习之路</div>
+        <h3 style="margin:0 0 6px;font-size:18px;">LangGraph 学习之路</h3>
+        <p style="font-size:11px;opacity:0.85;margin:0 0 8px;">从零开始学习 LangGraph 框架，构建 AI Agent 应用</p>
+        <div style="display:flex;gap:12px;font-size:10px;opacity:0.9;">
+          <span>📝 6 篇文章</span>
+          <span style="background:rgba(255,255,255,0.2);padding:1px 8px;border-radius:4px;">连载中</span>
+        </div>
+      </div>
+      <!-- 文章列表 -->
+      <div style="padding:16px;">
+        <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">文章目录</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;padding:10px;border:1px solid #333;border-radius:6px;align-items:center;">
+            <div style="width:24px;height:24px;background:#6366f1;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">1</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:500;">LangGraph 简介</div>
+              <div style="font-size:10px;color:#888;">2026-06-01 · 认识 AI Agent 框架</div>
+            </div>
+            <span style="font-size:10px;color:#6366f1;">→</span>
+          </div>
+          <div style="display:flex;gap:10px;padding:10px;border:1px solid #333;border-radius:6px;align-items:center;">
+            <div style="width:24px;height:24px;background:#6366f1;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">2</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:500;">核心概念：State 与 Node</div>
+              <div style="font-size:10px;color:#888;">2026-06-08 · 理解状态图的基本构建块</div>
+            </div>
+            <span style="font-size:10px;color:#6366f1;">→</span>
+          </div>
+          <div style="display:flex;gap:10px;padding:10px;border:1px solid #333;border-radius:6px;align-items:center;">
+            <div style="width:24px;height:24px;background:#6366f1;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">3</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:500;">构建第一个 Agent</div>
+              <div style="font-size:10px;color:#888;">2026-06-15 · 动手创建你的第一个 AI Agent</div>
+            </div>
+            <span style="font-size:10px;color:#6366f1;">→</span>
+          </div>
+          <div style="display:flex;gap:10px;padding:10px;border:1px solid #444;border-radius:6px;align-items:center;opacity:0.5;">
+            <div style="width:24px;height:24px;background:#555;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">4</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:500;">Tool Calling 与外部集成</div>
+              <div style="font-size:10px;color:#888;">敬请期待...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;"></div>
+
+<div class="split">
+  <!-- 文章阅读页（带侧边栏） -->
+  <div class="mockup">
+    <div class="mockup-header">📄 /columns/langgraph-learning/01-introduction — 文章阅读页</div>
+    <div class="mockup-body" style="min-height: 420px;">
+      <div class="mock-nav" style="display:flex;gap:20px;padding:8px 16px;border-bottom:1px solid #333;font-size:13px;">
+        <span style="font-weight:700;color:#6366f1;">Ginlon</span>
+        <span>首页</span>
+        <span>写作</span>
+        <span style="color:#6366f1;font-weight:600;">专栏</span>
+        <span style="margin-left:auto;">🌙</span>
+      </div>
+      <div style="display:flex;min-height:360px;">
+        <!-- 文章正文 -->
+        <div style="flex:1;padding:16px;border-right:1px solid #333;">
+          <div style="font-size:10px;color:#6366f1;margin-bottom:4px;">LangGraph 学习之路 · 第 1 篇</div>
+          <h3 style="margin:0 0 8px;font-size:16px;">LangGraph 简介</h3>
+          <div style="font-size:10px;color:#888;margin-bottom:12px;">2026-06-01 · tags: AI, LangGraph</div>
+          <div style="font-size:11px;line-height:1.8;color:#aaa;">
+            <p>LangGraph 是一个用于构建有状态、多参与者 AI 应用的框架...</p>
+            <p>在本系列中，我们将从零开始...</p>
+            <div class="placeholder" style="height:60px;margin:8px 0;">文章正文区域</div>
+            <div class="placeholder" style="height:40px;margin:8px 0;">更多内容...</div>
+          </div>
+          <!-- 上下篇导航 -->
+          <div style="display:flex;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid #333;">
+            <div style="font-size:10px;color:#888;">（已是第一篇）</div>
+            <div style="font-size:11px;color:#6366f1;">下一篇：核心概念 →</div>
+          </div>
+        </div>
+        <!-- 侧边栏专栏目录 -->
+        <div style="width:180px;padding:12px;font-size:11px;">
+          <div style="font-weight:600;margin-bottom:8px;color:#6366f1;font-size:12px;">LangGraph 学习之路</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="padding:4px 8px;background:#6366f1;color:white;border-radius:4px;">1. LangGraph 简介</div>
+            <div style="padding:4px 8px;color:#888;border-radius:4px;">2. 核心概念</div>
+            <div style="padding:4px 8px;color:#888;border-radius:4px;">3. 构建第一个 Agent</div>
+            <div style="padding:4px 8px;color:#555;border-radius:4px;">4. Tool Calling</div>
+            <div style="padding:4px 8px;color:#555;border-radius:4px;">5. 多 Agent 协作</div>
+            <div style="padding:4px 8px;color:#555;border-radius:4px;">6. 生产部署</div>
+          </div>
+          <div style="margin-top:12px;padding-top:8px;border-top:1px solid #333;">
+            <div style="font-size:10px;color:#888;">状态：<span style="color:#fbbf24;">连载中</span></div>
+            <div style="font-size:10px;color:#888;">共 6 篇</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- /writing 页面改动 -->
+  <div class="mockup">
+    <div class="mockup-header">✏️ /writing — 写作页（新增专栏区域）</div>
+    <div class="mockup-body" style="min-height: 420px;">
+      <div class="mock-nav" style="display:flex;gap:20px;padding:8px 16px;border-bottom:1px solid #333;font-size:13px;">
+        <span style="font-weight:700;color:#6366f1;">Ginlon</span>
+        <span>首页</span>
+        <span style="color:#6366f1;font-weight:600;">写作</span>
+        <span>专栏</span>
+        <span style="margin-left:auto;">🌙</span>
+      </div>
+      <div style="padding:16px;">
+        <div style="text-align:center;margin-bottom:16px;">
+          <h3 style="margin:4px 0;font-size:18px;">写作档案</h3>
+        </div>
+        <!-- 新增：专栏区域 -->
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="font-size:13px;font-weight:600;">📚 技术专栏</div>
+            <div style="font-size:11px;color:#6366f1;cursor:pointer;">查看全部 →</div>
+          </div>
+          <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;">
+            <div style="min-width:160px;border:1px solid #333;border-radius:8px;overflow:hidden;">
+              <div style="height:50px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">LangGraph</div>
+              <div style="padding:8px;">
+                <div style="font-size:11px;font-weight:500;">LangGraph 学习之路</div>
+                <div style="font-size:9px;color:#888;margin:2px 0;">6 篇 · <span style="color:#fbbf24;">连载中</span></div>
+              </div>
+            </div>
+            <div style="min-width:160px;border:1px solid #333;border-radius:8px;overflow:hidden;">
+              <div style="height:50px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">Rust</div>
+              <div style="padding:8px;">
+                <div style="font-size:11px;font-weight:500;">Rust 从零到一</div>
+                <div style="font-size:9px;color:#888;margin:2px 0;">12 篇 · 已完结</div>
+              </div>
+            </div>
+            <div style="min-width:160px;border:1px solid #333;border-radius:8px;overflow:hidden;">
+              <div style="height:50px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;">Node.js</div>
+              <div style="padding:8px;">
+                <div style="font-size:11px;font-weight:500;">Node.js 全栈开发</div>
+                <div style="font-size:9px;color:#888;margin:2px 0;">3 篇 · <span style="color:#fbbf24;">连载中</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 分割线 -->
+        <div style="border-top:1px solid #333;margin-bottom:16px;"></div>
+        <!-- 原有博客列表 -->
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;">📝 全部文章</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:8px;border:1px solid #333;border-radius:6px;">
+              <div style="font-size:12px;font-weight:500;">CSP 内容安全</div>
+              <div style="font-size:10px;color:#888;">2025-07-11 · tech</div>
+            </div>
+            <div style="padding:8px;border:1px solid #333;border-radius:6px;">
+              <div style="font-size:12px;font-weight:500;">WebSocket 入门</div>
+              <div style="font-size:10px;color:#888;">2025-06-20 · tech</div>
+            </div>
+            <div style="padding:8px;border:1px solid #333;border-radius:6px;">
+              <div style="font-size:12px;font-weight:500;">2025 读书笔记——认知觉醒</div>
+              <div style="font-size:10px;color:#888;">2025-05-23 · note</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

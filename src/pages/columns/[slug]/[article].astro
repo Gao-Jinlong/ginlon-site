@@ -47,18 +47,18 @@ const filteredHeadings = headings.filter((h: { depth: number }) => h.depth >= 2 
 
 const summary = detail.subtitle;
 const publishedLabel = dayjs(detail.createdAt).format(format);
-const articleIndex = detail.column.articles
-  ? detail.column.articles.findIndex((a) => a.slug === articleSlug) + 1
-  : 0;
+const articleIndex = detail.articles.findIndex((a: { slug: string }) => a.slug === articleSlug) + 1;
 
+const publishedTime = toIsoString(detail.createdAt);
+const modifiedTime = toIsoString(detail.updatedAt);
 const pageMeta = {
   title: `${detail.title} | ${detail.column.title} | ${siteConfig.name}`,
   description: summary || detail.column.description,
   ogType: 'article' as const,
   ogImage: siteConfig.articleOgImage,
   ...(detail.tags ? { tags: detail.tags } : {}),
-  ...(toIsoString(detail.createdAt) ? { publishedTime: toIsoString(detail.createdAt) } : {}),
-  ...(toIsoString(detail.updatedAt) ? { modifiedTime: toIsoString(detail.updatedAt) } : {}),
+  ...(publishedTime ? { publishedTime } : {}),
+  ...(modifiedTime ? { modifiedTime } : {}),
 };
 ---
 
@@ -101,7 +101,7 @@ const pageMeta = {
           columnTitle={detail.column.title}
           columnSlug={slug!}
           columnStatus={detail.column.status}
-          articles={detail.column.articles || []}
+          articles={detail.articles}
           currentArticleSlug={articleSlug!}
         />
         <div style="margin-top:0.75rem;">

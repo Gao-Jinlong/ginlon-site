@@ -35,6 +35,7 @@ export interface ColumnDetail extends Column {
 export interface ColumnArticleDetail extends ColumnArticle {
   content: CollectionEntry<'columnArticles'>;
   column: Column;
+  articles: ColumnArticle[];
   prev?: ColumnArticle;
   next?: ColumnArticle;
 }
@@ -43,12 +44,12 @@ export interface ColumnArticleDetail extends ColumnArticle {
 
 function extractColumnSlug(id: string): string {
   const parts = id.replace(/\\/g, '/').split('/');
-  return parts[0];
+  return parts[0]!;
 }
 
 function extractArticleSlug(id: string): string {
   const parts = id.replace(/\\/g, '/').split('/');
-  return parts.length >= 2 ? parts[1] : parts[0];
+  return parts.length >= 2 ? parts[1]! : parts[0]!;
 }
 
 function deriveSummaryFromBody(entry: CollectionEntry<'columnArticles'>): string {
@@ -91,14 +92,14 @@ function toColumnArticle(entry: CollectionEntry<'columnArticles'>): ColumnArticl
     slug: articleSlug,
     fullSlug: `${columnSlug}/${articleSlug}`,
     title: entry.data.title,
-    subtitle: entry.data.subtitle,
-    poster: entry.data.poster,
     createdAt: entry.data.createdAt,
-    updatedAt: entry.data.updatedAt,
     tags: entry.data.tags,
-    order: entry.data.order,
     summary: toArticleSummary(entry),
     draft: entry.data.draft,
+    ...(entry.data.subtitle ? { subtitle: entry.data.subtitle } : {}),
+    ...(entry.data.poster ? { poster: entry.data.poster } : {}),
+    ...(entry.data.updatedAt ? { updatedAt: entry.data.updatedAt } : {}),
+    ...(entry.data.order !== undefined ? { order: entry.data.order } : {}),
   };
 }
 
@@ -116,7 +117,7 @@ export async function getColumns(): Promise<Column[]> {
   });
 
   return allColumns.map((col) => {
-    const columnSlug = col.id.replace(/\\/g, '/').split('/')[0];
+    const columnSlug = col.id.replace(/\\/g, '/').split('/')[0]!;
     const articleCount = allArticles.filter(
       (a) => extractColumnSlug(a.id) === columnSlug,
     ).length;
@@ -125,9 +126,9 @@ export async function getColumns(): Promise<Column[]> {
       slug: columnSlug,
       title: col.data.title,
       description: col.data.description,
-      poster: col.data.poster,
       status: col.data.status,
       articleCount,
+      ...(col.data.poster ? { poster: col.data.poster } : {}),
     };
   });
 }
@@ -160,10 +161,10 @@ export async function getColumnBySlug(slug: string): Promise<ColumnDetail | unde
     slug,
     title: col.data.title,
     description: col.data.description,
-    poster: col.data.poster,
     status: col.data.status,
     articleCount: sorted.length,
     articles: sorted,
+    ...(col.data.poster ? { poster: col.data.poster } : {}),
   };
 }
 
@@ -177,7 +178,7 @@ export async function getColumnArticle(
   const articleIndex = columnDetail.articles.findIndex((a) => a.slug === articleSlug);
   if (articleIndex === -1) return undefined;
 
-  const article = columnDetail.articles[articleIndex];
+  const article = columnDetail.articles[articleIndex]!;
 
   const allEntries = await getCollection('columnArticles');
   const entry = allEntries.find((e) => {
@@ -188,18 +189,32 @@ export async function getColumnArticle(
 
   if (!entry) return undefined;
 
-  return {
-    ...article,
+  const result: ColumnArticleDetail = {
+    slug: article.slug,
+    fullSlug: article.fullSlug,
+    title: article.title,
+    createdAt: article.createdAt,
+    tags: article.tags,
+    summary: article.summary,
+    draft: article.draft,
     content: entry,
     column: {
       slug: columnDetail.slug,
       title: columnDetail.title,
       description: columnDetail.description,
-      poster: columnDetail.poster,
       status: columnDetail.status,
       articleCount: columnDetail.articleCount,
+      ...(columnDetail.poster ? { poster: columnDetail.poster } : {}),
     },
-    prev: articleIndex > 0 ? columnDetail.articles[articleIndex - 1] : undefined,
-    next: articleIndex < columnDetail.articles.length - 1 ? columnDetail.articles[articleIndex + 1] : undefined,
+    articles: columnDetail.articles,
   };
+
+  if (article.subtitle) result.subtitle = article.subtitle;
+  if (article.poster) result.poster = article.poster;
+  if (article.updatedAt) result.updatedAt = article.updatedAt;
+  if (article.order !== undefined) result.order = article.order;
+  if (articleIndex > 0) result.prev = columnDetail.articles[articleIndex - 1]!;
+  if (articleIndex < columnDetail.articles.length - 1) result.next = columnDetail.articles[articleIndex + 1]!;
+
+  return result;
 }

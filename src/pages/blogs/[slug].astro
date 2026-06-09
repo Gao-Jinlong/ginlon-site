@@ -234,6 +234,29 @@ const pageMeta = {
     color: inherit;
   }
 
+  .article-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+  }
+
+  .article-content :global(th),
+  .article-content :global(td) {
+    border: 1px solid var(--surface-border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  .article-content :global(th) {
+    background: var(--accent-soft);
+    font-weight: 600;
+    font-family: var(--font-sans);
+  }
+
+  .article-content :global(tr:nth-child(even) td) {
+    background: var(--accent-soft);
+  }
+
   .article-content :global(hr) {
     border: 0;
     border-top: 1px solid var(--surface-border);
