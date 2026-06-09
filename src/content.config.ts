@@ -29,7 +29,34 @@ const resume = defineCollection({
   }),
 });
 
+const columns = defineCollection({
+  loader: glob({ pattern: '**/index.md', base: './src/content/columns' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    poster: z.string().optional(),
+    status: z.enum(['ongoing', 'completed']).default('ongoing'),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const columnArticles = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/columns' }),
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    poster: z.string().optional(),
+    createdAt: z.string(),
+    updatedAt: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    order: z.number().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   blogs,
   resume,
+  columns,
+  columnArticles,
 };
