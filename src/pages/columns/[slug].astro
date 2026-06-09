@@ -1,0 +1,266 @@
+---
+import PageSection from '../../components/site/PageSection.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getColumnBySlug, type ColumnDetail } from '../../utils/getColumns';
+import { dayjs } from '../../utils/dayjs';
+
+export async function getStaticPaths() {
+  const { getColumns } = await import('../../utils/getColumns');
+  const columns = await getColumns();
+
+  return columns.map((col) => ({
+    params: { slug: col.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const column = await getColumnBySlug(slug!);
+
+if (!column) {
+  return Astro.redirect('/columns');
+}
+
+const statusLabel = column.status === 'ongoing' ? '连载中' : '已完结';
+const statusClass = column.status === 'ongoing' ? 'badge-ongoing' : 'badge-completed';
+
+const pageMeta = {
+  title: `${column.title} | Ginlon`,
+  description: column.description,
+};
+---
+
+<SiteLayout pageMeta={pageMeta}>
+  <PageSection narrow={false} id="column-detail">
+    <!-- Hero -->
+    <div class="column-hero">
+      <div class="column-hero-content">
+        <p class="column-eyebrow">COLUMN</p>
+        <h1 class="column-hero-title">{column.title}</h1>
+        <p class="column-hero-desc">{column.description}</p>
+        <div class="column-hero-meta">
+          <span class:list={['column-badge', statusClass]}>{statusLabel}</span>
+          <span class="column-meta-text">{column.articleCount} 篇文章</span>
+        </div>
+      </div>
+      {column.poster && (
+        <div class="column-hero-cover">
+          <img src={column.poster} alt={column.title} loading="eager" />
+        </div>
+      )}
+    </div>
+
+    <!-- 文章目录 -->
+    {column.articles.length > 0 ? (
+      <div class="column-articles">
+        <h2 class="column-articles-title">文章目录</h2>
+        <ol class="column-articles-list">
+          {column.articles.map((article, index) => (
+            <li>
+              <a href={`/columns/${slug}/${article.slug}`} class="column-article-item">
+                <span class="column-article-index">{index + 1}</span>
+                <div class="column-article-info">
+                  <span class="column-article-title">{article.title}</span>
+                  <span class="column-article-meta">
+                    {dayjs(article.createdAt).format('YYYY-MM-DD')}
+                    {article.subtitle && ` · ${article.subtitle}`}
+                  </span>
+                </div>
+                <span class="column-article-arrow">→</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ) : (
+      <div class="column-empty">
+        <p>专栏暂无文章，即将更新。</p>
+      </div>
+    )}
+  </PageSection>
+</SiteLayout>
+
+<style>
+  .column-hero {
+    display: grid;
+    gap: 1.5rem;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-bg-strong);
+    border-radius: var(--radius-m);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 1.5rem;
+  }
+
+  .column-hero-content {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .column-eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .column-hero-title {
+    margin: 0;
+    font-size: clamp(1.6rem, 1.2rem + 1vw, 2.5rem);
+    line-height: 1.15;
+    color: var(--text-strong);
+    letter-spacing: -0.03em;
+  }
+
+  .column-hero-desc {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-size: 1rem;
+  }
+
+  .column-hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.3rem;
+  }
+
+  .column-badge {
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+
+  .badge-ongoing {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .badge-completed {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .column-meta-text {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .column-hero-cover {
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    max-height: 16rem;
+  }
+
+  .column-hero-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .column-articles {
+    margin-top: 1rem;
+  }
+
+  .column-articles-title {
+    margin: 0 0 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .column-articles-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .column-article-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    background: var(--surface-bg-strong);
+    text-decoration: none;
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .column-article-item:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .column-article-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .column-article-info {
+    flex: 1;
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .column-article-title {
+    color: var(--text-strong);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .column-article-item:hover .column-article-title {
+    color: var(--accent);
+  }
+
+  .column-article-meta {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  .column-article-arrow {
+    color: var(--accent);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .column-empty {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--surface-bg);
+  }
+
+  @media (min-width: 1024px) {
+    .column-hero {
+      grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+      align-items: start;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .column-hero {
+      padding: 1rem;
+    }
+  }
+</style>
