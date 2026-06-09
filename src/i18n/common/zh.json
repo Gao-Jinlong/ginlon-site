@@ -81,5 +81,23 @@
     "title": "Ginlon 的个人网站",
     "description": "Ginlon 的个人网站 - 展示前端开发技能和经验。",
     "image": "https://gravatar.com/avatar/cd5878de1abed51ad8d91f354427a98647e470547b2dc1c714a43f76d7b8d025?v=1754772938000&size=512&d=initials"
+  },
+  "columns": {
+    "pageTitle": "技术专栏",
+    "pageDescription": "系统化学习，深入掌握每一项技术",
+    "statusOngoing": "连载中",
+    "statusCompleted": "已完结",
+    "articleCount": "篇文章",
+    "articleList": "文章目录",
+    "emptyState": "暂无专栏，敬请期待。",
+    "columnEmpty": "专栏暂无文章，即将更新。",
+    "viewAll": "查看全部",
+    "columnSection": "技术专栏",
+    "belongsTo": "本文属于专栏",
+    "chapter": "第",
+    "unit": "篇",
+    "nextArticle": "下一篇",
+    "prevArticle": "上一篇",
+    "comingSoon": "敬请期待..."
   }
 }
