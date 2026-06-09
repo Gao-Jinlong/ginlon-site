@@ -1,0 +1,53 @@
+---
+import PageSection from '../../components/site/PageSection.astro';
+import SectionHeading from '../../components/site/SectionHeading.astro';
+import ColumnCard from '../../components/site/ColumnCard.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getColumns } from '../../utils/getColumns';
+
+const columns = await getColumns();
+
+const pageMeta = {
+  title: '技术专栏 | Ginlon',
+  description: '系统化学习，深入掌握每一项技术',
+};
+---
+
+<SiteLayout pageMeta={pageMeta}>
+  <PageSection narrow={false} id="columns-list">
+    <SectionHeading
+      eyebrow="COLUMN"
+      title="技术专栏"
+      description={columns.length > 0 ? `共 ${columns.length} 个专栏，持续更新中。` : '暂无专栏，敬请期待。'}
+    />
+
+    {columns.length > 0 ? (
+      <div class="columns-grid">
+        {columns.map((column) => (
+          <ColumnCard column={column} />
+        ))}
+      </div>
+    ) : (
+      <div class="columns-empty">
+        <p>暂无专栏，敬请期待。</p>
+      </div>
+    )}
+  </PageSection>
+</SiteLayout>
+
+<style>
+  .columns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1.2rem;
+  }
+
+  .columns-empty {
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-m);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--surface-bg);
+  }
+</style>
