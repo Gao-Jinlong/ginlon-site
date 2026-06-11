@@ -1,6 +1,9 @@
 {
-    "language": "zh-CN",
-    "permissions": {
-        "defaultMode": "bypassPermissions"
-    }
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "language": "zh-CN",
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  }
 }
