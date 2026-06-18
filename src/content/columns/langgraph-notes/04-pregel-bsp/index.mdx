@@ -190,3 +190,51 @@ function PageRankCompute(incomingMessages):
 ```
 
 整个过程清晰展示了 Pregel 的节奏：superstep 0 大家都 active、各自发消息；superstep 1 每个顶点收到邻居上轮发的贡献、算出新 rank、再发出去；如此迭代，直到所有顶点都 halt。论文实测，在 **10 亿顶点、1270 亿条边、800 个 worker** 的规模上，跑完单源最短路径大约只要 **10 分钟**——这正是 vertex-centric + BSP 调度的威力。
+
+---
+
+## LangGraph：借了骨架，换了血肉
+
+LangGraph 的官方文档说得很直白：它的运行时以 Pregel 命名，"Pregel organizes the execution of the application into multiple steps, following the Pregel Algorithm / Bulk Synchronous Parallel model"。
+
+但要注意，LangGraph **没有照搬 Pregel 的全部**——它只借了 BSP/Pregel 的**调度律**，然后把血肉（顶点、消息、图批处理）全换成了 LLM 应用里的东西。
+
+### 借了什么：调度律
+
+LangGraph 的一个 step（也就是一个 superstep）固定走三个阶段：
+
+```mermaid
+flowchart LR
+    P["Plan 规划<br/>决定这一步执行哪些节点"] --> E["Execution 执行<br/>选中的节点并行跑"]
+    E --> U["Update 更新<br/>把写入刷进 channel"]
+    U --> P
+    U -.-> N["进入下一个 step"]
+```
+
+把它和 BSP 的三阶段并排看，对应关系一目了然：
+
+| BSP 三阶段 | LangGraph 三阶段 | 对应关系 |
+|---|---|---|
+| 局部计算 | Plan + Execution | 选节点、并行跑 Runnable |
+| 通信 | Execution（写 channel） | 各节点把结果写进 channel 暂存 |
+| 屏障同步 | Update | 所有节点完成后才统一刷 channel、进入下一步 |
+
+关键是中间那条规则，LangGraph 文档原话：*"channel updates are invisible to actors until the next step"*——**本步写的 channel 更新，对其它节点不可见，要等下一步才能读到**。这正是 BSP/Pregel 的 N→N+1 消息时序。
+
+有了这个对应，之前笔记里的几个"为什么"就都通了：
+
+- **为什么并行节点跑完才能进下一步？** → 因为 barrier，Update 阶段必须等 Execution 里所有节点完成。
+- **为什么 channel 更新要等到下一步才可见？** → 因为 N→N+1 时序，本步的写在本步对别人不可见。
+- **为什么 interrupt 能跨请求恢复？** → checkpointer 的存档点就落在 barrier 之后，所以每次恢复都是从一个完整的 superstep 边界继续。
+
+### 换了什么：血肉
+
+| 维度 | 原版 Pregel（Google） | LangGraph |
+|---|---|---|
+| 领域 | 大规模图数据批处理（PageRank、最短路径） | LLM 应用编排（Agent、工具调用、多步推理） |
+| 计算单元 | 顶点的 `Compute()` 函数 | 节点（封装 LLM/工具/子图等的 Runnable） |
+| 状态载体 | 顶点值 + 边值 + 消息 | Channel（更通用的状态容器） |
+| 通信方式 | `SendMessageTo`，需指定目标顶点 ID | Channel 读写，Pub/Sub 式，无需点名 |
+| 规模 | 数十亿顶点、数千台机器 | 单机或小集群，常一条 thread |
+
+最值得说的是 **channel**：它是 Pregel"消息"概念的**泛化**。Pregel 只有点对点消息，而 LangGraph 的 channel 有不同形态——`LastValue`（只保留最后一次写，类似覆盖式寄存器）、`BinaryOperatorAggregate`（用二元算子累积，类似把多条消息归约成一个值）。换句话说，Pregel 的"收一束消息算一次"在 LangGraph 里被抽象成了 channel + reducer，更灵活。
