@@ -187,6 +187,8 @@ await graph.invoke(
 
 这类设计适合做 Human-in-the-loop 工具系统：LLM 负责提出 tool call，人类负责确认边界，工具再执行真实副作用。
 
+当希望审批逻辑与工具本身绑定、使其可在流程图的不同部分重复使用时，此方法非常实用。
+
 ---
 
 ## 实际应用 3：服务端暂停，前端执行本地工具
@@ -429,7 +431,7 @@ async function badNode() {
 
 ### 4. payload 只放协议数据
 
-`interrupt()` 的 payload 是给调用方看的协议，不应该塞函数、类实例、数据库连接等运行时对象。推荐使用明确的 `type` 字段区分不同 UI 或外部动作。
+`interrupt()` 的 payload 是给调用方看的协议要求必须能够合理序列化，不应该塞函数、类实例、数据库连接等运行时对象。推荐使用明确的 `type` 字段区分不同 UI 或外部动作。
 
 ```ts
 interrupt({
@@ -470,6 +472,75 @@ type ResumePayload =
 ```
 
 这样做的好处是：UI 层只需要根据 `type` 分发到不同交互组件；服务端只需要校验 `resume` 是否满足当前 interrupt 的协议；LangGraph 节点只关心 `interrupt()` 返回值。
+
+---
+
+## 调试用：静态中断断点（Static Interrupts）
+
+前面讲的 `interrupt()` 是运行时动态暂停，给线上人机交互用。除此之外 LangGraph 还有一套**静态中断**机制——`interruptBefore` / `interruptAfter`，它把流程图当成可单步执行的程序，专门用于开发调试。
+
+> ⚠️ 静态中断仅用于开发调试和流程测试，**不要用于线上人机交互**。生产场景需要等待人类或外部系统响应时，请使用 `interrupt()` 函数。
+
+它的核心思路是：在编译图时或每次调用时指定若干"断点节点"，图运行到这些节点前后会暂停，便于你观察状态、单步放行。
+
+### 两种触发时机
+
+| 配置 | 含义 |
+|---|---|
+| `interruptBefore: ['node_a']` | 到达 node_a **执行节点逻辑前**暂停 |
+| `interruptAfter: ['node_b', 'node_c']` | 目标节点**完整执行完毕后**再暂停 |
+
+### 两种配置方式
+
+```ts
+// 1. 编译时配置：图编译阶段固定断点，所有调用统一生效
+const graph = builder.compile({
+  checkpointer,
+  interruptBefore: ['node_a'],
+  interruptAfter: ['node_b', 'node_c'],
+});
+
+// 2. 运行时配置：每次 invoke 单独传入，互不影响（推荐调试使用）
+await graph.invoke(inputs, {
+  configurable: { thread_id: 'debug-1' },
+  interruptBefore: ['node_a'],
+  interruptAfter: ['node_b', 'node_c'],
+});
+```
+
+`node_a` / `node_b` / `node_c` 等是流程图里**已有的业务节点**，无需为调试新增节点——静态中断仅基于节点名添加暂停点，不修改任何业务代码。
+
+### 单步恢复
+
+静态中断触发后，图不会自动继续，必须手动调用 `invoke(null)` 放行：
+
+```ts
+// 第一次：携带业务输入，运行到第一个断点自动停止
+await graph.invoke(inputs, config);
+
+// 之后：传入 null 复用原有输入，继续运行到下一个断点
+await graph.invoke(null, config);
+```
+
+规则是：首次携带业务输入，运行到第一个断点即停；之后每次 `invoke(null)` 单步放行到下一个断点；**每触发一次中断，都需要手动执行一次 `invoke(null)`**。
+
+### 调试观测
+
+排查中断相关问题时，配合 [LangSmith](https://smith.langchain.com/) 可视化观测流程状态、断点触发逻辑会非常直观。
+
+### 和 `interrupt()` 函数的关键区分
+
+这两种机制容易混淆，但用途完全不同：
+
+| 维度 | `interruptBefore` / `interruptAfter` | `interrupt()` |
+|---|---|---|
+| 用途 | 开发调试断点 | 线上人机交互 |
+| 暂停粒度 | 节点级（节点前后） | 节点内任意位置 |
+| 恢复方式 | `invoke(null)` | `new Command({ resume })` |
+| 能否注入新数据 | 否，复用原输入 | 能，注入人工修改后的业务数据 |
+| 是否修改业务代码 | 否，只挂断点 | 是，节点内显式调用 |
+
+简而言之：**调试流程用静态中断；让 Agent 在生产中"等人"用 `interrupt()`**。
 
 ---
 
