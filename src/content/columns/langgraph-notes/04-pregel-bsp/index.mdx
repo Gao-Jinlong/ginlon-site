@@ -98,3 +98,95 @@ BSP 用三个参数刻画一台并行机的"性格"：
 - **负载不均会被放大**：最慢的人拖垮整轮，`L` 越大、越不均，浪费越严重。
 
 **适合的问题**：迭代型、可分块的批量计算——数值线性代数、图算法（PageRank 这类）、大规模搜索、矩阵运算。**不适合**细粒度、低延迟的"一问一答"交互场景。
+
+---
+
+## Pregel：BSP 落到图计算上
+
+1990 年的 BSP 是抽象模型，真正让它大规模落地的，是 Google 2010 年的 **Pregel** 系统（Malewicz 等，SIGMOD 2010）。论文开宗明义：*"The high-level organization of Pregel programs is inspired by Valiant's Bulk Synchronous Parallel model."* —— Pregel 就是 BSP 在图计算上的具体实例化。
+
+题外话：Pregel 这个名字来自欧拉著名定理"柯尼斯堡七桥"里的那条河，致敬图论的祖师爷。
+
+### 核心思想：Think Like a Vertex
+
+Pregel 的编程范式叫 **vertex-centric（以顶点为中心）**：你只需要写"如果我是图里的一个顶点，在这一步我该干什么"，系统负责把它扩展到全图数十亿个顶点上。论文管这叫 *think like a vertex*。
+
+和 MapReduce 对比一下就清楚了：MapReduce 本质是无状态的函数式流水线，每一步都要**把整张图的状态序列化后搬给下一步**；而 Pregel 让顶点**常驻在执行机器上，只传消息**，通信开销大幅降低。
+
+### 顶点在一个 Superstep 里做什么
+
+每个 active 顶点在每个 superstep 能干 5 件事：
+
+| 行为 | 说明 | 可见性 |
+|---|---|---|
+| 读 | 读取上一轮收到的所有消息 | 上轮的消息这轮才能读 |
+| 算 | 执行自己的 `Compute()`，可改自己的值和出边的值 | 修改立即对本顶点可见 |
+| 发 | 给任意已知 ID 的顶点发消息 | **这些消息要到下一轮才送达** |
+| 改拓扑 | 发出增删顶点/边的请求 | 下一轮生效 |
+| 投票休眠 | `VoteToHalt()`，标记自己"干完了" | 本轮后转为 inactive |
+
+`Compute()` 的伪代码骨架长这样：
+
+```text
+// 顶点 V 在 superstep S 的行为
+function Compute(incomingMessages):
+    // 1. 用上轮收到的消息更新自己
+    updateMyValue(incomingMessages)
+
+    // 2. 把新结果沿出边发给邻居
+    for edge in myOutEdges:
+        SendMessageTo(edge.target, computePayload())
+
+    // 3. 如果收敛了，宣布自己没活了
+    if converged:
+        VoteToHalt()
+```
+
+注意 `SendMessageTo` 的语义：你在 superstep S 发出去的消息，邻居要到 **superstep S+1 调用 `Compute()` 时才收得到**。这完全是 BSP 的 N→N+1 时序。论文特意强调，正是因为这种纯消息传递 + 跨轮可见，"Pregel 程序天然无死锁、无数据竞争"。
+
+### Vote to Halt：顶点状态机
+
+每个顶点有两个状态：**active** 和 **inactive**。
+
+```mermaid
+stateDiagram-v2
+    [*] --> Active : superstep 0 全员 active
+    Active --> Inactive : VoteToHalt()
+    Inactive --> Active : 收到新消息
+    note right of Inactive
+        inactive 的顶点不会被调度
+        直到有人再给它发消息
+    end note
+```
+
+通俗类比：**每个顶点像装了闹钟的工人**——"没我事了我就睡觉，但只要有人给我发消息，我就会被叫醒重新上岗"。一个顶点 halt 之后并非永久退出，一旦收到消息会被重新激活，需要再次 halt。
+
+**全局终止条件**：所有顶点同时处于 inactive **且** 没有任何消息在途。两个条件缺一不可——否则某个睡着的顶点可能马上被一条还在路上的消息叫醒。
+
+### 迷你例：PageRank
+
+PageRank 是 Pregel 最经典的演示。每个顶点的 `Compute()` 长这样：
+
+```text
+// superstep 0：每个顶点初始 rank = 1/总顶点数
+function PageRankCompute(incomingMessages):
+    // 收上轮邻居传来的 rank 贡献，求和
+    sum = 0
+    for msg in incomingMessages:
+        sum += msg.value
+
+    // 经典 PageRank 公式
+    myRank = 0.15 / NumVertices + 0.85 * sum
+    myValue = myRank
+
+    // 把自己的 rank 均分给出边邻居
+    share = myRank / myOutEdges.length
+    for edge in myOutEdges:
+        SendMessageTo(edge.target, share)
+
+    // 跑够 30 轮（或用 aggregator 判断收敛）就睡
+    if superstep >= 30:
+        VoteToHalt()
+```
+
+整个过程清晰展示了 Pregel 的节奏：superstep 0 大家都 active、各自发消息；superstep 1 每个顶点收到邻居上轮发的贡献、算出新 rank、再发出去；如此迭代，直到所有顶点都 halt。论文实测，在 **10 亿顶点、1270 亿条边、800 个 worker** 的规模上，跑完单源最短路径大约只要 **10 分钟**——这正是 vertex-centric + BSP 调度的威力。
