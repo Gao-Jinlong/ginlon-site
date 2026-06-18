@@ -238,3 +238,32 @@ flowchart LR
 | 规模 | 数十亿顶点、数千台机器 | 单机或小集群，常一条 thread |
 
 最值得说的是 **channel**：它是 Pregel"消息"概念的**泛化**。Pregel 只有点对点消息，而 LangGraph 的 channel 有不同形态——`LastValue`（只保留最后一次写，类似覆盖式寄存器）、`BinaryOperatorAggregate`（用二元算子累积，类似把多条消息归约成一个值）。换句话说，Pregel 的"收一束消息算一次"在 LangGraph 里被抽象成了 channel + reducer，更灵活。
+
+---
+
+## 三列对照表
+
+把前面三部分串起来：
+
+| BSP 原始概念 | Pregel 实例化（Google 2010） | LangGraph 映射 |
+|---|---|---|
+| 处理器 + 本地内存 | 顶点 + 顶点值/边值（持久跨 superstep） | 节点（PregelNode）+ 其读写的 channel |
+| 通信网络（点对点） | `SendMessageTo` 指定目标顶点 | Channel 读写（Pub/Sub 式） |
+| Superstep（超步） | Pregel superstep | LangGraph step |
+| 局部计算阶段 | 顶点跑 `Compute()` | Plan + Execution：选中的节点并行跑 |
+| 通信阶段 | 异步批量发消息 | Execution 期间各节点写 channel（暂存） |
+| 屏障同步阶段 | master 等 worker 完成 | Update：所有节点完成后才刷 channel |
+| N→N+1 消息时序 | S 发的消息 S+1 才收到 | 本步 channel 更新下一步才可见 |
+| 参数 p（处理器数） | worker / 分区数 | 同一 step 内并行执行的节点数 |
+| 参数 g（通信成本） | 消息序列化与传输开销 | channel 序列化/checkpoint 开销 |
+| 参数 L（同步延迟） | superstep 间 barrier 等待 | 一个 step 末尾等最慢节点完成 |
+| Vote to halt | 顶点休眠，收消息复活 | 节点本轮不被 Plan 选中即停 |
+| 全局终止 | 所有顶点 inactive 且无消息在途 | 没有 node 被选中，或达到最大步数 |
+| 容错 | checkpoint + 恢复 | checkpointer（InMemorySaver 等） |
+| 典型负载 | PageRank、最短路径、连通分量 | Agent 循环、工具调用、多步 LLM 推理 |
+
+---
+
+## 一句话总结
+
+LangGraph 之所以能让 LLM 节点安全并行、可中断恢复、状态可追溯，根子都在 1990 年 Valiant 那篇 BSP 论文里——**分步走、等齐再走、跨步传消息**。Pregel 把这套调度律落到了图计算上，LangGraph 又把它借到了 Agent 编排上。理解了这条思想线，前面 checkpointer / store / interrupts 笔记里的种种机制，就都不再是孤立的知识点了。
