@@ -22,11 +22,14 @@ const isActive = (href: string) => {
       <nav aria-label="主导航">
         <ul class="site-nav-list">
           {
-            navLinks.map((item) => (
-              <li>
+            navLinks.map(item => (
+              <li class:list={['site-nav-item']}>
                 <a
                   href={item.href}
-                  class:list={['site-nav-link', isActive(item.href) && 'site-nav-link-active']}
+                  class:list={[
+                    'site-nav-link',
+                    isActive(item.href) && 'site-nav-link-active',
+                  ]}
                 >
                   {item.label}
                 </a>
@@ -81,6 +84,10 @@ const isActive = (href: string) => {
     gap: 24px;
   }
 
+  .site-nav-item {
+    display: inline-flex;
+    align-items: center;
+  }
   .site-nav-link {
     display: inline-flex;
     align-items: center;
