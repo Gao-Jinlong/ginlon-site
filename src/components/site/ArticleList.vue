@@ -122,7 +122,7 @@ const tagsExpanded = ref(false);
 const currentTagLabel = computed(() => {
   if (!currentTag.value) return '全部';
   const found = uniqueTags.value.find((t) => t.slug === currentTag.value);
-  return found ? `#${found.name}` : '全部';
+  return found ? `#${found.name}` : `#${currentTag.value}`;
 });
 
 // 计算所有唯一标签及其数量

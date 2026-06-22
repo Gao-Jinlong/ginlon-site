@@ -10,7 +10,10 @@ import { tagToSlug } from '../../utils/getTags';
 
 const blogs = await getBlogs('zh');
 const columns = await getColumns();
-const selectedTag = new URL(Astro.url).searchParams.get('tag')?.trim() ?? '';
+// 入站 tag 可能是显示名（如 /tags/[tag].astro 的跳转）或 slug，
+// 统一规范化为 slug，确保与列表项的 tagSlugs 匹配
+const rawTag = new URL(Astro.url).searchParams.get('tag')?.trim() ?? '';
+const selectedTag = rawTag ? tagToSlug(rawTag) : '';
 
 // 普通博客 → 统一列表项
 const blogItems = blogs.map((article) => ({
