@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
+import BackToTop from '../components/site/BackToTop.astro';
 import { siteConfig } from '../data/site';
 import '../styles/styles.css';
 import 'katex/dist/katex.min.css';
@@ -126,6 +127,7 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
         <slot />
       </main>
       {!hideFooter && <SiteFooter />}
+      <BackToTop />
     </div>
   </body>
 </html>

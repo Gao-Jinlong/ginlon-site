@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import Content from '../components/site/Content.astro';
 import { getBlogs } from '../utils/getBlogs';
 import { dayjs } from '../utils/dayjs';
 
@@ -29,8 +30,7 @@ const pageMeta = {
 ---
 
 <SiteLayout pageMeta={pageMeta}>
-  <!-- Hero -->
-  <section class="hero shell">
+  <Content as="section" class="hero">
     <img
       src="https://bucket.ginlon.site/avatar_512.png"
       alt="Ginlon"
@@ -44,12 +44,11 @@ const pageMeta = {
         相信工程是理解世界的方式，写作是理解自己的方式。
       </p>
     </div>
-  </section>
+  </Content>
 
-  <hr class="hairline" />
+  <Content><hr class="hairline" /></Content>
 
-  <!-- 精选写作 -->
-  <section class="section shell">
+  <Content as="section" class="section">
     <h2 class="section-title">精选写作</h2>
     <div class="writing-list">
       <hr class="hairline" />
@@ -67,12 +66,11 @@ const pageMeta = {
         ))
       }
     </div>
-  </section>
+  </Content>
 
-  <hr class="hairline" />
+  <Content><hr class="hairline" /></Content>
 
-  <!-- 当前关注 -->
-  <section class="section shell">
+  <Content as="section" class="section">
     <h2 class="section-title">当前关注</h2>
     <ul class="focus-list">
       {
@@ -84,7 +82,7 @@ const pageMeta = {
         ))
       }
     </ul>
-  </section>
+  </Content>
 </SiteLayout>
 
 <style>

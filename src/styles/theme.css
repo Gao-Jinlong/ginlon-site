@@ -2,12 +2,25 @@
   :root {
     /* 色彩 token —— 1:1 映射 designs/design.pen variables */
     --accent: #2e8b5e;
-    --accent-soft: rgba(46, 139, 94, 0.12);
+    --accent-hover: #24744e;
+    --accent-deep: #1e3322;
+    --accent-soft: #2e8b5e1f;
+    --accent-warm: #a45e3b;
+
     --page-bg: #faf8f3;
     --surface: #ffffff;
+    --surface-tint: #f1f4ec;
+    --surface-hover: #f1f4ec;
+    --surface-pressed: #e7ede3;
+    --surface-ink: #1e3322;
+    --tag-bg: #2e8b5e1f;
+
     --text-strong: #1a1f1c;
     --text-muted: #6b756f;
-    --hairline: rgba(26, 31, 28, 0.08);
+    --hairline: #1a1f1c14;
+
+    /* 阴影（正式 token，非垫片） */
+    --shadow-soft: 0 8px 24px rgba(26, 31, 28, 0.08);
 
     /* 字体 token */
     --font-serif:
@@ -16,12 +29,12 @@
       "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei",
       sans-serif;
 
-    /* 容器宽度（收窄聚焦） */
+    /* 容器宽度 */
     --shell-width: 1000px;
     --reading-width: 680px;
     --shell-pad: clamp(1.5rem, 5vw, 5rem);
 
-    /* 间距刻度（8px 基准，留白偏大） */
+    /* 间距刻度（8px 基准） */
     --sp-1: 4px;
     --sp-2: 8px;
     --sp-3: 16px;
@@ -30,24 +43,28 @@
     --sp-6: 64px;
     --sp-7: 96px;
     --sp-8: 128px;
-
-    /* 过渡期兼容垫片：未重构页面（专栏/关于/技术栈/标签/简历）仍引用旧 token，
-       映射到新值避免视觉错乱。这些页面单独重构后即可移除。 */
-    --surface-bg: var(--surface);
-    --surface-bg-strong: var(--surface);
-    --surface-border: var(--hairline);
-    --shadow-soft: 0 8px 24px rgba(26, 31, 28, 0.08);
-    --radius-m: 8px;
   }
 
   :root[data-theme='dark'],
   .dark {
     --accent: #7fd0a6;
-    --accent-soft: rgba(127, 208, 166, 0.15);
+    --accent-hover: #96ddb8;
+    --accent-deep: #d9f2dd;
+    --accent-soft: #7fd0a626;
+    --accent-warm: #e3a17f;
+
     --page-bg: #131714;
     --surface: #1a201c;
+    --surface-tint: #1e2720;
+    --surface-hover: #202a23;
+    --surface-pressed: #263329;
+    --surface-ink: #e8ede9;
+    --tag-bg: #7fd0a626;
+
     --text-strong: #e8ede9;
     --text-muted: #9ca8a1;
-    --hairline: rgba(232, 237, 233, 0.1);
+    --hairline: #e8ede91a;
+
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 }

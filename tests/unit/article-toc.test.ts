@@ -11,24 +11,6 @@ const sampleHeadings = [
 ];
 
 describe('article TOC components', () => {
-  it('renders desktop TOC rail with sticky positioning and heading links', async () => {
-    const container = await AstroContainer.create();
-    const { default: ArticleTocRail } = await import(
-      '../../src/components/site/ArticleTocRail.astro'
-    );
-
-    const html = await container.renderToString(ArticleTocRail, {
-      props: { headings: sampleHeadings },
-    });
-
-    expect(html).toContain('文章目录');
-    expect(html).toContain('#section-1');
-    expect(html).toContain('第一节');
-    expect(html).toContain('#section-2');
-    expect(html).toContain('第二节');
-    expect(html).toContain('toc-rail');
-  });
-
   it('renders mobile TOC drawer with toggle button and hidden content', async () => {
     const container = await AstroContainer.create();
     const { default: ArticleTocDrawer } = await import(

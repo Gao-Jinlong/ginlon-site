@@ -1,6 +1,7 @@
 ---
 import ArticleList from '../../components/site/ArticleList.vue';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import Content from '../../components/site/Content.astro';
 import dayjs from 'dayjs';
 import { getBlogs } from '../../utils/getBlogs';
 import { getColumns, getColumnBySlug } from '../../utils/getColumns';
@@ -58,11 +59,11 @@ const pageMeta = {
 
 <SiteLayout pageMeta={pageMeta}>
   <!-- 页头 -->
-  <header class="writing-head shell">
+  <Content as="header" class="writing-head">
     <p class="eyebrow">写作归档</p>
     <h1 class="writing-title">全部文章</h1>
     <p class="writing-desc">{pageMeta.description}</p>
-  </header>
+  </Content>
 
   <ArticleList client:only="vue" articles={articlesData} initialTag={selectedTag} />
 </SiteLayout>

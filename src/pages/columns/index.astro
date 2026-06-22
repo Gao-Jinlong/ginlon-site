@@ -1,6 +1,5 @@
 ---
-import PageSection from '../../components/site/PageSection.astro';
-import SectionHeading from '../../components/site/SectionHeading.astro';
+import Content from '../../components/site/Content.astro';
 import ColumnCard from '../../components/site/ColumnCard.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { getColumns } from '../../utils/getColumns';
@@ -8,46 +7,96 @@ import { getColumns } from '../../utils/getColumns';
 const columns = await getColumns();
 
 const pageMeta = {
-  title: '技术专栏 | Ginlon',
-  description: '系统化学习，深入掌握每一项技术',
+  title: '专栏 | Ginlon',
+  description: '围绕一个长期主题持续写作，把分散的文章组织成可按顺序阅读的知识路径。',
 };
 ---
 
 <SiteLayout pageMeta={pageMeta}>
-  <PageSection narrow={false} id="columns-list">
-    <SectionHeading
-      eyebrow="COLUMN"
-      title="技术专栏"
-      description={columns.length > 0 ? `共 ${columns.length} 个专栏，持续更新中。` : '暂无专栏，敬请期待。'}
-    />
+  <Content as="section" class="columns-page">
+    <header class="columns-head">
+      <p class="eyebrow">COLUMNS</p>
+      <h1 class="columns-title">专栏</h1>
+      <p class="columns-desc">{pageMeta.description}</p>
+    </header>
+
+    <hr class="hairline" />
 
     {columns.length > 0 ? (
-      <div class="columns-grid">
+      <div class="columns-list">
         {columns.map((column) => (
           <ColumnCard column={column} />
         ))}
       </div>
     ) : (
-      <div class="columns-empty">
-        <p>暂无专栏，敬请期待。</p>
-      </div>
+      <p class="columns-empty">暂无专栏，敬请期待。</p>
     )}
-  </PageSection>
+  </Content>
 </SiteLayout>
 
 <style>
-  .columns-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: 1.2rem;
+  .columns-head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-block: 72px 44px;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .columns-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+
+  .columns-desc {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  .columns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-block: 44px 72px;
   }
 
   .columns-empty {
-    border: 1px solid var(--surface-border);
-    border-radius: var(--radius-m);
-    padding: 2rem;
-    text-align: center;
+    padding-block: 44px 72px;
     color: var(--text-muted);
-    background: var(--surface-bg);
+    font-family: var(--font-serif);
+  }
+
+  @media (max-width: 720px) {
+    .columns-head {
+      padding-block: 36px 24px;
+      gap: 10px;
+    }
+
+    .columns-title {
+      font-size: 30px;
+    }
+
+    .columns-desc {
+      font-size: 15px;
+    }
+
+    .columns-list {
+      gap: 16px;
+      padding-block: 32px 44px;
+    }
   }
 </style>

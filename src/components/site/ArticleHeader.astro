@@ -1,0 +1,181 @@
+---
+import { Calendar, RefreshCw } from 'lucide-astro';
+
+type Props = {
+  title: string;
+  summary?: string | undefined;
+  publishedLabel: string;
+  publishedAtIso?: string | undefined;
+  lastModifiedLabel?: string | undefined;
+  lastModifiedIso?: string | undefined;
+  tags?: string[] | undefined;
+  categoryLabel?: string | undefined;
+  column?: { title: string; slug: string } | undefined;
+  poster?: string | undefined;
+  posterDescription?: string | undefined;
+};
+
+const {
+  title,
+  summary,
+  publishedLabel,
+  publishedAtIso,
+  lastModifiedLabel,
+  lastModifiedIso,
+  tags = [],
+  categoryLabel = '写作',
+  column,
+  poster,
+  posterDescription,
+} = Astro.props as Props;
+---
+
+<header class="article-header">
+  <div class="article-header-inner">
+    <p class="article-eyebrow">{categoryLabel}</p>
+
+    {(column || tags.length > 0) && (
+      <p class="article-column-tags">
+        {column && (
+          <a href={`/columns/${column.slug}`} class="article-column-link">专栏 · {column.title}</a>
+        )}
+        {tags.map((tag) => (
+          <span class="article-tag">#{tag}</span>
+        ))}
+      </p>
+    )}
+
+    <h1 class="article-title">{title}</h1>
+    {summary && <p class="article-summary">{summary}</p>}
+
+    <div class="article-meta">
+      <span class="article-meta-item">
+        <Calendar size={14} />
+        <time datetime={publishedAtIso}>{publishedLabel}</time>
+      </span>
+      {lastModifiedLabel && (
+        <span class="article-meta-item">
+          <RefreshCw size={14} />
+          <span>更新于 <time datetime={lastModifiedIso}>{lastModifiedLabel}</time></span>
+        </span>
+      )}
+    </div>
+  </div>
+
+  {poster && (
+    <figure class="article-cover">
+      <img src={poster} alt={posterDescription ?? title} loading="eager" />
+    </figure>
+  )}
+</header>
+
+<style>
+  .article-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: var(--reading-width);
+    margin-inline: auto;
+    padding-block: 48px 32px;
+  }
+
+  .article-header-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .article-eyebrow {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .article-column-tags {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .article-column-link {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .article-column-link:hover {
+    text-decoration: underline;
+  }
+
+  .article-tag {
+    color: var(--accent);
+  }
+
+  .article-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.9rem, 1.3rem + 2vw, 2.625rem);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-strong);
+  }
+
+  .article-summary {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .article-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .article-cover {
+    margin: 16px 0 0;
+  }
+
+  .article-cover img {
+    display: block;
+    width: 100%;
+    max-height: 34rem;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 720px) {
+    .article-header {
+      padding-block: 36px 24px;
+      gap: 16px;
+    }
+
+    .article-title {
+      font-size: 28px;
+      line-height: 1.35;
+    }
+
+    .article-summary {
+      font-size: 15px;
+    }
+  }
+</style>

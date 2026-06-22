@@ -1,9 +1,10 @@
 ---
 import { render } from 'astro:content';
-import ArticleHero from '../../components/site/ArticleHero.astro';
+import ArticleHeader from '../../components/site/ArticleHeader.astro';
+import ArticleAside from '../../components/site/ArticleAside.astro';
 import ArticlePager from '../../components/site/ArticlePager.astro';
 import ArticleTocDrawer from '../../components/site/ArticleTocDrawer.astro';
-import ArticleTocRail from '../../components/site/ArticleTocRail.astro';
+import Shell from '../../components/site/Content.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import 'viewerjs/dist/viewer.css';
 import { siteConfig } from '../../data/site';
@@ -68,23 +69,23 @@ const pageMeta = {
 
 <SiteLayout pageMeta={pageMeta}>
   <article>
-    <ArticleHero
-      title={article.data.title}
-      summary={summary}
-      publishedLabel={publishedLabel}
-      publishedAtIso={publishedTime}
-      lastModifiedLabel={lastModifiedLabel}
-      lastModifiedIso={modifiedTime}
-      tags={article.data.tags}
-      poster={article.data.poster}
-      posterDescription={article.data.posterDescription}
-      categoryLabel={categoryLabel}
-    />
+    <Shell as="div">
+      <ArticleHeader
+        title={article.data.title}
+        summary={summary}
+        publishedLabel={publishedLabel}
+        publishedAtIso={publishedTime}
+        lastModifiedLabel={lastModifiedLabel}
+        lastModifiedIso={modifiedTime}
+        tags={article.data.tags}
+        poster={article.data.poster}
+        posterDescription={article.data.posterDescription}
+        categoryLabel={categoryLabel}
+      />
 
-    <hr class="hairline shell" />
+      <hr class="article-rule" />
 
-    <div class="article-layout">
-      <div class="article-body reading">
+      <div class="article-body reading-center">
         <Content />
 
         {lastModifiedLabel && (
@@ -94,18 +95,15 @@ const pageMeta = {
         )}
       </div>
 
-      <aside class="article-sidebar">
-        <ArticleTocRail headings={filteredHeadings} />
-      </aside>
-    </div>
+      <hr class="article-rule" />
 
-    <hr class="hairline shell" />
+      <ArticlePager
+        prev={prev ? { slug: prev.slug, title: prev.title } : undefined}
+        next={next ? { slug: next.slug, title: next.title } : undefined}
+      />
+    </Shell>
 
-    <ArticlePager
-      prev={prev ? { slug: prev.slug, title: prev.title } : undefined}
-      next={next ? { slug: next.slug, title: next.title } : undefined}
-    />
-
+    <ArticleAside headings={filteredHeadings} />
     <ArticleTocDrawer headings={filteredHeadings} buttonLabel="目录" />
   </article>
 </SiteLayout>
@@ -177,150 +175,19 @@ const pageMeta = {
 </script>
 
 <style>
-  .article-layout {
-    display: grid;
-    grid-template-columns: 680px 140px;
-    gap: 26px;
-    justify-content: center;
-    padding-block: 56px 72px;
-  }
-
-  .article-body {
-    min-width: 0;
-    max-width: 100%;
-    color: var(--text-strong);
-    font-size: 17px;
-    line-height: 1.8;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-  }
-
-  .article-body :global(h2),
-  .article-body :global(h3),
-  .article-body :global(h4),
-  .article-body :global(h5) {
-    margin-top: 2.6rem;
-    margin-bottom: 0.9rem;
-    font-family: var(--font-serif);
-    color: var(--text-strong);
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-    /* 锚点定位时为 sticky 顶栏留出空间，避免标题被遮挡 */
-    scroll-margin-top: 100px;
-  }
-
-  .article-body :global(h2) {
-    font-size: 1.75rem;
-    font-weight: 600;
-  }
-
-  .article-body :global(h3) {
-    font-size: 1.35rem;
-    font-weight: 600;
-  }
-
-  .article-body :global(h4) {
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  .article-body :global(p),
-  .article-body :global(ul),
-  .article-body :global(ol),
-  .article-body :global(blockquote),
-  .article-body :global(pre),
-  .article-body :global(table) {
-    margin-block: 1rem;
-  }
-
-  .article-body :global(ul),
-  .article-body :global(ol) {
-    padding-left: 1.4rem;
-  }
-
-  .article-body :global(li) {
-    margin-block: 0.45rem;
-  }
-
-  .article-body :global(a) {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-  }
-
-  .article-body :global(img) {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-  }
-
-  .article-body :global(blockquote) {
-    border-left: 3px solid var(--accent);
-    margin-inline: 0;
-    padding: 0.2rem 0 0.2rem 1rem;
-    color: var(--text-muted);
-  }
-
-  .article-body :global(code):not(:global(pre code)) {
-    background: var(--accent-soft);
-    padding: 0.15rem 0.35rem;
-    border-radius: 4px;
-    font-size: 0.9em;
-    font-family: var(--font-sans);
-  }
-
-  .article-body :global(pre) {
-    overflow-x: auto;
-    max-width: 100%;
-    background: rgba(15, 23, 42, 0.96);
-    padding: 1rem;
-    border-radius: 6px;
-    color: #f8fafc;
-    font-family: var(--font-sans);
-  }
-
-  .article-body :global(pre.mermaid) {
-    background: transparent;
-    color: inherit;
-    overflow: visible;
-  }
-
-  .article-body :global(pre code) {
-    display: block;
-    width: max-content;
-    min-width: 100%;
-    background: transparent;
-    padding: 0;
-    color: inherit;
-  }
-
-  .article-body :global(table) {
-    width: 100%;
-    max-width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95em;
-    table-layout: fixed;
-    word-break: break-word;
-  }
-
-  .article-body :global(th),
-  .article-body :global(td) {
-    border-bottom: 1px solid var(--hairline);
-    padding: 0.5rem 0.75rem;
-    text-align: left;
-  }
-
-  .article-body :global(th) {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    color: var(--text-strong);
-  }
-
-  .article-body :global(hr) {
+  .article-rule {
+    height: 1px;
     border: 0;
-    border-top: 1px solid var(--hairline);
-    margin: 2.5rem 0;
+    background: var(--hairline);
+    margin: 0;
+    max-width: var(--reading-width);
+    margin-inline: auto;
+  }
+
+  .reading-center {
+    max-width: var(--reading-width);
+    margin-inline: auto;
+    padding-block: 32px 56px;
   }
 
   .article-body-footer {
@@ -330,42 +197,9 @@ const pageMeta = {
     text-align: right;
   }
 
-  .article-sidebar {
-    display: none;
-  }
-
-  @media (min-width: 1024px) {
-    .article-sidebar {
-      display: block;
-      position: sticky;
-      top: 100px;
-      align-self: start;
-      max-height: calc(100vh - 120px);
-      overflow-y: auto;
-    }
-  }
-
-  /* 平板/中等屏：单列，去掉 TOC 列 */
-  @media (max-width: 1023px) {
-    .article-layout {
-      grid-template-columns: 1fr;
-      padding-inline: var(--shell-pad);
-    }
-
-    .article-body {
-      max-width: var(--reading-width);
-      margin-inline: auto;
-    }
-  }
-
   @media (max-width: 720px) {
-    .article-layout {
-      padding-block: 28px 36px;
-    }
-
-    .article-body {
-      font-size: 16px;
-      line-height: 1.9;
+    .reading-center {
+      padding-block: 24px 36px;
     }
   }
 </style>
