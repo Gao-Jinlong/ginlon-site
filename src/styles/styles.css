@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 @import "./theme.css";
+@import "./article-content.css";
 
 @layer base {
   *,
