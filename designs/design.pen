@@ -1,0 +1,4978 @@
+{
+  "version": "2.13",
+  "children": [
+    {
+      "type": "frame",
+      "id": "KG7zb",
+      "x": 880,
+      "y": 0,
+      "name": "设计规范画板",
+      "clip": true,
+      "width": 1000,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "gap": 56,
+      "padding": 64,
+      "children": [
+        {
+          "type": "frame",
+          "id": "Gt7j0",
+          "name": "规范标题",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "text",
+              "id": "u5MeR",
+              "name": "Eyebrow",
+              "fill": "$accent",
+              "content": "DESIGN SYSTEM",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "AByNo",
+              "name": "Title",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "极简静默 · 设计规范",
+              "fontFamily": "$font-serif",
+              "fontSize": 36,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "uzheE",
+              "name": "Sub",
+              "fill": "$text-muted",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "大面积留白，绿色收敛点睛，衬线统一全站，靠排版节奏承载内容。",
+              "lineHeight": 1.8,
+              "fontFamily": "$font-serif",
+              "fontSize": 17,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "I5wSA",
+          "name": "分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "cnHKY",
+          "name": "色彩区",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "yK9l3",
+              "name": "色彩标题",
+              "fill": "$text-strong",
+              "content": "色彩",
+              "fontFamily": "$font-serif",
+              "fontSize": 24,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "yI6Rg",
+              "name": "色板行",
+              "width": "fill_container",
+              "gap": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "XX97f",
+                  "name": "背景",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 6,
+                      "id": "EJAkS",
+                      "name": "色块",
+                      "fill": "#FAF8F3",
+                      "width": "fill_container",
+                      "height": 72,
+                      "stroke": "$hairline",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "YoMmI",
+                      "name": "名",
+                      "fill": "$text-strong",
+                      "content": "背景",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "D33ss8",
+                      "name": "token",
+                      "fill": "$text-muted",
+                      "content": "#FAF8F3",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rZIu5",
+                  "name": "表面",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 6,
+                      "id": "sAlw1",
+                      "name": "色块",
+                      "fill": "#FFFFFF",
+                      "width": "fill_container",
+                      "height": 72,
+                      "stroke": "$hairline",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "L1yWH",
+                      "name": "名",
+                      "fill": "$text-strong",
+                      "content": "表面",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "AeHsu",
+                      "name": "token",
+                      "fill": "$text-muted",
+                      "content": "#FFFFFF",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OLtvZ",
+                  "name": "主文字",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 6,
+                      "id": "Z5huJ7",
+                      "name": "色块",
+                      "fill": "#1A1F1C",
+                      "width": "fill_container",
+                      "height": 72,
+                      "stroke": "$hairline",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "uMDMh",
+                      "name": "名",
+                      "fill": "$text-strong",
+                      "content": "主文字",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "VVDFX",
+                      "name": "token",
+                      "fill": "$text-muted",
+                      "content": "#1A1F1C",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "w3Sjlh",
+                  "name": "次文字",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 6,
+                      "id": "YCtUN",
+                      "name": "色块",
+                      "fill": "#6B756F",
+                      "width": "fill_container",
+                      "height": 72,
+                      "stroke": "$hairline",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "CFoCQ",
+                      "name": "名",
+                      "fill": "$text-strong",
+                      "content": "次文字",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "TlkvN",
+                      "name": "token",
+                      "fill": "$text-muted",
+                      "content": "#6B756F",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "E319Pm",
+                  "name": "强调绿",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 6,
+                      "id": "MLty8",
+                      "name": "色块",
+                      "fill": "#2E8B5E",
+                      "width": "fill_container",
+                      "height": 72,
+                      "stroke": "$hairline",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "s1vIC",
+                      "name": "名",
+                      "fill": "$text-strong",
+                      "content": "强调绿",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZHe1L",
+                      "name": "token",
+                      "fill": "$text-muted",
+                      "content": "#2E8B5E",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "SiL6d",
+                  "name": "发丝线",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 6,
+                      "id": "wXU7X",
+                      "name": "色块",
+                      "fill": "#1A1F1C14",
+                      "width": "fill_container",
+                      "height": 72,
+                      "stroke": "$hairline",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "E7ILh8",
+                      "name": "名",
+                      "fill": "$text-strong",
+                      "content": "发丝线",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "p4LZD",
+                      "name": "token",
+                      "fill": "$text-muted",
+                      "content": "#1A1F1C14",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yFLER",
+          "name": "字体区",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "jgnpa",
+              "name": "字体标题",
+              "fill": "$text-strong",
+              "content": "字体层级",
+              "fontFamily": "$font-serif",
+              "fontSize": 24,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "SB009",
+              "name": "Display行",
+              "width": "fill_container",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "SmR63",
+                  "name": "meta",
+                  "width": 120,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "f2AaHL",
+                      "name": "角色",
+                      "fill": "$text-strong",
+                      "content": "Display",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "rhoKc",
+                      "name": "参数",
+                      "fill": "$text-muted",
+                      "content": "56px · 600",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "E8mU97",
+                  "name": "样例",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "永和九年，岁在癸丑",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 56,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZxxRF",
+              "name": "H1行",
+              "width": "fill_container",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Cl54S",
+                  "name": "meta",
+                  "width": 120,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qZ8lI",
+                      "name": "角色",
+                      "fill": "$text-strong",
+                      "content": "H1",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "n48TkW",
+                      "name": "参数",
+                      "fill": "$text-muted",
+                      "content": "36px · 600",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "KHQ5g",
+                  "name": "样例",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "标题一 · 页面主标题",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 36,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Db4EW",
+              "name": "H2行",
+              "width": "fill_container",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sReMI",
+                  "name": "meta",
+                  "width": 120,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "avovo",
+                      "name": "角色",
+                      "fill": "$text-strong",
+                      "content": "H2",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "w0pm3K",
+                      "name": "参数",
+                      "fill": "$text-muted",
+                      "content": "24px · 600",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "h248d5",
+                  "name": "样例",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "标题二 · 区块标题",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 24,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wbJlU",
+              "name": "Body行",
+              "width": "fill_container",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hUyEd",
+                  "name": "meta",
+                  "width": 120,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qnfwC",
+                      "name": "角色",
+                      "fill": "$text-strong",
+                      "content": "Body",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "wdpVF",
+                      "name": "参数",
+                      "fill": "$text-muted",
+                      "content": "17px · 400",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "mThMj",
+                  "name": "样例",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "正文 · 衬线统一全站，行高宽松，阅读体验为先。",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 17
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ikteL",
+              "name": "Meta行",
+              "width": "fill_container",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "e5wM5x",
+                  "name": "meta",
+                  "width": 120,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d0hc8",
+                      "name": "角色",
+                      "fill": "$text-strong",
+                      "content": "Meta",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vnVLX",
+                      "name": "参数",
+                      "fill": "$text-muted",
+                      "content": "13px · 无衬线",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "agq9R",
+                  "name": "样例",
+                  "fill": "$text-muted",
+                  "content": "2026 · 01 · 元信息 / 标签",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "oU2F1",
+          "name": "间距区",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "C19iGb",
+              "name": "间距标题",
+              "fill": "$text-strong",
+              "content": "间距刻度",
+              "fontFamily": "$font-serif",
+              "fontSize": 24,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "MDcj1",
+              "name": "间距说明",
+              "fill": "$text-muted",
+              "content": "8px 基准 · 留白偏大",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "sJx52",
+              "name": "刻度行",
+              "width": "fill_container",
+              "gap": 16,
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "OCeuG",
+                  "name": "u4",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "bhwz6",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "eno6x",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "4",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bbAIU",
+                  "name": "u8",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "QZw2z",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "F2Y1s",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "8",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Vq3NU",
+                  "name": "u16",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "c6DAbE",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "tFGWV",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "16",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tAKPo",
+                  "name": "u24",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "v9qif",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 12,
+                      "height": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "od1dq",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "24",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GNQpS",
+                  "name": "u40",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "D1Jh3",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 20,
+                      "height": 20
+                    },
+                    {
+                      "type": "text",
+                      "id": "X5BAZQ",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "40",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "qaLFf",
+                  "name": "u64",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "IfMjg",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 32,
+                      "height": 32
+                    },
+                    {
+                      "type": "text",
+                      "id": "l7ZrCS",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "64",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zHb4a",
+                  "name": "u96",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "EL45N",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 48,
+                      "height": 48
+                    },
+                    {
+                      "type": "text",
+                      "id": "N8PYC",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "96",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JAGgF",
+                  "name": "u128",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "plGLJ",
+                      "name": "bar",
+                      "fill": "$accent",
+                      "width": 64,
+                      "height": 64
+                    },
+                    {
+                      "type": "text",
+                      "id": "xfqx9",
+                      "name": "v",
+                      "fill": "$text-muted",
+                      "content": "128",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "UTW5X",
+      "x": 1960,
+      "y": 0,
+      "name": "首页-浅色",
+      "theme": {
+        "mode": "light"
+      },
+      "clip": true,
+      "width": 1005,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "qxHH9",
+          "type": "ref",
+          "ref": "zQaMS",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "JfJO5",
+          "name": "Hero",
+          "width": "fill_container",
+          "gap": 32,
+          "padding": 80,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "ellipse",
+              "id": "qfRlk",
+              "name": "头像",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1782109028804.png",
+                "mode": "fill"
+              },
+              "width": 144,
+              "height": 144
+            },
+            {
+              "type": "frame",
+              "id": "zQul5",
+              "name": "Hero文字",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "qGRIl",
+                  "name": "大标题",
+                  "fill": "$text-strong",
+                  "content": "Ginlon",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 56,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "rwOpC",
+                  "name": "标语",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "全干工程师，写作爱好者。相信工程是理解世界的方式，写作是理解自己的方式。",
+                  "lineHeight": 1.9,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "qmGEZ",
+          "name": "区分隔线1",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "PkYsQ",
+          "name": "精选写作",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            64,
+            80
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "Q1PYW",
+              "name": "区标题",
+              "fill": "$text-strong",
+              "content": "精选写作",
+              "fontFamily": "$font-serif",
+              "fontSize": 24,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "PRYlf",
+              "name": "文章清单",
+              "width": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "FhBOB",
+                  "name": "文章1",
+                  "width": "fill_container",
+                  "gap": 32,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "XxorX",
+                      "name": "日期",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 96,
+                      "content": "2026 · 01",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KPYiQ",
+                      "name": "正文",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dek3b",
+                          "name": "标题",
+                          "fill": "$text-strong",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Harness 工程：与 Agent 协作的工程方法",
+                          "fontFamily": "$font-serif",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "N9M8v",
+                          "name": "摘要",
+                          "fill": "$text-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "当编码不再是瓶颈，工程师的价值开始向方法与判断迁移。",
+                          "lineHeight": 1.7,
+                          "fontFamily": "$font-serif",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "Qu2w7",
+                  "name": "行分隔线1",
+                  "fill": "$hairline",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "Z7dn9p",
+                  "name": "文章2",
+                  "width": "fill_container",
+                  "gap": 32,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "m9UKH",
+                      "name": "日期",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 96,
+                      "content": "2025 · 12",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "E328oM",
+                      "name": "正文",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cTJAv",
+                          "name": "标题",
+                          "fill": "$text-strong",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "写作流程的系统化实践",
+                          "fontFamily": "$font-serif",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kedxh",
+                          "name": "摘要",
+                          "fill": "$text-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "用固定节奏积累选题、草稿和复盘，让写作成为长期实践。",
+                          "lineHeight": 1.7,
+                          "fontFamily": "$font-serif",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "bK6Vz",
+                  "name": "行分隔线2",
+                  "fill": "$hairline",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "Z351I",
+                  "name": "文章3",
+                  "width": "fill_container",
+                  "gap": 32,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "FWyEZ",
+                      "name": "日期",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 96,
+                      "content": "2025 · 11",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "500",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "p5JQ5D",
+                      "name": "正文",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t6lmhG",
+                          "name": "标题",
+                          "fill": "$text-strong",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "长期主义者的注意力管理",
+                          "fontFamily": "$font-serif",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "O7sNt",
+                          "name": "摘要",
+                          "fill": "$text-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "把注意力放在十年后仍然有价值的能力上。",
+                          "lineHeight": 1.7,
+                          "fontFamily": "$font-serif",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "pEF2X",
+          "name": "区分隔线2",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "eqOqL",
+          "name": "当前关注",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            64,
+            80
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "IeamM",
+              "name": "区标题",
+              "fill": "$text-strong",
+              "content": "当前关注",
+              "fontFamily": "$font-serif",
+              "fontSize": 24,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "oX5Wm",
+              "name": "关注列表",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 28,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "icbsU",
+                  "name": "Harness Engineering",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "W0M3v",
+                      "name": "小标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Harness Engineering",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "gl0WS",
+                      "name": "说明",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "探索 Agent 优先时代如何有效利用 AI 进行软件工程实践。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eZnT4",
+                  "name": "写作流程系统化",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Qs3fD",
+                      "name": "小标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "写作流程系统化",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "v1wgNd",
+                      "name": "说明",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "通过固定节奏积累选题、草稿和复盘，让写作成为长期实践而非灵感事件。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "a8QbH",
+                  "name": "长期主义执行力",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "o5p0GD",
+                      "name": "小标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "长期主义执行力",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "R0Tktj",
+                      "name": "说明",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "关注可持续投入，把注意力放在十年后仍然有价值的能力上。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "m4fCkg",
+          "type": "ref",
+          "ref": "tOurA",
+          "name": "页脚实例",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "zQaMS",
+      "x": 880,
+      "y": -170,
+      "name": "组件/顶栏",
+      "reusable": true,
+      "width": 1000,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "LXtY6",
+          "name": "栏",
+          "width": "fill_container",
+          "padding": [
+            28,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Brjkm",
+              "name": "Logo",
+              "fill": "$text-strong",
+              "content": "Ginlon",
+              "fontFamily": "$font-serif",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "XogX0",
+              "name": "导航项",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "n6C3TI",
+                  "name": "写作",
+                  "fill": "$text-muted",
+                  "content": "写作",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "xMNoc",
+                  "name": "专栏",
+                  "fill": "$text-muted",
+                  "content": "专栏",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "icon",
+                  "id": "bdX6H",
+                  "name": "主题",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "moon",
+                  "library": "lucide",
+                  "fill": "$text-muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "ASCY9",
+          "name": "分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "tOurA",
+      "x": 880,
+      "y": -340,
+      "name": "组件/页脚",
+      "reusable": true,
+      "width": 1000,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "raA3G",
+          "name": "分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "Izl8L",
+          "name": "栏",
+          "width": "fill_container",
+          "padding": [
+            32,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "iwwdf",
+              "name": "版权",
+              "fill": "$text-muted",
+              "content": "© 2026 Ginlon",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "FxryF",
+              "name": "页脚链接",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "G7QKX",
+                  "name": "GitHub",
+                  "fill": "$text-muted",
+                  "content": "GitHub",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "PxVst",
+                  "name": "RSS",
+                  "fill": "$text-muted",
+                  "content": "RSS",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "f9v28",
+      "x": 3045,
+      "y": 0,
+      "name": "写作归档页-浅色",
+      "clip": true,
+      "width": 1000,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "ZNKpZ",
+          "type": "ref",
+          "ref": "zQaMS",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "GKl7S",
+          "name": "页头",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            72,
+            80,
+            40,
+            80
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "F3T6KS",
+              "name": "Eyebrow",
+              "fill": "$accent",
+              "content": "写作归档",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "l6nfmc",
+              "name": "标题",
+              "fill": "$text-strong",
+              "content": "全部文章",
+              "fontFamily": "$font-serif",
+              "fontSize": 36,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "Gt66z",
+              "name": "描述",
+              "fill": "$text-muted",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "按时间倒序归档的全部文章，可按标签过滤。",
+              "lineHeight": 1.8,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mGkvG",
+          "name": "筛选工具栏",
+          "width": "fill_container",
+          "padding": [
+            0,
+            80,
+            28,
+            80
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "zoQbd",
+              "name": "计数",
+              "fill": "$text-muted",
+              "content": "共 24 篇文章",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "gfNbl",
+              "name": "筛选按钮",
+              "fill": "$surface",
+              "cornerRadius": 6,
+              "stroke": "$hairline",
+              "strokeWidth": 1,
+              "gap": 8,
+              "padding": [
+                9,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "H2vZco",
+                  "name": "图标",
+                  "width": 15,
+                  "height": 15,
+                  "icon": "sliders-horizontal",
+                  "library": "lucide",
+                  "fill": "$text-muted"
+                },
+                {
+                  "type": "text",
+                  "id": "sfH9O",
+                  "name": "标签",
+                  "fill": "$text-strong",
+                  "content": "全部标签",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "icon",
+                  "id": "MadC9",
+                  "name": "箭头",
+                  "width": 15,
+                  "height": 15,
+                  "icon": "chevron-down",
+                  "library": "lucide",
+                  "fill": "$text-muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HA8cP",
+          "name": "归档列表",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            0,
+            80,
+            72,
+            80
+          ],
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "Yd4du",
+              "name": "顶线",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "lMOMF",
+              "name": "条目1",
+              "width": "fill_container",
+              "gap": 32,
+              "padding": [
+                28,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "y20bcv",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 96,
+                  "content": "2026 · 01",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "e9k9Ms",
+                  "name": "正文",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "N1HqNy",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Harness 工程：与 Agent 协作的工程方法",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 21,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "up1h6",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "当编码不再是瓶颈，工程师的价值开始向方法与判断迁移。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "z17eOD",
+                      "name": "标签行",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "X7tAs",
+                          "name": "工程",
+                          "fill": "$text-muted",
+                          "content": "#工程",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "YXT1d",
+                          "name": "Agent",
+                          "fill": "$text-muted",
+                          "content": "#Agent",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "L0fgod",
+              "name": "分线1",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "oRoq0",
+              "name": "条目2",
+              "width": "fill_container",
+              "gap": 32,
+              "padding": [
+                28,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "l5vVt",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 96,
+                  "content": "2025 · 12",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "m7y6bI",
+                  "name": "正文",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "j495T",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "写作流程的系统化实践",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 21,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "lf5tz",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "用固定节奏积累选题、草稿和复盘，让写作成为长期实践。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lUcjd",
+                      "name": "标签行",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "mLOhz",
+                          "name": "写作",
+                          "fill": "$text-muted",
+                          "content": "#写作",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "nFnby",
+              "name": "分线2",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "peBWZ",
+              "name": "条目3",
+              "width": "fill_container",
+              "gap": 32,
+              "padding": [
+                28,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "RUjp4",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 96,
+                  "content": "2025 · 12",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "a52tnN",
+                  "name": "正文",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "V39DG",
+                      "name": "来源",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "b9OpY",
+                          "name": "图标",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "layers",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "yO4Q5",
+                          "name": "专栏名",
+                          "fill": "$accent",
+                          "content": "LangGraph 笔记",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": 0.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "L0pXCg",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "LangGraph 笔记：Checkpointer 的作用",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 21,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ak7c2",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "梳理状态持久化的设计动机与取舍。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Rm8at",
+                      "name": "标签行",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "N9lfJ7",
+                          "name": "笔记",
+                          "fill": "$text-muted",
+                          "content": "#笔记",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Y4PolL",
+                          "name": "Agent",
+                          "fill": "$text-muted",
+                          "content": "#Agent",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "r7ypEj",
+              "name": "分线3",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "O4W6Cu",
+              "name": "条目4",
+              "width": "fill_container",
+              "gap": 32,
+              "padding": [
+                28,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "sChEG",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 96,
+                  "content": "2025 · 11",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "dAYKY",
+                  "name": "正文",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "jQaM9",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "长期主义者的注意力管理",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 21,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "u9GTgp",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "把注意力放在十年后仍然有价值的能力上。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "A96dZ",
+                      "name": "标签行",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yVWtp",
+                          "name": "长期主义",
+                          "fill": "$text-muted",
+                          "content": "#长期主义",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "IjRsI",
+              "name": "分线4",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "jTOlj",
+              "name": "条目5",
+              "width": "fill_container",
+              "gap": 32,
+              "padding": [
+                28,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "zpOfl",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 96,
+                  "content": "2025 · 10",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "y0nCgs",
+                  "name": "正文",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gWlRk",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "构建个人知识系统",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 21,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "msqy6",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "笔记不是收藏，是可被检索和复用的思考资产。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DfPEk",
+                      "name": "标签行",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kKD1w",
+                          "name": "笔记",
+                          "fill": "$text-muted",
+                          "content": "#笔记",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "GFuuK",
+                          "name": "写作",
+                          "fill": "$text-muted",
+                          "content": "#写作",
+                          "fontFamily": "$font-sans",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "DkbaL",
+              "name": "分线5",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            }
+          ]
+        },
+        {
+          "id": "Dlxbm",
+          "type": "ref",
+          "ref": "tOurA",
+          "name": "页脚实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "SGyP1",
+          "layoutPosition": "absolute",
+          "x": 704,
+          "y": 378,
+          "name": "标签浮层",
+          "width": 216,
+          "fill": "$surface",
+          "cornerRadius": 10,
+          "stroke": "$hairline",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#1A1F1C1F",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24
+          },
+          "layout": "vertical",
+          "gap": 2,
+          "padding": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "f7gYch",
+              "name": "项-全部",
+              "width": "fill_container",
+              "fill": "#000000",
+              "cornerRadius": 6,
+              "gap": 8,
+              "padding": [
+                9,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xNruG",
+                  "name": "名",
+                  "fill": "$accent",
+                  "content": "全部",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "icon",
+                  "id": "HAaRo",
+                  "name": "勾",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "check",
+                  "library": "lucide",
+                  "fill": "$accent"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "w6cj7I",
+              "name": "项-工程",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "cornerRadius": 6,
+              "gap": 8,
+              "padding": [
+                9,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "w3Yth",
+                  "name": "名",
+                  "fill": "$text-strong",
+                  "content": "工程",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "arKgL",
+              "name": "项-写作",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "cornerRadius": 6,
+              "gap": 8,
+              "padding": [
+                9,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nsdXl",
+                  "name": "名",
+                  "fill": "$text-strong",
+                  "content": "写作",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zDb7L",
+              "name": "项-Agent",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "cornerRadius": 6,
+              "gap": 8,
+              "padding": [
+                9,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "x1Bo1z",
+                  "name": "名",
+                  "fill": "$text-strong",
+                  "content": "Agent",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cxAyF",
+              "name": "项-长期主义",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "cornerRadius": 6,
+              "gap": 8,
+              "padding": [
+                9,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rt6c6",
+                  "name": "名",
+                  "fill": "$text-strong",
+                  "content": "长期主义",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wIwhf",
+              "name": "项-笔记",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "cornerRadius": 6,
+              "gap": 8,
+              "padding": [
+                9,
+                12
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xpZFG",
+                  "name": "名",
+                  "fill": "$text-strong",
+                  "content": "笔记",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "xV2hU",
+      "x": 4125,
+      "y": 0,
+      "name": "文章详情页-浅色",
+      "clip": true,
+      "width": 1000,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "NB6Kt",
+          "type": "ref",
+          "ref": "zQaMS",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "tui6N",
+          "name": "文章Hero",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            72,
+            160,
+            48,
+            160
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "bcHPu",
+              "name": "Eyebrow",
+              "fill": "$accent",
+              "content": "工程 · 长读",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "AKeUq",
+              "name": "标题",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Harness 工程：与 Agent 协作的工程方法",
+              "lineHeight": 1.3,
+              "fontFamily": "$font-serif",
+              "fontSize": 42,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "W41LeR",
+              "name": "摘要",
+              "fill": "$text-muted",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "当编码不再是瓶颈，工程师的价值开始向方法、判断与系统设计迁移。这篇文章梳理我在 Agent 优先时代的工程实践。",
+              "lineHeight": 1.8,
+              "fontFamily": "$font-serif",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "HlfIQ",
+              "name": "元信息",
+              "gap": 20,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "vqOz2",
+                  "name": "2026 · 01 · 18",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "GJOUv",
+                      "name": "i",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "calendar",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "lLGIu",
+                      "name": "t",
+                      "fill": "$text-muted",
+                      "content": "2026 · 01 · 18",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "R3NtXm",
+                  "name": "更新于 2026 · 02 · 03",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "vjvzS",
+                      "name": "i",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "refresh-cw",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "FybMn",
+                      "name": "t",
+                      "fill": "$text-muted",
+                      "content": "更新于 2026 · 02 · 03",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "PeSYQ",
+          "name": "Hero分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "fHp2d",
+          "name": "双栏布局",
+          "width": "fill_container",
+          "padding": [
+            56,
+            0,
+            72,
+            0
+          ],
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "EBlPC",
+              "name": "正文列",
+              "width": 680,
+              "layout": "vertical",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "TASDS",
+                  "name": "段1",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "过去十年，软件工程的瓶颈一直在「写代码」这件事上。我们用更好的语言、框架和工具，反复优化的都是同一个动作：把想法转译成可运行的代码。",
+                  "lineHeight": 1.9,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "VW5jN",
+                  "name": "段2",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "但当 Agent 能够可靠地完成转译，瓶颈就转移了。工程师真正稀缺的能力，变成了如何描述问题、如何拆解任务、如何验证结果——也就是「方法」本身。",
+                  "lineHeight": 1.9,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "vZym0",
+                  "name": "H2",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "什么是 Harness",
+                  "lineHeight": 1.3,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 26,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "plfCA",
+                  "name": "段3",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Harness 指的是包裹在模型外层的那套工程结构：上下文如何组织、工具如何暴露、结果如何校验、失败如何恢复。它决定了同样一个模型，在你手里能发挥几成功力。",
+                  "lineHeight": 1.9,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "A51IG",
+                  "name": "引用",
+                  "width": "fill_container",
+                  "stroke": "$accent",
+                  "strokeWidth": {
+                    "left": 3
+                  },
+                  "layout": "vertical",
+                  "padding": [
+                    4,
+                    0,
+                    4,
+                    20
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qe5RQ",
+                      "name": "引文",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "模型决定能力的上限，Harness 决定你能稳定拿到其中的多少。",
+                      "lineHeight": 1.8,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 17,
+                      "fontWeight": "normal",
+                      "fontStyle": "italic"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "z9sXK",
+                  "name": "H2b",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "三个实践原则",
+                  "lineHeight": 1.3,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 26,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "T00yM",
+                  "name": "段4",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "第一，让验证比生成更便宜。第二，把上下文当作一等公民来设计。第三，为失败设计恢复路径，而不是假设一次成功。",
+                  "lineHeight": 1.9,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OkXMk",
+              "layoutPosition": "absolute",
+              "x": 846,
+              "y": 56,
+              "name": "目录侧栏",
+              "width": 140,
+              "layout": "vertical",
+              "gap": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "MXaZQ",
+                  "name": "目录标题",
+                  "fill": "$text-muted",
+                  "content": "目录",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.5
+                },
+                {
+                  "type": "text",
+                  "id": "EiJeV",
+                  "name": "什么是 Harness",
+                  "fill": "$accent",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "什么是 Harness",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "oHl1N",
+                  "name": "三个实践原则",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "三个实践原则",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "F2eun",
+                  "name": "小结",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "小结",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "qmFwF",
+          "name": "翻页分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "AqEAi",
+          "name": "翻页",
+          "width": "fill_container",
+          "gap": 24,
+          "padding": [
+            40,
+            160
+          ],
+          "justifyContent": "space_between",
+          "children": [
+            {
+              "type": "frame",
+              "id": "UH5Bc",
+              "name": "上一篇",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "eOPMr",
+                  "name": "标",
+                  "fill": "$text-muted",
+                  "content": "← 上一篇",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "jXgnU",
+                  "name": "题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "写作流程的系统化实践",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jjBVk",
+              "name": "下一篇",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "G4WJU",
+                  "name": "标",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "下一篇 →",
+                  "textAlign": "right",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "foEgY",
+                  "name": "题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "长期主义者的注意力管理",
+                  "textAlign": "right",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xl6mh",
+          "type": "ref",
+          "ref": "tOurA",
+          "name": "页脚实例",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "JwRht",
+      "x": 880,
+      "y": 1486,
+      "name": "移动端-首页",
+      "clip": true,
+      "width": 390,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "I2Pf6",
+          "type": "ref",
+          "ref": "W5XJKc",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "Xuf0u",
+          "name": "Hero",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            40,
+            24
+          ],
+          "children": [
+            {
+              "type": "ellipse",
+              "id": "q0dRjL",
+              "name": "头像",
+              "fill": "#D8DED6",
+              "width": 72,
+              "height": 72
+            },
+            {
+              "type": "frame",
+              "id": "EKOF8",
+              "name": "Hero文字",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "XbYB3",
+                  "name": "大标题",
+                  "fill": "$text-strong",
+                  "content": "Ginlon",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "lVR2y",
+                  "name": "标语",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "全干工程师，写作爱好者。相信工程是理解世界的方式，写作是理解自己的方式。",
+                  "lineHeight": 1.9,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "I7aMKA",
+          "name": "区线1",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "JsXlA",
+          "name": "精选写作",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            36,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "lPOt0",
+              "name": "区标题",
+              "fill": "$text-strong",
+              "content": "精选写作",
+              "fontFamily": "$font-serif",
+              "fontSize": 22,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "MIi4o",
+              "name": "清单",
+              "width": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "IKxU7",
+                  "name": "文章1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    20,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vJFaH",
+                      "name": "日期",
+                      "fill": "$text-muted",
+                      "content": "2026 · 01",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "500",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "F4jRv",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Harness 工程：与 Agent 协作的工程方法",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ybnVO",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "当编码不再是瓶颈，工程师的价值开始向方法与判断迁移。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "oeSx5",
+                  "name": "线1",
+                  "fill": "$hairline",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "X3qaL",
+                  "name": "文章2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    20,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "CXQYr",
+                      "name": "日期",
+                      "fill": "$text-muted",
+                      "content": "2025 · 12",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "500",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "J9dD4",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "写作流程的系统化实践",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "UFjV1",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "用固定节奏积累选题、草稿和复盘。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "jYcGN",
+                  "name": "线2",
+                  "fill": "$hairline",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "u1TprG",
+                  "name": "文章3",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": [
+                    20,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "G2DH24",
+                      "name": "日期",
+                      "fill": "$text-muted",
+                      "content": "2025 · 11",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "500",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "I2auaP",
+                      "name": "标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "长期主义者的注意力管理",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Rhr6X",
+                      "name": "摘要",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "把注意力放在十年后仍然有价值的能力上。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "aijdZ",
+          "name": "区线2",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "P5i4zz",
+          "name": "当前关注",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            36,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "K6yzOZ",
+              "name": "区标题",
+              "fill": "$text-strong",
+              "content": "当前关注",
+              "fontFamily": "$font-serif",
+              "fontSize": 22,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "l72DM",
+              "name": "关注列表",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 22,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "D4NzGo",
+                  "name": "Harness Engineering",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fmjLy",
+                      "name": "小标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Harness Engineering",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "GDlg1",
+                      "name": "说明",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "探索 Agent 优先时代如何有效利用 AI 进行软件工程实践。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "I9Kyy",
+                  "name": "写作流程系统化",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "v4Yq8t",
+                      "name": "小标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "写作流程系统化",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "T3Qv1C",
+                      "name": "说明",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "通过固定节奏积累选题、草稿和复盘。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UE6kR",
+                  "name": "长期主义执行力",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "X6qC1",
+                      "name": "小标题",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "长期主义执行力",
+                      "fontFamily": "$font-serif",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "e2dtg",
+                      "name": "说明",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "把注意力放在十年后仍然有价值的能力上。",
+                      "lineHeight": 1.7,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ybgxD",
+          "type": "ref",
+          "ref": "u0fHC",
+          "name": "页脚实例",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "UOUz7",
+      "x": 1330,
+      "y": 1486,
+      "name": "移动端-写作归档",
+      "clip": true,
+      "width": 390,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "QsPtS",
+          "type": "ref",
+          "ref": "W5XJKc",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "nE7XR",
+          "name": "页头",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": [
+            36,
+            24,
+            20,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "xQCq3",
+              "name": "Eyebrow",
+              "fill": "$accent",
+              "content": "写作归档",
+              "fontFamily": "$font-sans",
+              "fontSize": 12,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "Ex3pb",
+              "name": "标题",
+              "fill": "$text-strong",
+              "content": "全部文章",
+              "fontFamily": "$font-serif",
+              "fontSize": 30,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "I53Agw",
+          "name": "移动端筛选栏",
+          "width": "fill_container",
+          "padding": [
+            0,
+            24,
+            24,
+            24
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "tIgvQ",
+              "name": "计数",
+              "fill": "$text-muted",
+              "content": "共 24 篇",
+              "fontFamily": "$font-sans",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "XifOO",
+              "name": "筛选按钮",
+              "fill": "$surface",
+              "cornerRadius": 6,
+              "stroke": "$hairline",
+              "strokeWidth": 1,
+              "gap": 6,
+              "padding": [
+                8,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "N4ioNe",
+                  "name": "图标",
+                  "width": 14,
+                  "height": 14,
+                  "icon": "sliders-horizontal",
+                  "library": "lucide",
+                  "fill": "$text-muted"
+                },
+                {
+                  "type": "text",
+                  "id": "tmwJ4",
+                  "name": "标签",
+                  "fill": "$text-strong",
+                  "content": "全部标签",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "O9JQK6",
+          "name": "列表",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            0,
+            24,
+            36,
+            24
+          ],
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "V9P3L",
+              "name": "顶线",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "xFPlZ",
+              "name": "条目1",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                20,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "B1VXmh",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "content": "2026 · 01",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "whAEB",
+                  "name": "标题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Harness 工程：与 Agent 协作的工程方法",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "uubxH",
+                  "name": "摘要",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "当编码不再是瓶颈，工程师的价值开始迁移。",
+                  "lineHeight": 1.7,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "Z7PJD",
+                  "name": "标签行",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "r0yYx",
+                      "name": "工程",
+                      "fill": "$text-muted",
+                      "content": "#工程",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "RTtpM",
+                      "name": "Agent",
+                      "fill": "$text-muted",
+                      "content": "#Agent",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "g9iHNZ",
+              "name": "分1",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "OdpAE",
+              "name": "条目2",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                20,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "QA9MT",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "content": "2025 · 12",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "L6KylX",
+                  "name": "标题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "写作流程的系统化实践",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "vnpLf",
+                  "name": "摘要",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "用固定节奏积累选题、草稿和复盘。",
+                  "lineHeight": 1.7,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "BZtI0",
+                  "name": "标签行",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d4G0i7",
+                      "name": "写作",
+                      "fill": "$text-muted",
+                      "content": "#写作",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "Yo1tb",
+              "name": "分2",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "nwi07",
+              "name": "条目3",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                20,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "G2kprv",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "content": "2025 · 12",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "oveWi",
+                  "name": "来源",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "R5oUcY",
+                      "name": "i",
+                      "width": 12,
+                      "height": 12,
+                      "icon": "layers",
+                      "library": "lucide",
+                      "fill": "$accent"
+                    },
+                    {
+                      "type": "text",
+                      "id": "laHmD",
+                      "name": "c",
+                      "fill": "$accent",
+                      "content": "LangGraph 笔记",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "GlAWp",
+                  "name": "标题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "LangGraph 笔记：Checkpointer",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "gNHwC",
+                  "name": "摘要",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "梳理状态持久化的设计动机与取舍。",
+                  "lineHeight": 1.7,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "uCebc",
+                  "name": "标签行",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "GxNIy",
+                      "name": "笔记",
+                      "fill": "$text-muted",
+                      "content": "#笔记",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "wnujr",
+              "name": "分3",
+              "fill": "$hairline",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "xapT2",
+              "name": "条目4",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": [
+                20,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "dikea",
+                  "name": "日期",
+                  "fill": "$text-muted",
+                  "content": "2025 · 11",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "500",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "hrPvF",
+                  "name": "标题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "长期主义者的注意力管理",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "VLt2L",
+                  "name": "摘要",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "把注意力放在十年后仍有价值的能力上。",
+                  "lineHeight": 1.7,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "MBMlf",
+                  "name": "标签行",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "m9HEy",
+                      "name": "长期主义",
+                      "fill": "$text-muted",
+                      "content": "#长期主义",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ManaG",
+          "type": "ref",
+          "ref": "u0fHC",
+          "name": "页脚实例",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ibe65",
+      "x": 1780,
+      "y": 1486,
+      "name": "移动端-文章详情",
+      "clip": true,
+      "width": 390,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "kBY1x",
+          "type": "ref",
+          "ref": "W5XJKc",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "suNYk",
+          "name": "文章Hero",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            36,
+            24,
+            28,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "JIaDO",
+              "name": "Eyebrow",
+              "fill": "$accent",
+              "content": "工程 · 长读",
+              "fontFamily": "$font-sans",
+              "fontSize": 12,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "MjXz1",
+              "name": "标题",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Harness 工程：与 Agent 协作的工程方法",
+              "lineHeight": 1.35,
+              "fontFamily": "$font-serif",
+              "fontSize": 28,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "IBopK",
+              "name": "摘要",
+              "fill": "$text-muted",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "当编码不再是瓶颈，工程师的价值开始向方法、判断与系统设计迁移。",
+              "lineHeight": 1.8,
+              "fontFamily": "$font-serif",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "oMIAO",
+              "name": "元信息",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "IWRE0",
+                  "name": "2026 · 01 · 18",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "mAct1",
+                      "name": "i",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "calendar",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "S3g5wB",
+                      "name": "t",
+                      "fill": "$text-muted",
+                      "content": "2026 · 01 · 18",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Azxq9",
+                  "name": "更新 02 · 03",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "g2VbR",
+                      "name": "i",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "refresh-cw",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "o12s3",
+                      "name": "t",
+                      "fill": "$text-muted",
+                      "content": "更新 02 · 03",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "Tycuv",
+          "name": "Hero线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "EVKOz",
+          "name": "正文",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            28,
+            24,
+            36,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "I7QEQV",
+              "name": "段1",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "过去十年，软件工程的瓶颈一直在「写代码」这件事上。我们反复优化的都是同一个动作：把想法转译成可运行的代码。",
+              "lineHeight": 1.9,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Bk51I",
+              "name": "段2",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "但当 Agent 能够可靠地完成转译，瓶颈就转移了。工程师真正稀缺的能力，变成了如何描述问题、拆解任务、验证结果。",
+              "lineHeight": 1.9,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "QeCZP",
+              "name": "H2",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "什么是 Harness",
+              "lineHeight": 1.35,
+              "fontFamily": "$font-serif",
+              "fontSize": 22,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "IwLLY",
+              "name": "段3",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Harness 指的是包裹在模型外层的那套工程结构：上下文如何组织、工具如何暴露、结果如何校验、失败如何恢复。",
+              "lineHeight": 1.9,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "Uyc0u",
+              "name": "引用",
+              "width": "fill_container",
+              "stroke": "$accent",
+              "strokeWidth": {
+                "left": 3
+              },
+              "layout": "vertical",
+              "padding": [
+                4,
+                0,
+                4,
+                16
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "B3Wenb",
+                  "name": "引文",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "模型决定能力的上限，Harness 决定你能稳定拿到其中的多少。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 16,
+                  "fontWeight": "normal",
+                  "fontStyle": "italic"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "HImcx",
+          "name": "翻页线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "N8qCQi",
+          "name": "翻页",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Bo4qF",
+              "name": "上一篇",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "RP7IU",
+                  "name": "标",
+                  "fill": "$text-muted",
+                  "content": "← 上一篇",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 11,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "uka1R",
+                  "name": "题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "写作流程的系统化实践",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "dDa3X",
+              "name": "下一篇",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vldw3",
+                  "name": "标",
+                  "fill": "$text-muted",
+                  "content": "下一篇 →",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 11,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "KUr8T",
+                  "name": "题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "长期主义者的注意力管理",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "N7SGb",
+          "type": "ref",
+          "ref": "u0fHC",
+          "name": "页脚实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "OCaKW",
+          "layoutPosition": "absolute",
+          "x": 306,
+          "y": 1090,
+          "name": "目录悬浮按钮",
+          "width": 56,
+          "height": 56,
+          "fill": "$accent",
+          "cornerRadius": 28,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#1A1F1C40",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 18
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "PDzwZ",
+              "name": "图标",
+              "width": 24,
+              "height": 24,
+              "icon": "list",
+              "library": "lucide",
+              "fill": "#FFFFFF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "WvwJq",
+      "x": 2230,
+      "y": 1486,
+      "name": "移动端-文章详情-目录抽屉",
+      "clip": true,
+      "width": 390,
+      "height": 846,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "q8fBpa",
+          "type": "ref",
+          "ref": "W5XJKc",
+          "name": "顶栏实例",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "FBcxc",
+          "name": "文章Hero",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            36,
+            24,
+            28,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "kNSAs",
+              "name": "Eyebrow",
+              "fill": "$accent",
+              "content": "工程 · 长读",
+              "fontFamily": "$font-sans",
+              "fontSize": 12,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "dukso",
+              "name": "标题",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Harness 工程：与 Agent 协作的工程方法",
+              "lineHeight": 1.35,
+              "fontFamily": "$font-serif",
+              "fontSize": 28,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "rmEf3",
+              "name": "摘要",
+              "fill": "$text-muted",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "当编码不再是瓶颈，工程师的价值开始向方法、判断与系统设计迁移。",
+              "lineHeight": 1.8,
+              "fontFamily": "$font-serif",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "P4RCUf",
+              "name": "元信息",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "yoF7o",
+                  "name": "2026 · 01 · 18",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "pymBo",
+                      "name": "i",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "calendar",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vUMkL",
+                      "name": "t",
+                      "fill": "$text-muted",
+                      "content": "2026 · 01 · 18",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zWeHA",
+                  "name": "更新 02 · 03",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "U4geul",
+                      "name": "i",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "refresh-cw",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "jhUQO",
+                      "name": "t",
+                      "fill": "$text-muted",
+                      "content": "更新 02 · 03",
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "gtufM",
+          "name": "Hero线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "d4KUL2",
+          "name": "正文",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            28,
+            24,
+            36,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "RWluH",
+              "name": "段1",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "过去十年，软件工程的瓶颈一直在「写代码」这件事上。我们反复优化的都是同一个动作：把想法转译成可运行的代码。",
+              "lineHeight": 1.9,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "RTUWS",
+              "name": "段2",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "但当 Agent 能够可靠地完成转译，瓶颈就转移了。工程师真正稀缺的能力，变成了如何描述问题、拆解任务、验证结果。",
+              "lineHeight": 1.9,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "heVzy",
+              "name": "H2",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "什么是 Harness",
+              "lineHeight": 1.35,
+              "fontFamily": "$font-serif",
+              "fontSize": 22,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "bviUG",
+              "name": "段3",
+              "fill": "$text-strong",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Harness 指的是包裹在模型外层的那套工程结构：上下文如何组织、工具如何暴露、结果如何校验、失败如何恢复。",
+              "lineHeight": 1.9,
+              "fontFamily": "$font-serif",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "NZ5hC",
+              "name": "引用",
+              "width": "fill_container",
+              "stroke": "$accent",
+              "strokeWidth": {
+                "left": 3
+              },
+              "layout": "vertical",
+              "padding": [
+                4,
+                0,
+                4,
+                16
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Et9Rh",
+                  "name": "引文",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "模型决定能力的上限，Harness 决定你能稳定拿到其中的多少。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "$font-serif",
+                  "fontSize": 16,
+                  "fontWeight": "normal",
+                  "fontStyle": "italic"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "VK412",
+          "name": "翻页线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "lEPcr",
+          "name": "翻页",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "seFRX",
+              "name": "上一篇",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "sZK3j",
+                  "name": "标",
+                  "fill": "$text-muted",
+                  "content": "← 上一篇",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 11,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "PhHGG",
+                  "name": "题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "写作流程的系统化实践",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AixFH",
+              "name": "下一篇",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uyMAk",
+                  "name": "标",
+                  "fill": "$text-muted",
+                  "content": "下一篇 →",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 11,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "neSHj",
+                  "name": "题",
+                  "fill": "$text-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "长期主义者的注意力管理",
+                  "fontFamily": "$font-serif",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hTljh",
+          "type": "ref",
+          "ref": "u0fHC",
+          "name": "页脚实例",
+          "width": "fill_container"
+        },
+        {
+          "id": "xeya1",
+          "type": "ref",
+          "ref": "k7Ah2",
+          "name": "目录抽屉实例",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "height": 846,
+          "width": 390
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W5XJKc",
+      "x": 880,
+      "y": -490,
+      "name": "组件/移动端顶栏",
+      "reusable": true,
+      "width": 390,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ZumFq",
+          "name": "栏",
+          "width": "fill_container",
+          "padding": [
+            20,
+            24
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "jOMyf",
+              "name": "Logo",
+              "fill": "$text-strong",
+              "content": "Ginlon",
+              "fontFamily": "$font-serif",
+              "fontSize": 19,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "BXJkZ",
+              "name": "导航项",
+              "gap": 20,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pG2Xm",
+                  "name": "写作",
+                  "fill": "$text-muted",
+                  "content": "写作",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "j4R1vR",
+                  "name": "专栏",
+                  "fill": "$text-muted",
+                  "content": "专栏",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "icon",
+                  "id": "sxnUw",
+                  "name": "主题",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "moon",
+                  "library": "lucide",
+                  "fill": "$text-muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "NnJR3",
+          "name": "分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "u0fHC",
+      "x": 880,
+      "y": -640,
+      "name": "组件/移动端页脚",
+      "reusable": true,
+      "width": 390,
+      "fill": "$page-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "iKQOc",
+          "name": "分隔线",
+          "fill": "$hairline",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "VHlG7",
+          "name": "栏",
+          "width": "fill_container",
+          "padding": 24,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "sJDJs",
+              "name": "版权",
+              "fill": "$text-muted",
+              "content": "© 2026 Ginlon",
+              "fontFamily": "$font-sans",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "qaVRL",
+              "name": "链接",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "sM2kI",
+                  "name": "GitHub",
+                  "fill": "$text-muted",
+                  "content": "GitHub",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "hLIi1",
+                  "name": "RSS",
+                  "fill": "$text-muted",
+                  "content": "RSS",
+                  "fontFamily": "$font-sans",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "k7Ah2",
+      "x": 880,
+      "y": -1566,
+      "name": "组件/移动端底部抽屉",
+      "reusable": true,
+      "width": 390,
+      "height": 846,
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "R7yUC7",
+          "x": 0,
+          "y": 0,
+          "name": "遮罩",
+          "fill": "#1A1F1C80",
+          "width": 390,
+          "height": 846
+        },
+        {
+          "type": "frame",
+          "id": "Ld5ty",
+          "x": 0,
+          "y": 396,
+          "name": "抽屉面板",
+          "width": 390,
+          "height": 450,
+          "fill": "$surface",
+          "cornerRadius": [
+            20,
+            20,
+            0,
+            0
+          ],
+          "layout": "vertical",
+          "padding": [
+            16,
+            24,
+            28,
+            24
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "X9m1Kv",
+              "name": "抓手区",
+              "width": "fill_container",
+              "padding": [
+                0,
+                0,
+                16,
+                0
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2,
+                  "id": "AT5Wm",
+                  "name": "抓手",
+                  "fill": "$hairline",
+                  "width": 36,
+                  "height": 4
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "mqyQ2",
+              "name": "抽屉标题",
+              "fill": "$text-muted",
+              "content": "目录",
+              "fontFamily": "$font-sans",
+              "fontSize": 13,
+              "fontWeight": "600",
+              "letterSpacing": 1.5
+            },
+            {
+              "type": "frame",
+              "id": "VT4VE",
+              "name": "抽屉内容槽",
+              "slot": [],
+              "width": "fill_container",
+              "layout": "vertical",
+              "padding": [
+                16,
+                0,
+                0,
+                0
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "h11qcC",
+                  "name": "项-什么是 Harness",
+                  "width": "fill_container",
+                  "fill": "$accent-soft",
+                  "cornerRadius": 6,
+                  "layout": "vertical",
+                  "padding": [
+                    14,
+                    12
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hzmRD",
+                      "name": "t",
+                      "fill": "$accent",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "什么是 Harness",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "FZOYJ",
+                  "name": "项-三个实践原则",
+                  "width": "fill_container",
+                  "fill": "#00000000",
+                  "cornerRadius": 6,
+                  "layout": "vertical",
+                  "padding": [
+                    14,
+                    12
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "IFWmP",
+                      "name": "t",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "三个实践原则",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "K2LARI",
+                  "name": "项-小结",
+                  "width": "fill_container",
+                  "fill": "#00000000",
+                  "cornerRadius": 6,
+                  "layout": "vertical",
+                  "padding": [
+                    14,
+                    12
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "nxwM4",
+                      "name": "t",
+                      "fill": "$text-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "小结",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$font-serif",
+                      "fontSize": 15
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
+  "variables": {
+    "accent": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2E8B5E",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#7FD0A6",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "font-sans": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font-serif": {
+      "type": "string",
+      "value": "Noto Serif SC"
+    },
+    "hairline": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#1A1F1C14",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#E8EDE91A",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "page-bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FAF8F3",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#131714",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "surface": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#1A201C",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-muted": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#6B756F",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#9CA8A1",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-strong": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#1A1F1C",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#E8EDE9",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "accent-soft": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#2E8B5E1F",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#7FD0A626",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    }
+  }
+}
