@@ -269,6 +269,9 @@ onUnmounted(() => {
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(26, 31, 28, 0.12);
   z-index: 30;
+  /* 限制高度避免标签过多时溢出屏幕：视口高度 - 触发器到底部的余量 */
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
 }
 
 .tag-option {
