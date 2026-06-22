@@ -25,10 +25,17 @@
     <div class="article-list">
       <article
         v-for="article in filteredArticles"
-        :key="article.slug"
+        :key="article.permalink"
         class="article-card"
         :data-slug="article.slug"
       >
+        <a
+          v-if="article.source === 'column' && article.columnSlug"
+          :href="`/columns/${article.columnSlug}`"
+          class="article-column-badge"
+        >
+          专栏 · {{ article.columnTitle }}
+        </a>
         <a :href="article.permalink" class="article-main-link">
           <h3 class="article-card-title">{{ article.title }}</h3>
         </a>
@@ -68,6 +75,9 @@ interface Article {
   tags: string[];
   tagSlugs: string[];
   permalink: string;
+  source: 'blog' | 'column';
+  columnTitle?: string;
+  columnSlug?: string;
 }
 
 interface Tag {
@@ -278,5 +288,22 @@ onUnmounted(() => {
   padding: 1rem;
   color: var(--text-muted);
   background: var(--surface-bg);
+}
+
+.article-column-badge {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.18rem 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+
+.article-column-badge:hover {
+  text-decoration: underline;
 }
 </style>
