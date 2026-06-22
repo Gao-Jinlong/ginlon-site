@@ -1,0 +1,69 @@
+---
+import { ArrowUp } from 'lucide-astro';
+---
+
+<button type="button" class="back-to-top" aria-label="回到顶部" data-back-to-top hidden>
+  <ArrowUp size={20} />
+</button>
+
+<script>
+  function installBackToTop() {
+    const btn = document.querySelector('[data-back-to-top]');
+    if (!(btn instanceof HTMLButtonElement)) return;
+    if (btn.getAttribute('data-bound') === 'true') return;
+    btn.setAttribute('data-bound', 'true');
+
+    const onScroll = () => {
+      const show = window.scrollY > window.innerHeight;
+      btn.hidden = !show;
+    };
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  document.addEventListener('astro:page-load', installBackToTop);
+  document.addEventListener('astro:after-swap', installBackToTop);
+  installBackToTop();
+</script>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 22px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-soft);
+    z-index: 30;
+    transition: background-color 150ms ease, opacity 150ms ease;
+  }
+
+  .back-to-top[hidden] {
+    display: none;
+  }
+
+  .back-to-top:hover {
+    background: var(--accent-hover);
+  }
+
+  /* 移动端：与 TOC 抽屉浮钮（right:20 bottom:20，56px）错开，堆叠在其上方 */
+  @media (max-width: 720px) {
+    .back-to-top {
+      right: 22px;
+      bottom: 88px;
+    }
+  }
+</style>
