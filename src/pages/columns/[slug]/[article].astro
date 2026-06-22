@@ -1,10 +1,10 @@
 ---
 import { render } from 'astro:content';
-import ArticleHero from '../../../components/site/ArticleHero.astro';
+import ArticleHeader from '../../../components/site/ArticleHeader.astro';
+import ArticleAside from '../../../components/site/ArticleAside.astro';
 import ArticlePager from '../../../components/site/ArticlePager.astro';
 import ArticleTocDrawer from '../../../components/site/ArticleTocDrawer.astro';
-import ArticleTocRail from '../../../components/site/ArticleTocRail.astro';
-import ColumnSidebar from '../../../components/site/ColumnSidebar.astro';
+import Shell from '../../../components/site/Content.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { siteConfig } from '../../../data/site';
 import { dayjs, format } from '../../../utils/dayjs';
@@ -47,7 +47,7 @@ const filteredHeadings = headings.filter((h: { depth: number }) => h.depth >= 2 
 
 const summary = detail.subtitle;
 const publishedLabel = dayjs(detail.createdAt).format(format);
-const articleIndex = detail.articles.findIndex((a: { slug: string }) => a.slug === articleSlug) + 1;
+const categoryLabel = '工程 · 长读';
 
 const publishedTime = toIsoString(detail.createdAt);
 const modifiedTime = toIsoString(detail.updatedAt);
@@ -63,270 +63,66 @@ const pageMeta = {
 ---
 
 <SiteLayout pageMeta={pageMeta}>
-  <article class="article-page-shell">
-    <!-- 专栏归属提示 -->
-    <div class="column-breadcrumb">
-      <span class="column-breadcrumb-label">专栏</span>
-      <a href={`/columns/${slug}`} class="column-breadcrumb-link">{detail.column.title}</a>
-      <span class="column-breadcrumb-sep">·</span>
-      <span>第 {articleIndex} 篇</span>
-    </div>
+  <article>
+    <Shell as="div">
+      <ArticleHeader
+        title={detail.title}
+        summary={summary}
+        publishedLabel={publishedLabel}
+        publishedAtIso={publishedTime}
+        lastModifiedIso={modifiedTime}
+        tags={detail.tags}
+        poster={detail.poster}
+        categoryLabel={categoryLabel}
+        column={{ title: detail.column.title, slug: slug! }}
+      />
 
-    <ArticleHero
-      title={detail.title}
-      summary={summary}
-      publishedLabel={publishedLabel}
-      tags={detail.tags}
-      poster={detail.poster}
-    />
+      <hr class="article-rule" />
 
-    <div class="article-layout">
-      <div class="article-main-column">
-        <ArticleTocDrawer headings={filteredHeadings} buttonLabel="目录" />
-
-        <div class="article-body-surface">
-          <div class="article-content">
-            <Content />
-          </div>
-        </div>
-
-        <ArticlePager
-          prev={detail.prev ? { slug: `/columns/${slug}/${detail.prev.slug}`, title: detail.prev.title } : undefined}
-          next={detail.next ? { slug: `/columns/${slug}/${detail.next.slug}`, title: detail.next.title } : undefined}
-        />
+      <div class="article-body reading-center">
+        <Content />
       </div>
 
-      <aside class="article-sidebar">
-        <ColumnSidebar
-          columnTitle={detail.column.title}
-          columnSlug={slug!}
-          columnStatus={detail.column.status}
-          articles={detail.articles}
-          currentArticleSlug={articleSlug!}
-        />
-        <div style="margin-top:0.75rem;">
-          <ArticleTocRail headings={filteredHeadings} />
-        </div>
-      </aside>
-    </div>
+      <hr class="article-rule" />
+
+      <ArticlePager
+        prev={detail.prev ? { slug: `/columns/${slug}/${detail.prev.slug}`, title: detail.prev.title } : undefined}
+        next={detail.next ? { slug: `/columns/${slug}/${detail.next.slug}`, title: detail.next.title } : undefined}
+      />
+    </Shell>
+
+    <ArticleAside
+      headings={filteredHeadings}
+      column={{
+        title: detail.column.title,
+        slug: slug!,
+        articles: detail.articles.map((a) => ({ slug: a.slug, title: a.title })),
+        currentSlug: articleSlug!,
+      }}
+    />
+    <ArticleTocDrawer headings={filteredHeadings} buttonLabel="目录" />
   </article>
 </SiteLayout>
 
 <style>
-  .article-page-shell {
-    display: grid;
-    gap: 1.5rem;
-    max-width: var(--shell-width);
-    margin: 0 auto;
-    padding: 0 0.75rem;
-    align-items: start;
-  }
-
-  .column-breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-  }
-
-  .column-breadcrumb-label {
-    color: var(--accent);
-    font-weight: 600;
-    font-size: 0.76rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .column-breadcrumb-link {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .column-breadcrumb-link:hover {
-    text-decoration: underline;
-  }
-
-  .column-breadcrumb-sep {
-    color: var(--surface-border);
-  }
-
-  .article-layout {
-    display: grid;
-    gap: 1.5rem;
-    align-items: start;
-  }
-
-  .article-main-column {
-    display: grid;
-    gap: 1rem;
-    min-width: 0;
-  }
-
-  .article-body-surface {
-    border: 1px solid var(--surface-border);
-    background: var(--surface-bg-strong);
-    padding: 1.2rem;
-    box-shadow: var(--shadow-soft);
-  }
-
-  .article-content {
-    max-width: var(--reading-width);
-    margin: 0 auto;
-    color: var(--text-strong);
-    font-size: 1rem;
-    line-height: 1.9;
-  }
-
-  .article-content :global(h2),
-  .article-content :global(h3),
-  .article-content :global(h4),
-  .article-content :global(h5) {
-    margin-top: 2.6rem;
-    margin-bottom: 0.9rem;
-    color: var(--text-strong);
-    line-height: 1.25;
-    letter-spacing: -0.03em;
-  }
-
-  .article-content :global(h2) {
-    font-size: clamp(1.6rem, 1.2rem + 1vw, 2.25rem);
-  }
-
-  .article-content :global(h3) {
-    font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.7rem);
-  }
-
-  .article-content :global(p),
-  .article-content :global(ul),
-  .article-content :global(ol),
-  .article-content :global(blockquote),
-  .article-content :global(pre),
-  .article-content :global(table) {
-    margin-block: 1rem;
-  }
-
-  .article-content :global(ul),
-  .article-content :global(ol) {
-    padding-left: 1.4rem;
-  }
-
-  .article-content :global(li) {
-    margin-block: 0.45rem;
-  }
-
-  .article-content :global(a) {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-  }
-
-  .article-content :global(img) {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
-
-  .article-content :global(blockquote) {
-    border-left: 3px solid var(--accent);
-    margin-inline: 0;
-    padding: 0.2rem 0 0.2rem 1rem;
-    color: var(--text-muted);
-  }
-
-  .article-content :global(code):not(:global(pre code)) {
-    border: 1px solid var(--surface-border);
-    background: var(--accent-soft);
-    padding: 0.15rem 0.35rem;
-    font-size: 0.9em;
-  }
-
-  .article-content :global(pre) {
-    overflow-x: auto;
-    border: 1px solid var(--surface-border);
-    background: rgba(15, 23, 42, 0.96);
-    padding: 1rem;
-    color: #f8fafc;
-  }
-
-  .article-content :global(pre.mermaid) {
-    background: transparent;
-    border: none;
-    color: inherit;
-    overflow: visible;
-  }
-
-  .article-content :global(pre code) {
-    display: block;
-    min-width: max-content;
-    background: transparent;
-    padding: 0;
-    color: inherit;
-  }
-
-  .article-content :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95em;
-  }
-
-  .article-content :global(th),
-  .article-content :global(td) {
-    border: 1px solid var(--surface-border);
-    padding: 0.5rem 0.75rem;
-    text-align: left;
-  }
-
-  .article-content :global(th) {
-    background: var(--accent-soft);
-    font-weight: 600;
-    font-family: var(--font-sans);
-  }
-
-  .article-content :global(tr:nth-child(even) td) {
-    background: var(--accent-soft);
-  }
-
-  .article-content :global(hr) {
+  .article-rule {
+    height: 1px;
     border: 0;
-    border-top: 1px solid var(--surface-border);
-    margin: 2.5rem 0;
+    background: var(--hairline);
+    margin: 0;
+    max-width: var(--reading-width);
+    margin-inline: auto;
   }
 
-  @media (min-width: 1024px) {
-    .article-layout {
-      grid-template-columns: minmax(0, 1fr) 17rem;
-    }
-
-    .article-sidebar {
-      display: block;
-      position: sticky;
-      top: 6.5rem;
-      align-self: start;
-      max-height: calc(100vh - 7.5rem);
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+  .reading-center {
+    max-width: var(--reading-width);
+    margin-inline: auto;
+    padding-block: 32px 56px;
   }
 
-  @media (min-width: 1200px) {
-    .article-body-surface {
-      padding: 1.6rem;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .article-page-shell {
-      padding: 0 0.5rem;
-    }
-
-    .article-body-surface {
-      padding: 1rem;
-    }
-
-    .article-content {
-      font-size: 0.97rem;
+  @media (max-width: 720px) {
+    .reading-center {
+      padding-block: 24px 36px;
     }
   }
 </style>
