@@ -1,36 +1,45 @@
 @layer base {
   :root {
-    --accent: #256b4f;
-    --accent-soft: rgba(37, 107, 79, 0.14);
-    --page-bg: #f7f5ef;
-    --surface-bg: rgba(255, 255, 255, 0.8);
-    --surface-bg-strong: rgba(255, 255, 255, 0.92);
-    --surface-border: rgba(18, 44, 30, 0.16);
-    --text-strong: #1b241f;
-    --text-muted: #4f5f56;
-    --reading-width: 46rem;
-    --shell-width: 82rem;
-    --radius-m: 0.875rem;
-    --shadow-soft: 0 18px 45px rgba(25, 46, 35, 0.08);
-    --grid-color: rgba(27, 36, 31, 0.07);
-    --font-sans:
-      "LXGW WenKai", "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
-      ui-sans-serif, system-ui, sans-serif;
+    /* 色彩 token —— 1:1 映射 designs/design.pen variables */
+    --accent: #2e8b5e;
+    --accent-soft: rgba(46, 139, 94, 0.12);
+    --page-bg: #faf8f3;
+    --surface: #ffffff;
+    --text-strong: #1a1f1c;
+    --text-muted: #6b756f;
+    --hairline: rgba(26, 31, 28, 0.08);
+
+    /* 字体 token */
     --font-serif:
-      "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", serif;
+      "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
+    --font-sans:
+      "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei",
+      sans-serif;
+
+    /* 容器宽度（收窄聚焦） */
+    --shell-width: 1000px;
+    --reading-width: 680px;
+    --shell-pad: clamp(1.5rem, 5vw, 5rem);
+
+    /* 间距刻度（8px 基准，留白偏大） */
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 16px;
+    --sp-4: 24px;
+    --sp-5: 40px;
+    --sp-6: 64px;
+    --sp-7: 96px;
+    --sp-8: 128px;
   }
 
   :root[data-theme='dark'],
   .dark {
-    --accent: #63b58f;
-    --accent-soft: rgba(99, 181, 143, 0.2);
-    --page-bg: #141a16;
-    --surface-bg: rgba(23, 31, 26, 0.86);
-    --surface-bg-strong: rgba(23, 31, 26, 0.95);
-    --surface-border: rgba(179, 213, 194, 0.24);
-    --text-strong: #e8efe9;
-    --text-muted: #b1c1b8;
-    --shadow-soft: 0 24px 55px rgba(1, 6, 3, 0.45);
-    --grid-color: rgba(232, 239, 233, 0.08);
+    --accent: #7fd0a6;
+    --accent-soft: rgba(127, 208, 166, 0.15);
+    --page-bg: #131714;
+    --surface: #1a201c;
+    --text-strong: #e8ede9;
+    --text-muted: #9ca8a1;
+    --hairline: rgba(232, 237, 233, 0.1);
   }
 }
