@@ -1,78 +1,87 @@
 ---
+import { ArrowRight } from 'lucide-astro';
 import type { Column } from '../../utils/getColumns';
 
 interface Props {
   column: Column;
-  compact?: boolean;
 }
 
-const { column, compact = false } = Astro.props;
+const { column } = Astro.props;
 
-const statusLabel = column.status === 'ongoing' ? '连载中' : '已完结';
-const statusClass = column.status === 'ongoing' ? 'status-ongoing' : 'status-completed';
+const statusLabel = column.status === 'ongoing' ? '持续更新' : '已完结';
 ---
 
-<a href={`/columns/${column.slug}`} class:list={['column-card', compact && 'column-card-compact']}>
-  {column.poster && !compact && (
-    <div class="column-card-cover">
-      <img src={column.poster} alt={column.title} loading="lazy" />
-    </div>
-  )}
-  <div class="column-card-body">
+<a href={`/columns/${column.slug}`} class="column-card">
+  <span class:list={['column-status', column.status === 'ongoing' ? 'is-ongoing' : 'is-done']}>
+    <span class="column-status-dot" aria-hidden="true"></span>
+    {statusLabel}
+  </span>
+
+  <div class="column-card-info">
     <h3 class="column-card-title">{column.title}</h3>
-    {!compact && <p class="column-card-desc">{column.description}</p>}
-    <div class="column-card-meta">
-      <span class:list={['column-status', statusClass]}>{statusLabel}</span>
-      <span class="column-count">{column.articleCount} 篇文章</span>
-    </div>
+    <p class="column-card-desc">{column.description}</p>
   </div>
+
+  <span class="column-enter">
+    进入专栏
+    <ArrowRight size={15} />
+  </span>
 </a>
 
 <style>
   .column-card {
-    display: grid;
-    gap: 0.65rem;
-    border: 1px solid var(--surface-border);
-    background: var(--surface-bg-strong);
-    border-radius: var(--radius-m);
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 24px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
     text-decoration: none;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+    transition: border-color 150ms ease, background-color 150ms ease;
   }
 
   .column-card:hover {
+    background: var(--surface-hover);
     border-color: var(--accent);
-    box-shadow: var(--shadow-soft);
   }
 
-  .column-card-cover {
-    width: 100%;
-    height: 10rem;
-    overflow: hidden;
+  .column-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
   }
 
-  .column-card-cover img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .column-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
   }
 
-  .column-card-body {
-    padding: 1rem;
-    display: grid;
-    gap: 0.45rem;
-  }
-
-  .column-card-compact .column-card-body {
-    padding: 0.75rem;
+  .column-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .column-card-title {
     margin: 0;
-    color: var(--text-strong);
-    font-size: 1.05rem;
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 600;
     line-height: 1.35;
+    color: var(--text-strong);
+    transition: color 150ms ease;
   }
 
   .column-card:hover .column-card-title {
@@ -81,41 +90,42 @@ const statusClass = column.status === 'ongoing' ? 'status-ongoing' : 'status-com
 
   .column-card-desc {
     margin: 0;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.8;
     color: var(--text-muted);
-    font-size: 0.88rem;
-    line-height: 1.65;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .column-card-meta {
-    display: flex;
+  .column-enter {
+    display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    font-size: 0.78rem;
+    gap: 8px;
+    padding: 11px 14px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 150ms ease;
   }
 
-  .column-status {
-    padding: 0.12rem 0.5rem;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.72rem;
+  .column-card:hover .column-enter {
+    background: var(--accent-hover);
   }
 
-  .status-ongoing {
-    background: #fef3c7;
-    color: #92400e;
-  }
+  @media (max-width: 720px) {
+    .column-card {
+      padding: 20px;
+      gap: 16px;
+    }
 
-  .status-completed {
-    background: #d1fae5;
-    color: #065f46;
-  }
-
-  .column-count {
-    color: var(--text-muted);
-    font-size: 0.78rem;
+    .column-card-title {
+      font-size: 20px;
+    }
   }
 </style>
