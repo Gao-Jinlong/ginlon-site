@@ -1,0 +1,159 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  column?: {
+    title: string;
+    slug: string;
+    articles: { slug: string; title: string }[];
+    currentSlug: string;
+  } | undefined;
+}
+
+const { headings, column } = Astro.props;
+const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+---
+
+<aside class="article-aside" aria-label="文章快捷栏">
+  {column && (
+    <nav class="aside-module" aria-label="所属专栏">
+      <p class="aside-module-title">所属专栏</p>
+      <a href={`/columns/${column.slug}`} class="aside-column-name">{column.title}</a>
+      <ul class="aside-column-list">
+        {column.articles.map((article, index) => (
+          <li>
+            <a
+              href={`/columns/${column.slug}/${article.slug}`}
+              class:list={['aside-column-link', article.slug === column.currentSlug && 'is-current']}
+            >
+              {String(index + 1).padStart(2, '0')} {article.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  {column && tocItems.length > 0 && <div class="aside-divider"></div>}
+
+  {tocItems.length > 0 && (
+    <nav class="aside-module" aria-label="文章导航">
+      <p class="aside-module-title">文章导航</p>
+      <ul class="aside-toc-list">
+        {tocItems.map((heading) => (
+          <li class:list={[`aside-toc-depth-${heading.depth}`]}>
+            <a href={`#${heading.slug}`} class="aside-toc-link" data-toc-link>{heading.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )}
+</aside>
+
+<style>
+  .article-aside {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .article-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: fixed;
+      top: 120px;
+      /* 定位在 1000px Content 右外侧：视口中线 + 半个内容宽 + 间距 */
+      left: calc(50% + 500px + 24px);
+      width: 220px;
+      max-height: calc(100vh - 160px);
+      overflow-y: auto;
+      padding: 20px 18px;
+      border: 1px solid var(--accent-soft);
+      border-radius: 8px;
+      background: var(--surface-tint);
+      box-shadow: var(--shadow-soft);
+      z-index: 10;
+    }
+
+    /* 窄于约 1500px 时右外侧空间不足，隐藏避免压住正文 */
+    @media (max-width: 1499px) {
+      .article-aside {
+        display: none;
+      }
+    }
+  }
+
+  .aside-module {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .aside-module-title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+  }
+
+  .aside-column-name {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--surface-ink);
+    text-decoration: none;
+  }
+
+  .aside-column-name:hover {
+    color: var(--accent);
+  }
+
+  .aside-column-list,
+  .aside-toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .aside-column-link,
+  .aside-toc-link {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--surface-ink);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .aside-column-link.is-current,
+  .aside-column-link:hover,
+  .aside-toc-link:hover,
+  .aside-toc-link.is-active {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .aside-toc-link {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .aside-toc-depth-3 { padding-left: 12px; }
+  .aside-toc-depth-4 { padding-left: 24px; }
+
+  .aside-divider {
+    height: 1px;
+    background: var(--accent-soft);
+  }
+</style>
