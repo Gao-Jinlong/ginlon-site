@@ -15,31 +15,30 @@ const isActive = (href: string) => {
 ---
 
 <header class="site-header">
-  <div class="site-header-inner">
-    <a href="/" class="site-brand">
-      <span class="site-brand-mark">G</span>
-      <span class="site-brand-copy">
-        <strong>Ginlon</strong>
-        <span>写作档案</span>
-      </span>
-    </a>
+  <div class="site-header-bar shell">
+    <a href="/" class="site-logo">Ginlon</a>
 
-    <nav aria-label="主导航">
-      <ul class="site-nav-list">
-        {
-          navLinks.map((item) => (
-            <li>
-              <a href={item.href} class:list={['site-nav-link', isActive(item.href) && 'site-nav-link-active']}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <ThemeToggleButton />
+    <div class="site-header-right">
+      <nav aria-label="主导航">
+        <ul class="site-nav-list">
+          {
+            navLinks.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={['site-nav-link', isActive(item.href) && 'site-nav-link-active']}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <ThemeToggleButton />
+    </div>
   </div>
+  <hr class="hairline site-header-divider" />
 </header>
 
 <style>
@@ -47,58 +46,29 @@ const isActive = (href: string) => {
     position: sticky;
     top: 0;
     z-index: 20;
-    padding: 1rem 0 0.2rem;
-    backdrop-filter: blur(8px);
+    background: var(--page-bg);
   }
 
-  .site-header-inner {
-    width: min(100% - 1.5rem, var(--shell-width));
-    margin: 0 auto;
+  .site-header-bar {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    border: 1px solid var(--surface-border);
-    border-radius: var(--radius-m);
-    padding: 0.7rem 0.85rem;
-    background: var(--surface-bg);
-    box-shadow: var(--shadow-soft);
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 28px;
   }
 
-  .site-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
-    text-decoration: none;
-    min-width: max-content;
-  }
-
-  .site-brand-mark {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.88rem;
-    font-weight: 700;
-  }
-
-  .site-brand-copy {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .site-brand-copy strong {
+  .site-logo {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 600;
     color: var(--text-strong);
-    font-size: 0.95rem;
+    text-decoration: none;
   }
 
-  .site-brand-copy span {
-    color: var(--text-muted);
-    font-size: 0.72rem;
+  .site-header-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
   }
 
   .site-nav-list {
@@ -107,52 +77,38 @@ const isActive = (href: string) => {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem;
+    gap: 24px;
   }
 
   .site-nav-link {
-    display: inline-flex;
-    align-items: center;
-    border-radius: 999px;
     color: var(--text-muted);
     text-decoration: none;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: color 150ms ease, background-color 150ms ease;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    transition: color 150ms ease;
   }
 
   .site-nav-link:hover,
   .site-nav-link-active {
     color: var(--accent);
-    background: var(--accent-soft);
   }
 
-  nav {
-    margin-left: auto;
-    margin-right: 0.35rem;
+  .site-header-divider {
+    margin: 0;
   }
 
   @media (max-width: 720px) {
-    .site-header {
-      padding-top: 0.75rem;
-    }
-
-    .site-header-inner {
-      width: min(100% - 1rem, var(--shell-width));
+    .site-header-bar {
       flex-wrap: wrap;
-      justify-content: space-between;
+      padding-block: 20px;
     }
 
-    nav {
-      margin: 0;
-      order: 3;
-      width: 100%;
+    .site-header-right {
+      gap: 16px;
     }
 
     .site-nav-list {
-      width: 100%;
-      justify-content: flex-start;
+      gap: 16px;
     }
   }
 </style>
