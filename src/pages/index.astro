@@ -30,58 +30,68 @@ const pageMeta = {
 ---
 
 <SiteLayout pageMeta={pageMeta}>
-  <Content as="section" class="hero">
-    <img
-      src="https://bucket.ginlon.site/avatar_512.png"
-      alt="Ginlon"
-      class="hero-avatar"
-    />
-    <div class="hero-text">
-      <p class="hero-eyebrow">关于我</p>
-      <h1 class="hero-title">Ginlon</h1>
-      <p class="hero-tagline">
-        全干工程师，写作爱好者。<br />
-        相信工程是理解世界的方式，写作是理解自己的方式。
-      </p>
-    </div>
+  <Content>
+    <section class="hero">
+      <img
+        src="https://bucket.ginlon.site/avatar_512.png"
+        alt="Ginlon"
+        class="hero-avatar"
+      />
+      <div class="hero-text">
+        <p class="hero-eyebrow">关于我</p>
+        <h1 class="hero-title">Ginlon</h1>
+        <p class="hero-tagline">
+          全干工程师，写作爱好者。<br />
+          相信工程是理解世界的方式，写作是理解自己的方式。
+        </p>
+      </div>
+    </section>
   </Content>
 
-  <Content><hr class="hairline" /></Content>
-
-  <Content as="section" class="section">
-    <h2 class="section-title">精选写作</h2>
-    <div class="writing-list">
-      <hr class="hairline" />
-      {
-        selectedWriting.map((article) => (
-          <a class="writing-row" href={`/blogs/${article.data.permalink}`}>
-            <time class="writing-date meta">
-              {dayjs(article.data.createdAt).format('YYYY-MM-DD')}
-            </time>
-            <div class="writing-main">
-              <h3 class="writing-title">{article.data.title}</h3>
-              <p class="writing-summary">{article.data.description ?? article.data.subtitle ?? ''}</p>
-            </div>
-          </a>
-        ))
-      }
-    </div>
+  <Content>
+    <hr class="hairline" />
   </Content>
 
-  <Content><hr class="hairline" /></Content>
+  <Content>
+    <section class="section">
+      <h2 class="section-title">精选写作</h2>
+      <div class="writing-list">
+        <hr class="hairline" />
+        {
+          selectedWriting.map((article) => (
+            <a class="writing-row" href={`/blogs/${article.data.permalink}`}>
+              <time class="writing-date meta">
+                {dayjs(article.data.createdAt).format('YYYY-MM-DD')}
+              </time>
+              <div class="writing-main">
+                <h3 class="writing-title">{article.data.title}</h3>
+                <p class="writing-summary">{article.data.description ?? article.data.subtitle ?? ''}</p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </Content>
 
-  <Content as="section" class="section">
-    <h2 class="section-title">当前关注</h2>
-    <ul class="focus-list">
-      {
-        focusList.map((item) => (
-          <li class="focus-item">
-            <h3 class="focus-title">{item.title}</h3>
-            <p class="focus-desc">{item.description}</p>
-          </li>
-        ))
-      }
-    </ul>
+  <Content>
+    <hr class="hairline" />
+  </Content>
+
+  <Content>
+    <section class="section">
+      <h2 class="section-title">当前关注</h2>
+      <ul class="focus-list">
+        {
+          focusList.map((item) => (
+            <li class="focus-item">
+              <h3 class="focus-title">{item.title}</h3>
+              <p class="focus-desc">{item.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
   </Content>
 </SiteLayout>
 

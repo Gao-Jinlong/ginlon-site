@@ -77,14 +77,18 @@ const isActive = (href: string) => {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 24px;
   }
 
   .site-nav-link {
+    display: inline-flex;
+    align-items: center;
     color: var(--text-muted);
     text-decoration: none;
     font-family: var(--font-sans);
     font-size: 14px;
+    line-height: 1;
     transition: color 150ms ease;
   }
 
