@@ -2738,12 +2738,12 @@
       "x": 880,
       "y": 0,
       "name": "WEB端",
-      "layout": "horizontal",
-      "gap": 60,
       "children": [
         {
           "type": "frame",
           "id": "KG7zb",
+          "x": 0,
+          "y": 0,
           "name": "设计规范画板",
           "clip": true,
           "width": 1266.3991284935803,
@@ -3844,6 +3844,8 @@
         {
           "type": "frame",
           "id": "UTW5X",
+          "x": 1326.3991284935803,
+          "y": 0,
           "name": "首页-浅色",
           "theme": {
             "mode": "light"
@@ -3862,9 +3864,10 @@
               "width": "fill_container"
             },
             {
-              "type": "group",
-              "id": "Z5983V",
+              "type": "frame",
+              "id": "ZmTvi",
               "name": "Content",
+              "width": 1000,
               "layout": "vertical",
               "alignItems": "center",
               "children": [
@@ -3931,7 +3934,7 @@
                   "name": "区分隔线1",
                   "fill": "$hairline",
                   "width": "fill_container",
-                  "height": 1
+                  "height": 1.333267822753114
                 },
                 {
                   "type": "frame",
@@ -4186,7 +4189,7 @@
                   "name": "区分隔线2",
                   "fill": "$hairline",
                   "width": "fill_container",
-                  "height": 1
+                  "height": 1.333267822753114
                 },
                 {
                   "type": "frame",
@@ -4341,6 +4344,8 @@
         {
           "type": "frame",
           "id": "f9v28",
+          "x": 3210.0138735243354,
+          "y": 0,
           "name": "写作归档页-浅色",
           "clip": true,
           "width": 1519.678954192297,
@@ -4996,6 +5001,8 @@
         {
           "type": "frame",
           "id": "xV2hU",
+          "x": 4789.692827716633,
+          "y": 0,
           "name": "文章详情页-浅色",
           "clip": true,
           "width": 1519.678954192297,
@@ -6014,6 +6021,8 @@
         {
           "type": "frame",
           "id": "oVGUc",
+          "x": 6369.37178190893,
+          "y": 0,
           "name": "文章详情页-无专栏",
           "clip": true,
           "width": 1519.6789541922972,
@@ -6925,6 +6934,8 @@
         {
           "type": "frame",
           "id": "A21GI",
+          "x": 7949.050736101227,
+          "y": 0,
           "name": "专栏页-浅色",
           "clip": true,
           "width": 1520,
