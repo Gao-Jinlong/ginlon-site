@@ -96,7 +96,8 @@
 .article-body table {
   width: 100%;
   max-width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;   /* collapse 模式下 border-radius 会被忽略，改用 separate */
+  border-spacing: 0;
   font-size: 0.95em;
   table-layout: fixed;
   word-break: break-word;
@@ -114,6 +115,12 @@
   border-bottom: 1px solid var(--hairline);
   padding: 0.6rem 0.85rem;
   text-align: left;
+}
+
+/* 行间竖向分隔：除最后一列外，单元格右侧加 hairline */
+.article-body th:not(:last-child),
+.article-body td:not(:last-child) {
+  border-right: 1px solid var(--hairline);
 }
 
 .article-body tbody tr:last-child td {

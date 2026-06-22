@@ -125,13 +125,22 @@ const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
     gap: 12px;
   }
 
-  .aside-column-link,
-  .aside-toc-link {
+  .aside-column-link {
     display: block;
     font-family: var(--font-serif);
     font-size: 13px;
     line-height: 1.5;
     color: var(--surface-ink);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .aside-toc-link {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-muted);
     text-decoration: none;
     transition: color 150ms ease;
   }
@@ -142,11 +151,6 @@ const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
   .aside-toc-link.is-active {
     color: var(--accent);
     font-weight: 600;
-  }
-
-  .aside-toc-link {
-    font-size: 14px;
-    color: var(--text-muted);
   }
 
   .aside-toc-depth-3 { padding-left: 12px; }
