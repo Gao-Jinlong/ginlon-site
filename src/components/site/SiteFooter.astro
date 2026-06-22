@@ -5,77 +5,65 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="site-footer-inner">
-    <p class="site-footer-copy">
-      持续记录工程、写作与长期实践。
-    </p>
-
+  <hr class="hairline site-footer-divider" />
+  <div class="site-footer-bar shell">
+    <p class="site-footer-copy meta">© {year} Ginlon</p>
     <div class="site-footer-links">
       {
         siteConfig.contactLinks.map((link) => (
-          <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
+          <a
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noreferrer' : undefined}
+            class="site-footer-link meta"
+          >
             {link.label}
           </a>
         ))
       }
     </div>
-
-    <p class="site-footer-meta">
-      <span>© {year} Ginlon</span>
-      <span>{siteConfig.recordNumber ?? ''}</span>
-    </p>
   </div>
 </footer>
 
 <style>
-  .site-footer {
-    border-top: 1px solid var(--surface-border);
-    margin-top: 3rem;
-    padding: 1.6rem 0 2rem;
+  .site-footer-divider {
+    margin: 0;
   }
 
-  .site-footer-inner {
-    width: min(100% - 1.5rem, var(--shell-width));
-    margin: 0 auto;
-    display: grid;
-    gap: 0.85rem;
+  .site-footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 32px;
   }
 
   .site-footer-copy {
     margin: 0;
-    color: var(--text-muted);
-    font-size: 0.92rem;
   }
 
   .site-footer-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.7rem 1rem;
-    align-items: center;
+    gap: 24px;
   }
 
-  .site-footer-links a {
+  .site-footer-link {
     text-decoration: none;
-    color: var(--text-strong);
-    font-size: 0.88rem;
-  }
-
-  .site-footer-links a:hover {
-    color: var(--accent);
-  }
-
-  .site-footer-meta {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 0.9rem;
     color: var(--text-muted);
-    font-size: 0.78rem;
+    transition: color 150ms ease;
+  }
+
+  .site-footer-link:hover {
+    color: var(--text-strong);
   }
 
   @media (max-width: 640px) {
-    .site-footer-inner {
-      width: min(100% - 1rem, var(--shell-width));
+    .site-footer-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-block: 24px;
     }
   }
 </style>

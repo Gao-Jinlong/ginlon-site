@@ -1,4 +1,5 @@
 ---
+import { Sun, Moon } from 'lucide-astro';
 import type { AppLocale } from '../../i18n/utils';
 
 type Props = {
@@ -6,19 +7,17 @@ type Props = {
 };
 
 const { locale = 'zh' } = Astro.props as Props;
-const lightLabel = locale === 'zh' ? '浅色' : 'Light';
-const darkLabel = locale === 'zh' ? '深色' : 'Dark';
 ---
 
 <button
   type="button"
   class="theme-toggle"
   data-theme-toggle
-  data-label-light={lightLabel}
-  data-label-dark={darkLabel}
+  data-theme="light"
   aria-label={locale === 'zh' ? '切换主题' : 'Toggle theme'}
 >
-  <span class="theme-toggle-label" data-theme-toggle-label>{lightLabel}</span>
+  <Sun class="theme-icon theme-icon-light" size={18} />
+  <Moon class="theme-icon theme-icon-dark" size={18} />
 </button>
 
 <script>
@@ -34,12 +33,7 @@ const darkLabel = locale === 'zh' ? '深色' : 'Dark';
 
     document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
       if (!(button instanceof HTMLElement)) return;
-      const label = button.querySelector('[data-theme-toggle-label]');
-      if (!(label instanceof HTMLElement)) return;
-
-      const darkText = button.getAttribute('data-label-dark') ?? DARK;
-      const lightText = button.getAttribute('data-label-light') ?? LIGHT;
-      label.textContent = resolved === DARK ? darkText : lightText;
+      button.dataset.theme = resolved;
     });
   }
 
@@ -68,20 +62,32 @@ const darkLabel = locale === 'zh' ? '深色' : 'Dark';
 
 <style>
   .theme-toggle {
-    border: 1px solid var(--surface-border);
-    border-radius: 999px;
-    background: var(--surface-bg);
+    border: none;
+    background: transparent;
     color: var(--text-muted);
-    padding: 0.4rem 0.75rem;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    padding: 0;
+    cursor: pointer;
+    transition: color 150ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
 
   .theme-toggle:hover {
     color: var(--accent);
-    border-color: color-mix(in srgb, var(--accent), var(--surface-border) 68%);
-    transform: translateY(-1px);
+  }
+
+  /* 只显示当前主题对应的图标 */
+  .theme-icon {
+    display: none;
+  }
+
+  .theme-toggle[data-theme='light'] .theme-icon-light {
+    display: block;
+  }
+
+  .theme-toggle[data-theme='dark'] .theme-icon-dark {
+    display: block;
   }
 </style>

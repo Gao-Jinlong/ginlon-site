@@ -5,6 +5,7 @@ import SiteHeader from '../components/site/SiteHeader.astro';
 import { siteConfig } from '../data/site';
 import '../styles/styles.css';
 import 'katex/dist/katex.min.css';
+import 'viewerjs/dist/viewer.css';
 import type { PageMeta } from '../types/seo';
 import { buildCanonicalUrl, buildLocaleAlternates, mergePageMeta } from '../utils/seo';
 
@@ -45,7 +46,7 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
 
@@ -142,7 +143,7 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
   }
 
   .editorial-main {
-    padding: 0.9rem 0 2.2rem;
+    padding: 0;
   }
 
   .skip-link {

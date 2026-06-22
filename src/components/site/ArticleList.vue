@@ -1,79 +1,92 @@
 <template>
-  <div class="article-list-wrapper">
-    <aside class="tag-sidebar">
-      <button
-        type="button"
-        class="tag-toggle"
-        :aria-expanded="tagsExpanded"
-        @click="tagsExpanded = !tagsExpanded"
-      >
-        <span>标签筛选：{{ currentTagLabel }}</span>
-        <span class="tag-toggle-icon">{{ tagsExpanded ? '⌃' : '⌄' }}</span>
-      </button>
-      <p class="tag-sidebar-title">标签筛选</p>
-      <nav
-        class="tag-filter-bar"
-        :class="{ 'tag-filter-bar-collapsed': !tagsExpanded }"
-        aria-label="文章标签筛选"
-      >
-        <a
-          href="/writing"
-          :class="['tag-link', { 'tag-link-active': !currentTag }]"
-          @click.prevent="handleTagClick('')"
-        >
-          全部文章
-        </a>
-        <a
-          v-for="tag in uniqueTags"
-          :key="tag.slug"
-          :href="`/writing?tag=${encodeURIComponent(tag.slug)}`"
-          :class="['tag-link', { 'tag-link-active': currentTag === tag.slug }]"
-          @click.prevent="handleTagClick(tag.slug)"
-        >
-          #{{ tag.name }}
-          <span>{{ tag.count }}</span>
-        </a>
-      </nav>
-    </aside>
+  <div class="writing-archive">
+    <!-- 筛选工具栏 -->
+    <div class="toolbar shell">
+      <p class="count meta">共 {{ filteredArticles.length }} 篇文章</p>
 
-    <div class="article-main">
-      <!-- 文章列表 -->
-      <div class="article-list">
-        <article
-          v-for="article in filteredArticles"
-          :key="article.permalink"
-          class="article-card"
-          :data-slug="article.slug"
+      <div class="tag-select" :class="{ open: dropdownOpen }">
+        <button
+          type="button"
+          class="tag-trigger"
+          :aria-expanded="dropdownOpen"
+          aria-haspopup="listbox"
+          @click="dropdownOpen = !dropdownOpen"
         >
-          <a
-            v-if="article.source === 'column' && article.columnSlug"
-            :href="`/columns/${article.columnSlug}`"
-            class="article-column-badge"
+          <span class="tag-trigger-label">{{ currentTagLabel }}</span>
+          <svg
+            class="tag-trigger-icon"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            专栏 · {{ article.columnTitle }}
-          </a>
-          <a :href="article.permalink" class="article-main-link">
-            <h3 class="article-card-title">{{ article.title }}</h3>
-          </a>
-          <time class="article-card-date" :datetime="article.publishedAt">
-            {{ formatDate(article.publishedAt) }}
-          </time>
-          <p class="article-card-summary">{{ article.summary }}</p>
-          <ul v-if="article.tags.length > 0" class="article-card-tags">
-            <li v-for="(tag, index) in article.tags" :key="tag">
-              <a
-                href="#"
-                class="article-tag"
-                @click.prevent="handleTagClick(article.tagSlugs[index])"
-              >
-                {{ tag }}
-              </a>
-            </li>
-          </ul>
-        </article>
-      </div>
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
 
-      <!-- 空状态 -->
+        <div v-if="dropdownOpen" class="tag-popup" role="listbox">
+          <button
+            type="button"
+            class="tag-option"
+            :class="{ 'tag-option-active': !currentTag }"
+            role="option"
+            @click="handleTagClick('')"
+          >
+            <span>全部文章</span>
+            <span class="tag-count">{{ articles.length }}</span>
+          </button>
+          <button
+            v-for="tag in uniqueTags"
+            :key="tag.slug"
+            type="button"
+            class="tag-option"
+            :class="{ 'tag-option-active': currentTag === tag.slug }"
+            role="option"
+            @click="handleTagClick(tag.slug)"
+          >
+            <span>#{{ tag.name }}</span>
+            <span class="tag-count">{{ tag.count }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 归档列表 -->
+    <div class="archive shell">
+      <hr class="hairline" />
+      <article v-for="item in filteredArticles" :key="item.permalink" class="archive-row">
+        <a :href="item.permalink" class="archive-main">
+          <time class="archive-date meta" :datetime="item.publishedAt">
+            {{ formatDate(item.publishedAt) }}
+          </time>
+          <div class="archive-body">
+            <h3 class="archive-title">{{ item.title }}</h3>
+            <p v-if="item.summary" class="archive-summary">{{ item.summary }}</p>
+            <div class="archive-meta">
+              <span
+                v-if="item.source === 'column' && item.columnSlug"
+                class="archive-source"
+              >
+                <a
+                  :href="`/columns/${item.columnSlug}`"
+                  @click.stop
+                >专栏 · {{ item.columnTitle }}</a>
+              </span>
+              <span v-if="item.tags.length > 0" class="archive-tags">
+                <span v-for="(tag, index) in item.tags" :key="tag" class="archive-tag">
+                  #{{ tag }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </a>
+        <hr class="hairline" />
+      </article>
+
       <p v-show="filteredArticles.length === 0" class="empty-state">
         没有匹配的文章，试试切换到"全部文章"。
       </p>
@@ -112,23 +125,17 @@ const props = withDefaults(defineProps<Props>(), {
   initialTag: '',
 });
 
-// 当前选中的标签（使用 ref 响应式）
 const currentTag = ref(props.initialTag);
+const dropdownOpen = ref(false);
 
-// 窄屏标签折叠状态（桌面端由 CSS 强制展开）
-const tagsExpanded = ref(false);
-
-// 折叠按钮上显示的当前标签文案
 const currentTagLabel = computed(() => {
-  if (!currentTag.value) return '全部';
+  if (!currentTag.value) return '全部标签';
   const found = uniqueTags.value.find((t) => t.slug === currentTag.value);
   return found ? `#${found.name}` : `#${currentTag.value}`;
 });
 
-// 计算所有唯一标签及其数量
 const uniqueTags = computed<Tag[]>(() => {
   const tagMap = new Map<string, { name: string; slug: string; count: number }>();
-
   props.articles.forEach((article) => {
     article.tags.forEach((tag, index) => {
       const slug = article.tagSlugs[index];
@@ -140,266 +147,270 @@ const uniqueTags = computed<Tag[]>(() => {
       }
     });
   });
-
   return Array.from(tagMap.values()).sort((a, b) => b.count - a.count);
 });
 
-// 筛选后的文章
 const filteredArticles = computed(() => {
-  if (!currentTag.value) {
-    return props.articles;
-  }
+  if (!currentTag.value) return props.articles;
   return props.articles.filter((article) => article.tagSlugs.includes(currentTag.value));
 });
 
-// 格式化日期
 function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toISOString().slice(0, 10);
+  return new Date(dateStr).toISOString().slice(0, 10);
 }
 
-// 处理标签点击
 function handleTagClick(tag: string) {
   const newUrl = tag
     ? `${window.location.pathname}?tag=${encodeURIComponent(tag)}`
     : window.location.pathname;
   history.pushState({ tag }, '', newUrl);
   currentTag.value = tag;
+  dropdownOpen.value = false;
   updateDescription();
-  tagsExpanded.value = false;
 }
 
-// 更新描述文字
 function updateDescription() {
-  const descriptionEl = document.querySelector('.section-description');
+  const descriptionEl = document.querySelector('.writing-desc');
   if (descriptionEl) {
     if (currentTag.value) {
       descriptionEl.textContent = `当前标签：${currentTag.value}，共 ${filteredArticles.value.length} 篇。`;
     } else {
-      descriptionEl.textContent = '按发布时间倒序排列，点击标签筛选文章。';
+      descriptionEl.textContent = '按时间倒序归档的全部文章，可按标签过滤。';
     }
   }
 }
 
-// 处理浏览器前进/后退
+function handleClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.tag-select')) {
+    dropdownOpen.value = false;
+  }
+}
+
 function handlePopState() {
   const params = new URLSearchParams(window.location.search);
-  const tag = params.get('tag')?.trim() || '';
-  currentTag.value = tag;
+  currentTag.value = params.get('tag')?.trim() || '';
   updateDescription();
 }
 
 onMounted(() => {
   window.addEventListener('popstate', handlePopState);
+  document.addEventListener('click', handleClickOutside);
   updateDescription();
 });
 
 onUnmounted(() => {
   window.removeEventListener('popstate', handlePopState);
+  document.removeEventListener('click', handleClickOutside);
 });
 </script>
 
 <style scoped>
-.article-list-wrapper {
-  display: grid;
-  gap: 1.5rem;
+.writing-archive {
+  display: block;
 }
 
-/* 折叠按钮：默认（窄屏）显示 */
-.tag-toggle {
+/* 工具栏 */
+.toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 28px;
+}
+
+.count {
+  margin: 0;
+}
+
+/* 标签下拉 */
+.tag-select {
+  position: relative;
+  width: 216px;
+}
+
+.tag-trigger {
   width: 100%;
-  gap: 0.5rem;
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-m);
-  background: var(--surface-bg-strong);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  background: var(--surface);
   color: var(--text-strong);
-  padding: 0.6rem 0.85rem;
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 13px;
   cursor: pointer;
+  transition: border-color 150ms ease;
 }
 
-.tag-toggle-icon {
+.tag-trigger:hover {
+  border-color: var(--accent);
+}
+
+.tag-trigger-icon {
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
-/* 侧栏标题：默认（窄屏）隐藏 */
-.tag-sidebar-title {
-  display: none;
-  margin: 0 0 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-strong);
-}
-
-.tag-filter-bar {
+.tag-popup {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  margin-top: 0.75rem;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(26, 31, 28, 0.12);
+  z-index: 30;
+  /* 限制高度避免标签过多时溢出屏幕：视口高度 - 触发器到底部的余量 */
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
 }
 
-/* 窄屏折叠：收起时隐藏标签列表 */
-.tag-filter-bar-collapsed {
-  display: none;
-}
-
-/* 桌面端：两栏 + sticky 侧栏 */
-@media (min-width: 768px) {
-  .article-list-wrapper {
-    grid-template-columns: 13rem 1fr;
-    align-items: start;
-    gap: 2rem;
-  }
-
-  .tag-sidebar {
-    position: sticky;
-    top: 5rem;
-  }
-
-  .tag-toggle {
-    display: none;
-  }
-
-  .tag-sidebar-title {
-    display: block;
-  }
-
-  .tag-filter-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 0;
-  }
-
-  /* 桌面端始终展开，忽略折叠状态 */
-  .tag-filter-bar-collapsed {
-    display: flex;
-  }
-}
-
-.tag-link {
-  display: inline-flex;
+.tag-option {
+  display: flex;
   align-items: center;
-  gap: 0.45rem;
-  border: 1px solid var(--surface-border);
-  border-radius: 999px;
-  padding: 0.35rem 0.72rem;
-  text-decoration: none;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
   color: var(--text-muted);
-  font-size: 0.84rem;
-  transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
-.tag-link span {
-  font-size: 0.72rem;
-  opacity: 0.8;
-}
-
-.tag-link:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.tag-link-active {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.article-list {
-  display: grid;
-  gap: 0.9rem;
-}
-
-.article-card {
-  border: 1px solid var(--surface-border);
-  background: var(--surface-bg-strong);
-  border-radius: var(--radius-m);
-  padding: 1rem 1rem 0.95rem;
-  display: grid;
-  gap: 0.58rem;
-}
-
-.article-main-link {
-  text-decoration: none;
-  width: fit-content;
-}
-
-.article-card-title {
-  margin: 0;
+.tag-option:hover {
   color: var(--text-strong);
-  font-size: 1.16rem;
+}
+
+.tag-option-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tag-count {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* 归档列表 */
+.archive {
+  padding-bottom: 72px;
+}
+
+.archive-row {
+  display: block;
+}
+
+.archive-main {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 32px;
+  align-items: baseline;
+  padding-block: 28px;
+  text-decoration: none;
+}
+
+.archive-date {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.archive-body {
+  min-width: 0;
+}
+
+.archive-title {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1.35;
+  color: var(--text-strong);
+  transition: color 150ms ease;
 }
 
-.article-main-link:hover .article-card-title {
+.archive-main:hover .archive-title {
   color: var(--accent);
 }
 
-.article-card-date {
-  margin: 0;
+.archive-summary {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--text-muted);
-  font-size: 0.85rem;
 }
 
-.article-card-summary {
-  margin: 0;
-  color: var(--text-muted);
-  line-height: 1.75;
-  font-size: 0.95rem;
-}
-
-.article-card-tags {
-  margin: 0.1rem 0 0;
-  padding: 0;
-  list-style: none;
+.archive-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
 }
 
-.article-tag {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--surface-border);
-  border-radius: 999px;
-  padding: 0.2rem 0.58rem;
-  font-size: 0.78rem;
-  color: var(--text-muted);
+.archive-source a {
+  color: var(--accent);
   text-decoration: none;
 }
 
-.article-tag:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-soft);
+.archive-source a:hover {
+  text-decoration: underline;
+}
+
+.archive-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.archive-tag {
+  color: var(--text-muted);
 }
 
 .empty-state {
-  margin: 1rem 0 0;
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-m);
-  padding: 1rem;
+  margin: 28px 0 0;
   color: var(--text-muted);
-  background: var(--surface-bg);
+  font-family: var(--font-serif);
 }
 
-.article-column-badge {
-  width: fit-content;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 0.18rem 0.6rem;
-  font-size: 0.76rem;
-  font-weight: 500;
-  color: var(--accent);
-  background: var(--accent-soft);
-  text-decoration: none;
-}
+/* 移动端（对照 UOUz7） */
+@media (max-width: 720px) {
+  .toolbar {
+    padding-bottom: 24px;
+  }
 
-.article-column-badge:hover {
-  text-decoration: underline;
+  .count {
+    font-size: 12px;
+  }
+
+  .tag-select {
+    width: auto;
+    flex: 1;
+  }
+
+  .archive {
+    padding-bottom: 36px;
+  }
+
+  .archive-main {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-block: 20px;
+  }
 }
 </style>
