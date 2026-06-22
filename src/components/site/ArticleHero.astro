@@ -9,167 +9,138 @@ interface Props {
   tags?: string[] | undefined;
   poster?: string | undefined;
   posterDescription?: string | undefined;
+  categoryLabel?: string | undefined;
 }
 
-const { title, summary, publishedLabel, publishedAtIso, lastModifiedLabel, lastModifiedIso, tags = [], poster, posterDescription } = Astro.props;
+const {
+  title,
+  summary,
+  publishedLabel,
+  publishedAtIso,
+  lastModifiedLabel,
+  lastModifiedIso,
+  tags = [],
+  poster,
+  posterDescription,
+  categoryLabel = '写作',
+} = Astro.props;
 ---
 
-<header class="article-hero">
-  <div class="article-hero-copy">
-    <p class="article-eyebrow">写作</p>
-    <h1 class="article-title">{title}</h1>
-    {summary && <p class="article-summary">{summary}</p>}
-    <div class="article-meta-group">
-      <div class="article-meta-row">
-        <time class="article-date" datetime={publishedAtIso}>{publishedLabel}</time>
-        {tags.length > 0 && (
-          <div class="article-tags">
-            {tags.map((tag) => (
-              <span class="article-tag">{tag}</span>
-            ))}
-          </div>
-        )}
-      </div>
+<header class="article-hero shell">
+  <div class="hero-content">
+    <p class="hero-eyebrow">{categoryLabel}</p>
+    <h1 class="hero-title">{title}</h1>
+    {summary && <p class="hero-summary">{summary}</p>}
+    <div class="hero-meta">
+      <time class="meta" datetime={publishedAtIso}>{publishedLabel}</time>
+      {tags.length > 0 && (
+        <span class="hero-tags">
+          {tags.map((tag) => (
+            <span class="meta">#{tag}</span>
+          ))}
+        </span>
+      )}
       {lastModifiedLabel && (
-        <p class="article-updated">
-          最后更新: <time datetime={lastModifiedIso}>{lastModifiedLabel}</time>
-        </p>
+        <span class="meta">· 最后更新 <time datetime={lastModifiedIso}>{lastModifiedLabel}</time></span>
       )}
     </div>
   </div>
 
   {poster && (
-    <figure class="article-cover">
+    <figure class="hero-cover">
       <img
         src={poster}
         alt={posterDescription ?? title}
-        class="article-cover-image"
+        class="hero-cover-image"
         loading="eager"
       />
-      {posterDescription && <figcaption>{posterDescription}</figcaption>}
     </figure>
   )}
 </header>
 
 <style>
   .article-hero {
-    display: grid;
-    gap: 1.5rem;
-    border: 1px solid var(--surface-border);
-    background: var(--surface-bg-strong);
-    padding: 1.3rem;
-    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 72px 0 48px;
   }
 
-  .article-hero-copy {
-    display: grid;
-    gap: 1rem;
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     max-width: var(--reading-width);
   }
 
-  .article-eyebrow {
+  .hero-eyebrow {
     margin: 0;
-    color: var(--accent);
     font-family: var(--font-sans);
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--accent);
   }
 
-  .article-title {
+  .hero-title {
     margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.9rem, 1.3rem + 2vw, 2.625rem);
+    font-weight: 600;
+    line-height: 1.3;
     color: var(--text-strong);
-    font-size: clamp(2.2rem, 1.4rem + 2.5vw, 4.2rem);
-    line-height: 0.96;
-    letter-spacing: -0.04em;
   }
 
-  .article-summary {
+  .hero-summary {
     margin: 0;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.8;
     color: var(--text-muted);
-    font-size: 1rem;
-    line-height: 1.9;
-    max-width: 42rem;
   }
 
-  .article-meta-group {
-    display: grid;
-    gap: 0.65rem;
-  }
-
-  .article-meta-row {
+  .hero-meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.6rem;
+    gap: 12px;
   }
 
-  .article-date {
-    color: var(--text-muted);
-    font-family: var(--font-sans);
-    font-size: 0.88rem;
-  }
-
-  .article-tags {
-    display: flex;
+  .hero-tags {
+    display: inline-flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 8px;
   }
 
-  .article-tag {
-    display: inline-block;
-    padding: 0.15rem 0.55rem;
-    border: 1px solid var(--surface-border);
-    border-radius: 999px;
-    color: var(--accent);
-    font-family: var(--font-sans);
-    font-size: 0.78rem;
-    font-weight: 500;
+  .hero-cover {
+    margin: 16px 0 0;
   }
 
-  .article-updated {
-    margin: 0;
-    color: var(--text-muted);
-    font-family: var(--font-sans);
-    font-size: 0.88rem;
-  }
-
-  .article-cover {
-    display: grid;
-    gap: 0.7rem;
-    margin: 0;
-  }
-
-  .article-cover-image {
+  .hero-cover-image {
     display: block;
     width: 100%;
     max-height: 34rem;
     object-fit: cover;
-    border: 1px solid var(--surface-border);
-    background: linear-gradient(135deg, rgba(31, 118, 103, 0.08), rgba(114, 140, 168, 0.06));
+    border-radius: 4px;
   }
 
-  .article-cover figcaption {
-    color: var(--text-muted);
-    font-size: 0.88rem;
-    line-height: 1.6;
-  }
-
-  @media (min-width: 1200px) {
+  @media (max-width: 720px) {
     .article-hero {
-      grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
-      align-items: start;
-      padding: 1.6rem;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .article-hero {
-      padding: 1rem;
+      padding: 36px 0 28px;
+      gap: 16px;
     }
 
-    .article-summary {
-      font-size: 0.97rem;
+    .hero-content {
+      gap: 16px;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      line-height: 1.35;
+    }
+
+    .hero-summary {
+      font-size: 15px;
     }
   }
 </style>
