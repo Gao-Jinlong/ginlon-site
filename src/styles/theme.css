@@ -30,6 +30,14 @@
     --sp-6: 64px;
     --sp-7: 96px;
     --sp-8: 128px;
+
+    /* 过渡期兼容垫片：未重构页面（专栏/关于/技术栈/标签/简历）仍引用旧 token，
+       映射到新值避免视觉错乱。这些页面单独重构后即可移除。 */
+    --surface-bg: var(--surface);
+    --surface-bg-strong: var(--surface);
+    --surface-border: var(--hairline);
+    --shadow-soft: 0 8px 24px rgba(26, 31, 28, 0.08);
+    --radius-m: 8px;
   }
 
   :root[data-theme='dark'],
