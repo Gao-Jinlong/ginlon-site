@@ -1,14 +1,26 @@
 ---
-import ArticleCard from '../components/site/ArticleCard.astro';
-import PageSection from '../components/site/PageSection.astro';
-import SectionHeading from '../components/site/SectionHeading.astro';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { getBlogs } from '../utils/getBlogs';
+import { dayjs } from '../utils/dayjs';
 
 const articles = await getBlogs('zh');
-// 优先显示精选文章（frontmatter 中 featured: true），如果没有则取最新 3 篇
 const featuredArticles = articles.filter((article) => article.featured);
 const selectedWriting = featuredArticles.length > 0 ? featuredArticles : articles.slice(0, 3);
+
+const focusList = [
+  {
+    title: 'Harness Engineering',
+    description: '探索在 Agent 优先时代如何有效利用 AI 进行软件工程实践。',
+  },
+  {
+    title: '写作流程系统化',
+    description: '通过固定节奏积累选题、草稿和复盘，让写作成为长期实践而非灵感事件。',
+  },
+  {
+    title: '长期主义执行力',
+    description: '关注可持续投入，把注意力放在十年后仍然有价值的能力上。',
+  },
+];
 
 const pageMeta = {
   title: 'Ginlon | 写作与工程实践',
@@ -17,222 +29,227 @@ const pageMeta = {
 ---
 
 <SiteLayout pageMeta={pageMeta}>
-  <section class="home-hero">
-    <p class="hero-eyebrow">关于我</p>
-    <div class="hero-profile">
-      <img src="https://bucket.ginlon.site/avatar_512.png" alt="Ginlon" class="hero-avatar" />
-      <div class="hero-profile-content">
-        <h1 class="hero-title">Ginlon</h1>
-        <p class="hero-tagline">
-          全干工程师，写作爱好者。<br />
-          相信工程是理解世界的方式，写作是理解自己的方式。
-        </p>
-      </div>
+  <!-- Hero -->
+  <section class="hero shell">
+    <img
+      src="https://bucket.ginlon.site/avatar_512.png"
+      alt="Ginlon"
+      class="hero-avatar"
+    />
+    <div class="hero-text">
+      <p class="hero-eyebrow">关于我</p>
+      <h1 class="hero-title">Ginlon</h1>
+      <p class="hero-tagline">
+        全干工程师，写作爱好者。<br />
+        相信工程是理解世界的方式，写作是理解自己的方式。
+      </p>
     </div>
   </section>
 
-  <PageSection narrow={false} id="home-selected-writing">
-    <SectionHeading
-      eyebrow="精选写作"
-      title="写作"
-      description="挑三篇最近的文章，快速进入我这段时间关心的问题。"
-    />
+  <hr class="hairline" />
 
-    <div class="article-list">
-      {selectedWriting.map((article) => <ArticleCard article={article} />)}
+  <!-- 精选写作 -->
+  <section class="section shell">
+    <h2 class="section-title">精选写作</h2>
+    <div class="writing-list">
+      <hr class="hairline" />
+      {
+        selectedWriting.map((article) => (
+          <a class="writing-row" href={`/blogs/${article.data.permalink}`}>
+            <time class="writing-date meta">
+              {dayjs(article.data.createdAt).format('YYYY-MM-DD')}
+            </time>
+            <div class="writing-main">
+              <h3 class="writing-title">{article.data.title}</h3>
+              <p class="writing-summary">{article.data.description ?? article.data.subtitle ?? ''}</p>
+            </div>
+          </a>
+        ))
+      }
     </div>
-  </PageSection>
+  </section>
 
-  <PageSection narrow={false} id="home-current-focus">
-    <SectionHeading
-      eyebrow="当前关注"
-      title="当前关注"
-      description="最近在推进的三个长期主题。"
-    />
+  <hr class="hairline" />
 
+  <!-- 当前关注 -->
+  <section class="section shell">
+    <h2 class="section-title">当前关注</h2>
     <ul class="focus-list">
-      <li>
-        <h3>Harness Engineering</h3>
-        <p>探索在 Agent 优先时代如何有效利用 AI 进行软件工程实践。</p>
-      </li>
-      <li>
-        <h3>写作流程系统化</h3>
-        <p>通过固定节奏积累选题、草稿和复盘，让写作成为长期实践而非灵感事件。</p>
-      </li>
-      <li>
-        <h3>长期主义执行力</h3>
-        <p>关注可持续投入，把注意力放在十年后仍然有价值的能力上。</p>
-      </li>
+      {
+        focusList.map((item) => (
+          <li class="focus-item">
+            <h3 class="focus-title">{item.title}</h3>
+            <p class="focus-desc">{item.description}</p>
+          </li>
+        ))
+      }
     </ul>
-  </PageSection>
-
-  <!-- <PageSection narrow={false} id="home-about-preview">
-    <SectionHeading
-      eyebrow="关于"
-      title="关于我"
-      description="期望在 AI 时代实现自我价值的工程师"
-    />
-
-    <div class="about-preview">
-      <p>
-        我的追求是构建一个对人类有价值的工程，然后将经验传递给后来者。
-      </p>
-      <div class="about-links">
-        <a href="/about">阅读完整介绍</a>
-        {
-          siteConfig.contactLinks.map((link) => (
-            <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-              {link.label}
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </PageSection> -->
+  </section>
 </SiteLayout>
 
 <style>
-  .home-hero {
-    border: 1px solid var(--surface-border);
-    border-radius: var(--radius-m);
-    background: var(--surface-bg-strong);
-    padding: 1.5rem;
-    display: grid;
-    gap: 0.75rem;
-    max-width: var(--shell-width);
-    margin: 0 auto;
+  /* Hero */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding-block: 80px;
+  }
+
+  .hero-avatar {
+    width: 144px;
+    height: 144px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
   }
 
   .hero-eyebrow {
     margin: 0;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     color: var(--accent);
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-  }
-
-  .hero-profile {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-
-  .hero-avatar {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--surface-border);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .hero-profile-content {
-    display: grid;
-    gap: 0.5rem;
-    flex: 1;
   }
 
   .hero-title {
     margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 1.5rem + 3vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--text-strong);
-    font-size: clamp(2rem, 1.2rem + 2vw, 3.2rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
   }
 
   .hero-tagline {
     margin: 0;
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.8;
     color: var(--text-muted);
-    font-size: 1rem;
-    line-height: 1.9;
     max-width: 38rem;
   }
 
-  .article-list {
-    display: grid;
-    gap: 0.9rem;
+  /* 区段通用 */
+  .section {
+    padding-block: 64px;
   }
 
+  .section-title {
+    margin: 0 0 32px;
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+
+  /* 精选写作清单 */
+  .writing-list {
+    display: block;
+  }
+
+  .writing-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 32px;
+    align-items: baseline;
+    padding-block: 28px;
+    text-decoration: none;
+  }
+
+  .writing-date {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .writing-main {
+    min-width: 0;
+  }
+
+  .writing-title {
+    margin: 0 0 8px;
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text-strong);
+    transition: color 150ms ease;
+  }
+
+  .writing-row:hover .writing-title {
+    color: var(--accent);
+  }
+
+  .writing-summary {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  /* 当前关注 */
   .focus-list {
     margin: 0;
     padding: 0;
     list-style: none;
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .focus-list li {
-    border: 1px solid var(--surface-border);
-    border-radius: var(--radius-m);
-    background: var(--surface-bg);
-    padding: 0.95rem;
-    display: grid;
-    gap: 0.4rem;
-  }
-
-  .focus-list h3 {
-    margin: 0;
-    font-size: 1.03rem;
-    color: var(--text-strong);
-  }
-
-  .focus-list p {
-    margin: 0;
-    color: var(--text-muted);
-    line-height: 1.7;
-  }
-
-  .about-preview {
-    border: 1px solid var(--surface-border);
-    border-radius: var(--radius-m);
-    background: var(--surface-bg);
-    padding: 1rem;
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .about-preview p {
-    margin: 0;
-    color: var(--text-muted);
-    line-height: 1.8;
-  }
-
-  .about-links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 0.8rem;
+    flex-direction: column;
+    gap: 28px;
   }
 
-  .about-links a {
+  .focus-item {
+    display: grid;
+    gap: 6px;
+  }
+
+  .focus-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 600;
     color: var(--text-strong);
-    text-decoration: none;
-    font-size: 0.9rem;
   }
 
-  .about-links a:hover {
-    color: var(--accent);
+  .focus-desc {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-muted);
   }
 
-  @media (max-width: 767px) {
-    .home-hero {
-      padding: 1rem;
-    }
-
-    .hero-profile {
+  /* 移动端（对照 JwRht） */
+  @media (max-width: 720px) {
+    .hero {
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
+      gap: 20px;
+      padding-block: 36px;
     }
 
     .hero-avatar {
-      width: 80px;
-      height: 80px;
+      width: 72px;
+      height: 72px;
     }
-  }
 
-  @media (min-width: 768px) {
-    .home-hero {
-      padding: 1.5rem 2rem;
+    .section {
+      padding-block: 36px;
+    }
+
+    .writing-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
     }
   }
 </style>
