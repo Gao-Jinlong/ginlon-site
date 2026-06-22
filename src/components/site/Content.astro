@@ -1,0 +1,30 @@
+---
+type Props = {
+  as?: 'div' | 'section' | 'header' | 'main' | 'article';
+  width?: 'default' | 'reading';
+  class?: string;
+};
+
+const { as = 'div', width = 'default', class: className } = Astro.props as Props;
+const Tag = as;
+---
+
+<Tag class:list={['content', `content-${width}`, className]}>
+  <slot />
+</Tag>
+
+<style>
+  .content {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: var(--shell-pad);
+  }
+
+  .content-default {
+    max-width: var(--shell-width);
+  }
+
+  .content-reading {
+    max-width: calc(var(--reading-width) + var(--shell-pad) * 2);
+  }
+</style>
