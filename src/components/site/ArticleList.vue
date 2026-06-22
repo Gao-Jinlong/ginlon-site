@@ -1,66 +1,83 @@
 <template>
   <div class="article-list-wrapper">
-    <!-- 标签筛选栏 -->
-    <nav class="tag-filter-bar" aria-label="文章标签筛选">
-      <a
-        href="/writing"
-        :class="['tag-link', { 'tag-link-active': !currentTag }]"
-        @click.prevent="handleTagClick('')"
+    <aside class="tag-sidebar">
+      <button
+        type="button"
+        class="tag-toggle"
+        :aria-expanded="tagsExpanded"
+        @click="tagsExpanded = !tagsExpanded"
       >
-        全部文章
-      </a>
-      <a
-        v-for="tag in uniqueTags"
-        :key="tag.slug"
-        :href="`/writing?tag=${encodeURIComponent(tag.slug)}`"
-        :class="['tag-link', { 'tag-link-active': currentTag === tag.slug }]"
-        @click.prevent="handleTagClick(tag.slug)"
-      >
-        #{{ tag.name }}
-        <span>{{ tag.count }}</span>
-      </a>
-    </nav>
-
-    <!-- 文章列表 -->
-    <div class="article-list">
-      <article
-        v-for="article in filteredArticles"
-        :key="article.permalink"
-        class="article-card"
-        :data-slug="article.slug"
+        <span>标签筛选：{{ currentTagLabel }}</span>
+        <span class="tag-toggle-icon">{{ tagsExpanded ? '⌃' : '⌄' }}</span>
+      </button>
+      <p class="tag-sidebar-title">标签筛选</p>
+      <nav
+        class="tag-filter-bar"
+        :class="{ 'tag-filter-bar-collapsed': !tagsExpanded }"
+        aria-label="文章标签筛选"
       >
         <a
-          v-if="article.source === 'column' && article.columnSlug"
-          :href="`/columns/${article.columnSlug}`"
-          class="article-column-badge"
+          href="/writing"
+          :class="['tag-link', { 'tag-link-active': !currentTag }]"
+          @click.prevent="handleTagClick('')"
         >
-          专栏 · {{ article.columnTitle }}
+          全部文章
         </a>
-        <a :href="article.permalink" class="article-main-link">
-          <h3 class="article-card-title">{{ article.title }}</h3>
+        <a
+          v-for="tag in uniqueTags"
+          :key="tag.slug"
+          :href="`/writing?tag=${encodeURIComponent(tag.slug)}`"
+          :class="['tag-link', { 'tag-link-active': currentTag === tag.slug }]"
+          @click.prevent="handleTagClick(tag.slug)"
+        >
+          #{{ tag.name }}
+          <span>{{ tag.count }}</span>
         </a>
-        <time class="article-card-date" :datetime="article.publishedAt">
-          {{ formatDate(article.publishedAt) }}
-        </time>
-        <p class="article-card-summary">{{ article.summary }}</p>
-        <ul v-if="article.tags.length > 0" class="article-card-tags">
-          <li v-for="(tag, index) in article.tags" :key="tag">
-            <a
-              href="#"
-              class="article-tag"
-              @click.prevent="handleTagClick(article.tagSlugs[index])"
-            >
-              {{ tag }}
-            </a>
-          </li>
-        </ul>
-      </article>
-    </div>
+      </nav>
+    </aside>
 
-    <!-- 空状态 -->
-    <p v-show="filteredArticles.length === 0" class="empty-state">
-      没有匹配的文章，试试切换到"全部文章"。
-    </p>
+    <div class="article-main">
+      <!-- 文章列表 -->
+      <div class="article-list">
+        <article
+          v-for="article in filteredArticles"
+          :key="article.permalink"
+          class="article-card"
+          :data-slug="article.slug"
+        >
+          <a
+            v-if="article.source === 'column' && article.columnSlug"
+            :href="`/columns/${article.columnSlug}`"
+            class="article-column-badge"
+          >
+            专栏 · {{ article.columnTitle }}
+          </a>
+          <a :href="article.permalink" class="article-main-link">
+            <h3 class="article-card-title">{{ article.title }}</h3>
+          </a>
+          <time class="article-card-date" :datetime="article.publishedAt">
+            {{ formatDate(article.publishedAt) }}
+          </time>
+          <p class="article-card-summary">{{ article.summary }}</p>
+          <ul v-if="article.tags.length > 0" class="article-card-tags">
+            <li v-for="(tag, index) in article.tags" :key="tag">
+              <a
+                href="#"
+                class="article-tag"
+                @click.prevent="handleTagClick(article.tagSlugs[index])"
+              >
+                {{ tag }}
+              </a>
+            </li>
+          </ul>
+        </article>
+      </div>
+
+      <!-- 空状态 -->
+      <p v-show="filteredArticles.length === 0" class="empty-state">
+        没有匹配的文章，试试切换到"全部文章"。
+      </p>
+    </div>
   </div>
 </template>
 
@@ -97,6 +114,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 // 当前选中的标签（使用 ref 响应式）
 const currentTag = ref(props.initialTag);
+
+// 窄屏标签折叠状态（桌面端由 CSS 强制展开）
+const tagsExpanded = ref(false);
+
+// 折叠按钮上显示的当前标签文案
+const currentTagLabel = computed(() => {
+  if (!currentTag.value) return '全部';
+  const found = uniqueTags.value.find((t) => t.slug === currentTag.value);
+  return found ? `#${found.name}` : '全部';
+});
 
 // 计算所有唯一标签及其数量
 const uniqueTags = computed<Tag[]>(() => {
@@ -139,6 +166,7 @@ function handleTagClick(tag: string) {
   history.pushState({ tag }, '', newUrl);
   currentTag.value = tag;
   updateDescription();
+  tagsExpanded.value = false;
 }
 
 // 更新描述文字
@@ -174,13 +202,81 @@ onUnmounted(() => {
 <style scoped>
 .article-list-wrapper {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+/* 折叠按钮：默认（窄屏）显示 */
+.tag-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-m);
+  background: var(--surface-bg-strong);
+  color: var(--text-strong);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tag-toggle-icon {
+  color: var(--text-muted);
+}
+
+/* 侧栏标题：默认（窄屏）隐藏 */
+.tag-sidebar-title {
+  display: none;
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-strong);
 }
 
 .tag-filter-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+/* 窄屏折叠：收起时隐藏标签列表 */
+.tag-filter-bar-collapsed {
+  display: none;
+}
+
+/* 桌面端：两栏 + sticky 侧栏 */
+@media (min-width: 768px) {
+  .article-list-wrapper {
+    grid-template-columns: 13rem 1fr;
+    align-items: start;
+    gap: 2rem;
+  }
+
+  .tag-sidebar {
+    position: sticky;
+    top: 5rem;
+  }
+
+  .tag-toggle {
+    display: none;
+  }
+
+  .tag-sidebar-title {
+    display: block;
+  }
+
+  .tag-filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 0;
+  }
+
+  /* 桌面端始终展开，忽略折叠状态 */
+  .tag-filter-bar-collapsed {
+    display: flex;
+  }
 }
 
 .tag-link {
