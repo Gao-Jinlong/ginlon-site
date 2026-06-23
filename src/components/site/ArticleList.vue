@@ -97,6 +97,17 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
+/**
+ * 标签名 → URL slug（与 src/utils/getTags.ts 的 tagToSlug 保持一致）。
+ * 此处内联而非 import，避免把内容集合虚拟模块拖入 client:only 客户端 bundle。
+ */
+function tagToSlug(tag: string): string {
+  return tag
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w一-龥-]/g, '');
+}
+
 interface Article {
   slug: string;
   title: string;
@@ -194,6 +205,11 @@ function handlePopState() {
 }
 
 onMounted(() => {
+  // 静态站点：URL 查询参数在构建时无法被服务端读取，
+  // initialTag 恒为空，因此挂载时直接从运行时 URL 恢复选中态（刷新/带参直达均可恢复）。
+  const params = new URLSearchParams(window.location.search);
+  const urlTag = params.get('tag')?.trim() || '';
+  currentTag.value = urlTag ? tagToSlug(urlTag) : props.initialTag;
   window.addEventListener('popstate', handlePopState);
   document.addEventListener('click', handleClickOutside);
   updateDescription();
