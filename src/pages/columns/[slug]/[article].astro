@@ -6,6 +6,7 @@ import ArticlePager from '../../../components/site/ArticlePager.astro';
 import ArticleTocDrawer from '../../../components/site/ArticleTocDrawer.astro';
 import Shell from '../../../components/site/Content.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import 'viewerjs/dist/viewer.css';
 import { siteConfig } from '../../../data/site';
 import { dayjs, format } from '../../../utils/dayjs';
 import { getColumns, getColumnArticle } from '../../../utils/getColumns';
@@ -126,3 +127,100 @@ const pageMeta = {
     }
   }
 </style>
+
+<script>
+  // TOC 滚动高亮：高亮「当前阅读位置上方最近的标题」对应项。
+  // 用 scroll + getBoundingClientRect 直接计算，比 IntersectionObserver 更可控、
+  // 无 rootMargin 语义陷阱。哨兵线位于视口顶部下方 SENTINEL_PX 处（避开 sticky header）。
+  let tocCleanup: (() => void) | null = null;
+  let lastActiveId: string | null = null;
+
+  document.addEventListener('astro:page-load', () => {
+    tocCleanup?.();
+    tocCleanup = null;
+    lastActiveId = null;
+
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+    if (links.length === 0) return;
+
+    const headings: { id: string; el: HTMLElement; link: HTMLAnchorElement }[] = [];
+    links.forEach((link) => {
+      const id = link.getAttribute('href')?.slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el) headings.push({ id, el, link });
+    });
+    if (headings.length === 0) return;
+
+    const SENTINEL_PX = 100;
+    let ticking = false;
+
+    const setActive = (id: string) => {
+      if (id === lastActiveId) return;
+      links.forEach((l) => l.classList.remove('is-active'));
+      const target = headings.find((h) => h.id === id);
+      target?.link.classList.add('is-active');
+      lastActiveId = id;
+    };
+
+    const update = () => {
+      let current = headings[0]!.id;
+      for (const h of headings) {
+        if (h.el.getBoundingClientRect().top <= SENTINEL_PX) {
+          current = h.id;
+        } else {
+          break;
+        }
+      }
+      setActive(current);
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    tocCleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  });
+</script>
+
+<script>
+  // 图片预览：点击正文图片放大查看（Viewer.js）
+  let articleViewer: { destroy: () => void } | null = null;
+  document.addEventListener('astro:page-load', async () => {
+    const body = document.querySelector('.article-body');
+    if (!(body instanceof HTMLElement)) return;
+
+    // 销毁上一页遗留的实例，避免重复绑定
+    articleViewer?.destroy();
+    articleViewer = null;
+
+    const { default: Viewer } = await import('viewerjs');
+    articleViewer = new Viewer(body, {
+      toolbar: {
+        zoomIn: true,
+        zoomOut: true,
+        oneToOne: true,
+        reset: true,
+        prev: true,
+        play: false,
+        next: true,
+        rotateLeft: true,
+        rotateRight: true,
+        flipHorizontal: true,
+        flipVertical: true,
+      },
+      title: false,
+    });
+  });
+</script>
