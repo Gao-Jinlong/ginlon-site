@@ -121,6 +121,24 @@ const pageMeta = {
     padding-block: 32px 56px;
   }
 
+  pre.mermaid {
+    cursor: zoom-in;
+    transition: background-color 0.15s ease;
+  }
+
+  pre.mermaid:hover {
+    background-color: rgba(125, 125, 125, 0.08);
+  }
+
+  [data-theme='dark'] pre.mermaid:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .mermaid-img {
+    max-width: 100%;
+    height: auto;
+  }
+
   @media (max-width: 720px) {
     .reading-center {
       padding-block: 24px 36px;
@@ -195,8 +213,10 @@ const pageMeta = {
 </script>
 
 <script>
+  import { svgXmlToDataUrl } from '../../../utils/mermaidPreview';
+  import type Viewer from 'viewerjs';
   // 图片预览：点击正文图片放大查看（Viewer.js）
-  let articleViewer: { destroy: () => void } | null = null;
+  let articleViewer: Viewer | null = null;
   document.addEventListener('astro:page-load', async () => {
     const body = document.querySelector('.article-body');
     if (!(body instanceof HTMLElement)) return;
@@ -221,6 +241,67 @@ const pageMeta = {
         flipVertical: true,
       },
       title: false,
+    });
+  });
+
+  // mermaid 图预览：astro-mermaid 渲染完成后，把内联 SVG 换成 <img>，
+  // 复用上面同一组 Viewer 实例（articleViewer），让 mermaid 进图片预览队列。
+  let mermaidObserver: MutationObserver | null = null;
+  document.addEventListener('astro:page-load', () => {
+    const body = document.querySelector('.article-body');
+    if (!(body instanceof HTMLElement)) return;
+
+    mermaidObserver?.disconnect();
+    mermaidObserver = null;
+
+    const wrapMermaidImage = (pre: HTMLPreElement): boolean => {
+      const svg = pre.querySelector('svg');
+      if (!svg) return false; // 渲染失败（astro-mermaid 插了错误 div，无 svg）→ 不动
+      const clone = svg.cloneNode(true) as SVGSVGElement;
+      // mermaid 的 svg 用 width="100%"+viewBox 但无显式 height，
+      // 序列化成 <img> 后固有尺寸会失真（变成很小的默认值）。
+      // 这里据 viewBox 设回像素宽高，让 <img> 按正确比例渲染。
+      const vb = clone.getAttribute('viewBox');
+      const m = vb ? vb.match(/\S+\s+\S+\s+([\d.]+)\s+([\d.]+)/) : null;
+      if (m) {
+        clone.setAttribute('width', m[1]!);
+        clone.setAttribute('height', m[2]!);
+      }
+      const xml = new XMLSerializer().serializeToString(clone);
+      const img = document.createElement('img');
+      img.src = svgXmlToDataUrl(xml);
+      img.alt = 'Mermaid 图表';
+      img.className = 'mermaid-img';
+      img.loading = 'lazy';
+      pre.replaceChildren(img); // <pre> 保留作布局容器
+      return true;
+    };
+
+    const needsWrap = (pre: Element): boolean =>
+      pre.hasAttribute('data-processed') &&
+      !!pre.querySelector('svg') &&
+      !pre.querySelector('img.mermaid-img');
+
+    const scanAndWrap = () => {
+      let changed = false;
+      document.querySelectorAll('pre.mermaid').forEach((pre) => {
+        if (needsWrap(pre)) {
+          changed = wrapMermaidImage(pre as HTMLPreElement) || changed;
+        }
+      });
+      if (changed) articleViewer?.update(); // 让 Viewer 收录新 <img>
+    };
+
+    scanAndWrap(); // 快路径：扫一遍已就绪的
+
+    // 监听 data-processed：astro-mermaid 渲染完 svg 后会设它；
+    // 主题切换时它会先移除再重设 → 重新封装新主题 svg（去重靠 needsWrap 的 img 判断）
+    mermaidObserver = new MutationObserver(scanAndWrap);
+    mermaidObserver.observe(body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-processed'],
     });
   });
 </script>
