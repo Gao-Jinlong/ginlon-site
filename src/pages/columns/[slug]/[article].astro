@@ -213,7 +213,7 @@ const pageMeta = {
 </script>
 
 <script>
-  import { svgXmlToDataUrl } from '../../../utils/mermaidPreview';
+  import { svgXmlToDataUrl, injectSvgBackground } from '../../../utils/mermaidPreview';
   import type Viewer from 'viewerjs';
   // 图片预览：点击正文图片放大查看（Viewer.js）
   let articleViewer: Viewer | null = null;
@@ -263,11 +263,21 @@ const pageMeta = {
       // 这里据 viewBox 设回像素宽高，让 <img> 按正确比例渲染。
       const vb = clone.getAttribute('viewBox');
       const m = vb ? vb.match(/\S+\s+\S+\s+([\d.]+)\s+([\d.]+)/) : null;
-      if (m) {
-        clone.setAttribute('width', m[1]!);
-        clone.setAttribute('height', m[2]!);
+      const vbW = m?.[1];
+      const vbH = m?.[2];
+      if (vbW && vbH) {
+        clone.setAttribute('width', vbW);
+        clone.setAttribute('height', vbH);
       }
-      const xml = new XMLSerializer().serializeToString(clone);
+      let xml = new XMLSerializer().serializeToString(clone);
+      // mermaid SVG 透明背景：放进 Viewer 浮层会透出底部文章内容、影响阅读。
+      // 注入一个覆盖整图的主题色背景 rect（与 theme.css 的 --page-bg 对应）。
+      if (vbW && vbH) {
+        const isDark =
+          document.documentElement.getAttribute('data-theme') === 'dark';
+        const bg = isDark ? '#131714' : '#faf8f3';
+        xml = injectSvgBackground(xml, vbW, vbH, bg);
+      }
       const img = document.createElement('img');
       img.src = svgXmlToDataUrl(xml);
       img.alt = 'Mermaid 图表';
