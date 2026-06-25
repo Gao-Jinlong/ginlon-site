@@ -52,29 +52,29 @@ HTML 产物:  <pre class="mermaid">flowchart ...</pre>          ← 原始定义
 
 ## 5. 封装逻辑
 
-### 5.1 纯函数 `svgElementToDataUrl(svg)`
+### 5.1 纯函数 `svgXmlToDataUrl(xml)`
 
-把「SVG → data URL」抽成可单测的纯函数（放 `src/utils/mermaidPreview.ts`）：
+把「XML 字符串 → data URL」抽成可单测的纯函数（放 `src/utils/mermaidPreview.ts`）。**入参是字符串而非 DOM 节点**——这样无需 jsdom 环境（项目 vitest 用 `environment: 'node'`，未装 jsdom）即可单测：
 
 ```ts
-export function svgElementToDataUrl(svg: SVGSVGElement): string {
-  const clone = svg.cloneNode(true) as SVGSVGElement;
-  // 可选：移除 mermaid 注入的无意义随机 id，减小 data URL 体积
-  const xml = new XMLSerializer().serializeToString(clone);
+export function svgXmlToDataUrl(xml: string): string {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml);
 }
 ```
 
 用 `encodeURIComponent` 而非 `btoa`（base64）：对中文/特殊字符更安全，体积更小。
 
-### 5.2 封装函数 `wrapMermaidImage(pre)`
+DOM 序列化（`XMLSerializer`）留在页面 `<script>` 调用处（见 5.2），不进 utils。
+
+### 5.2 封装函数 `wrapMermaidImage(pre)`（页面 `<script>` 内）
 
 ```ts
 function wrapMermaidImage(pre: HTMLPreElement): boolean {
   const svg = pre.querySelector('svg');
   if (!svg) return false;                       // 渲染失败（astro-mermaid 插了错误 div）→ 不动
+  const xml = new XMLSerializer().serializeToString(svg);
   const img = document.createElement('img');
-  img.src = svgElementToDataUrl(svg as SVGSVGElement);
+  img.src = svgXmlToDataUrl(xml);               // 调 utils 纯函数
   img.alt = 'Mermaid 图表';
   img.className = 'mermaid-img';
   img.loading = 'lazy';
@@ -84,6 +84,8 @@ function wrapMermaidImage(pre: HTMLPreElement): boolean {
 ```
 
 封装成功的判定：`pre.querySelector('svg')` 存在。封装完成后 `<img>` 替换了 svg。
+
+`wrapMermaidImage` 依赖 DOM（`XMLSerializer`/`document`），故留在页面 `<script>` 而非 utils——只有真正的纯逻辑（`svgXmlToDataUrl`）进 utils 以便单测。
 
 ### 5.3 触发与去重：MutationObserver
 
@@ -166,10 +168,10 @@ pre.mermaid:hover { background-color: rgba(125,125,125,.08); }
 
 ### 10.1 vitest 单测（覆盖纯函数）
 
-新增 `src/utils/mermaidPreview.test.ts`：
+新增 `tests/unit/mermaidPreview.test.ts`（遵循项目「测试集中在 `tests/unit/`」约定；`svgXmlToDataUrl` 是纯字符串函数，无需 jsdom）：
 
-- 输入含中文节点文字的 svg → 输出以 `data:image/svg+xml;charset=utf-8,` 开头；`decodeURIComponent` 后含原文中文。
-- 输入含 `<` `>` `&` 的 svg → 正确转义无损坏。
+- 输入含中文的 SVG XML 字符串 → 输出以 `data:image/svg+xml;charset=utf-8,` 开头；`decodeURIComponent` 后含原文中文。
+- 输入含 `<` `>` `&` `"` 的 XML → `encodeURIComponent` 正确转义，反解后与原文一致。
 
 ### 10.2 手动验证清单（实施时逐项过）
 
@@ -194,9 +196,9 @@ pre.mermaid:hover { background-color: rgba(125,125,125,.08); }
 
 | 文件 | 改动 | 说明 |
 |---|---|---|
-| `src/utils/mermaidPreview.ts`（新增） | 纯函数 `svgElementToDataUrl(svg)` 与 `wrapMermaidImage(pre)` | 不依赖 Viewer/全局变量，仅操作 DOM 入参，可单测 |
-| `src/utils/mermaidPreview.test.ts`（新增） | vitest 单测 | 覆盖 §10.1 |
-| `src/pages/blogs/[slug].astro` | `<script>` 内引入 `mermaidPreview.ts`，写 observer + 生命周期，封装后调 `articleViewer.update()`；`<style>` 加 mermaid 悬停样式 | observer 逻辑因依赖页面作用域的 `articleViewer` 与 `.article-body` 选择器，留在页面 `<script>` 中，不进 utils |
-| `src/pages/columns/[slug]/[article].astro` | 同上 | 两个页面的 `<script>` 段会重复 observer 设置逻辑（约 20 行），属可接受重复；若实施时发现重复明显，可把 observer 设置也抽成接收 `(container, getViewer)` 的函数进 utils，但这不改变设计结论 |
+| `src/utils/mermaidPreview.ts`（新增） | 纯函数 `svgXmlToDataUrl(xml)` | 纯字符串逻辑，可单测，不依赖 DOM |
+| `tests/unit/mermaidPreview.test.ts`（新增） | vitest 单测 | 覆盖 §10.1 |
+| `src/pages/blogs/[slug].astro` | `<script>` 内 import `svgXmlToDataUrl`，写 `wrapMermaidImage` + observer + 生命周期，封装后调 `articleViewer.update()`；`<style>` 加 mermaid 悬停样式 | DOM 相关逻辑（`wrapMermaidImage`、observer）因依赖 `XMLSerializer`/`document` 与页面作用域的 `articleViewer`，留在页面 `<script>` |
+| `src/pages/columns/[slug]/[article].astro` | 同上 | 两个页面的 `<script>` 段会重复 observer 设置逻辑（约 20 行），属可接受重复 |
 
-**函数边界**：`svgElementToDataUrl` / `wrapMermaidImage` 入参是 DOM 节点、无副作用外溢（除 `pre.replaceChildren`）、不读全局；observer、`articleViewer` 引用、`astro:page-load` 钩子留在页面 `<script>`。这样纯函数可独立单测，页面副作用集中可读。
+**函数边界**：`svgXmlToDataUrl` 是纯字符串函数（无 DOM 依赖），进 utils 可单测；`wrapMermaidImage`/observer/`articleViewer` 引用/`astro:page-load` 钩子留在页面 `<script>`。
