@@ -1,10 +1,10 @@
 ---
-title: '记忆进阶：消息压缩、Checkpoint 管理与生产部署'
+title: 'LangGraph 的记忆进阶：消息压缩、Checkpoint 管理与生产部署'
 subtitle: ''
 poster: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800'
 createdAt: '2026-07-01 12:00 +08:00'
 tags: ['LangGraph', 'JavaScript', 'AI', '记忆']
-order: 9
+order: 4
 draft: false
 ---
 
@@ -14,8 +14,8 @@ draft: false
 
 LangGraph 的记忆分两层，前两篇已经深入讲过它们的存储机制：
 
-- **短期记忆 = checkpointer**：把每个 super-step 的 ThreadState 存成快照，让一次对话能断点续跑。→ 见本专栏 [01-checkpointer](../01-checkpointer)
-- **长期记忆 = store**：按 namespace 组织的 KV 存储，跨对话长期保留用户偏好、画像。→ 见本专栏 [02-store](../02-store)
+- **短期记忆 = checkpointer**：把每个 super-step 的 ThreadState 存成快照，让一次对话能断点续跑。→ 见本专栏 [02-checkpointer](../02-checkpointer)
+- **长期记忆 = store**：按 namespace 组织的 KV 存储，跨对话长期保留用户偏好、画像。→ 见本专栏 [03-store](../03-store)
 
 但官方 *Add persistent memory* 文档里，还有一大块**「管好这些记忆」的实务**，前两篇没展开——本篇就补这块：
 
@@ -26,7 +26,7 @@ LangGraph 的记忆分两层，前两篇已经深入讲过它们的存储机制�
 | **生产部署选型** | memory / sqlite 只能开发用，生产该选 Postgres 还是 MongoDB |
 | **数据库迁移 `setup()`** | 怎么自动建表建索引，不用手写 DDL |
 
-一句话：**01/02 讲「记忆怎么存」，本篇讲「记忆怎么管、怎么上线」**。
+一句话：**02/03 讲「记忆怎么存」，本篇讲「记忆怎么管、怎么上线」**。
 
 ---
 
@@ -291,7 +291,7 @@ flowchart LR
 
 ## 生产部署：选对后端
 
-01/02 讲过 memory / sqlite / postgres 三档，但那是偏存储机制的视角。上了生产，**后端选型**还有一个重要变量没展开：**MongoDB**。LangGraph 的 checkpointer 和 store 都有 MongoDB 实现，它是和 Postgres 并列的生产级选项。
+02/03 讲过 memory / sqlite / postgres 三档，但那是偏存储机制的视角。上了生产，**后端选型**还有一个重要变量没展开：**MongoDB**。LangGraph 的 checkpointer 和 store 都有 MongoDB 实现，它是和 Postgres 并列的生产级选项。
 
 ### 四后端对比
 
@@ -318,7 +318,7 @@ flowchart LR
 
 ### 初始化：编译时注入
 
-不管选哪个后端，套路都一样——**编译图时把 checkpointer 和 store 一起注入**（且必须同后端，见 02-store 的铁律）：
+不管选哪个后端，套路都一样——**编译图时把 checkpointer 和 store 一起注入**（且必须同后端，见 03-store 的铁律）：
 
 ```javascript
 // Postgres 示例
@@ -407,7 +407,7 @@ const graph = workflow.compile({ checkpointer, store });
 
 4. **删除线程不可逆，删前确认。** `graph.checkpointer.delete()` 清掉的是整个线程的所有快照，无法恢复。用户注销 / GDPR 清理时才用，且要先确认没有其他服务依赖这个线程的历史。
 
-5. **生产环境必须用持久化后端，且 checkpointer 与 store 同后端。** `memory` 重启即失、`sqlite` 多实例锁冲突；生产选 Postgres 或 MongoDB，且两者的后端必须一致（详见 02-store 的铁律）。
+5. **生产环境必须用持久化后端，且 checkpointer 与 store 同后端。** `memory` 重启即失、`sqlite` 多实例锁冲突；生产选 Postgres 或 MongoDB，且两者的后端必须一致（详见 03-store 的铁律）。
 
 6. **部署时记得 `setup()`，且 checkpointer / store 各调一次。** 忘了建表，首次 invoke 就会报"表不存在"。`setup()` 是幂等的，启动时跑一次最稳妥。
 
@@ -415,4 +415,4 @@ const graph = workflow.compile({ checkpointer, store });
 
 ## 一句话总结
 
-**记忆不是"装上 checkpointer + store"就完事——你得管它：长对话用 `trimMessages` / `RemoveMessage` / 摘要法压缩消息省 token，过期线程用 `delete()` 清理保合规，上生产换 Postgres 或 MongoDB 持久化后端，部署时跑 `setup()` 自动建表。** 01/02 讲了记忆怎么存，本篇讲了记忆怎么管、怎么上线——存 + 管 + 部署，三件套凑齐，才是一个能上生产的"有记忆"Agent。
+**记忆不是"装上 checkpointer + store"就完事——你得管它：长对话用 `trimMessages` / `RemoveMessage` / 摘要法压缩消息省 token，过期线程用 `delete()` 清理保合规，上生产换 Postgres 或 MongoDB 持久化后端，部署时跑 `setup()` 自动建表。** 02/03 讲了记忆怎么存，本篇讲了记忆怎么管、怎么上线——存 + 管 + 部署，三件套凑齐，才是一个能上生产的"有记忆"Agent。

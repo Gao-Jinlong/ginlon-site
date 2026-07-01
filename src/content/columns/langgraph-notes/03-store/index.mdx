@@ -1,10 +1,10 @@
 ---
-title: 'LangGraph Store 详解 —— 跨线程的长期记忆系统'
+title: 'LangGraph 的跨线程记忆：Store 详解'
 subtitle: ''
 poster: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800'
 createdAt: '2026-06-25 12:00 +08:00'
 tags: ['LangGraph', 'JavaScript', 'AI', '存储']
-order: 2
+order: 3
 draft: false
 ---
 
@@ -35,7 +35,7 @@ draft: false
 
 一句话区分：**checkpointer 管「这次对话进行到哪了」，store 管「跨多次对话记得什么」**。
 
-> 关于 checkpointer 的细节（快照、版本链、分支对话），见本专栏 [01-checkpointer](../01-checkpointer) 笔记。
+> 关于 checkpointer 的细节（快照、版本链、分支对话），见本专栏 [02-checkpointer](../02-checkpointer) 笔记。
 
 ### 一条容易忽略的铁律：同后端
 

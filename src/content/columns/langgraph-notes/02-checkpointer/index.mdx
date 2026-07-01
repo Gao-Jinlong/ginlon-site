@@ -1,10 +1,10 @@
 ---
-title: 'LangGraph Checkpointer 详解 —— 对话状态的版本管理系统'
+title: 'LangGraph 的状态版本管理：Checkpointer 详解'
 subtitle: ''
 poster: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800'
 createdAt: '2026-06-04 12:00 +08:00'
 tags: ['LangGraph', 'Python', 'AI', '状态管理']
-order: 1
+order: 2
 draft: false
 ---
 
@@ -39,7 +39,7 @@ draft: false
 
 ### Super-step = 强制存档点
 
-> 关于 super-step / 屏障同步的更深层模型（BSP / Pregel），见本专栏 [04-pregel-bsp](../04-pregel-bsp) 笔记。
+> 关于 super-step / 屏障同步的更深层模型（BSP / Pregel），见本专栏 [01-pregel-bsp](../01-pregel-bsp) 笔记。
 
 每个 super-step 边界都是**强制持久化点**：一批节点（无论串行还是并行）全部跑完，落盘一份 checkpoint，再进下一步。这意味着：
 
