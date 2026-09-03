@@ -100,6 +100,26 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
       });
     </script>
 
+    <!-- Google Analytics (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-TD35ZQXL2E"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      // send_page_view:false —— 站内导航由 ClientRouter 接管，统一在 astro:page-load 补发，避免漏记或重复计数
+      gtag('config', 'G-TD35ZQXL2E', { send_page_view: false });
+
+      document.addEventListener('astro:page-load', () => {
+        gtag('event', 'page_view', {
+          page_path: location.pathname + location.search,
+          page_title: document.title,
+        });
+      });
+    </script>
+
+    <!-- Microsoft Clarity -->
     <script is:inline type="text/javascript">
       (function (c, l, a, r, i, t, y) {
         c[a] =
