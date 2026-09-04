@@ -1,0 +1,5 @@
+# pnpm 11 起依赖构建脚本默认不执行且未批准会报 ERR_PNPM_IGNORED_BUILDS，
+# 这里显式批准 esbuild / sharp 的安装脚本。
+allowBuilds:
+  esbuild: true
+  sharp: true

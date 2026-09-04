@@ -18,8 +18,10 @@
 - `pnpm test` / `pnpm test:watch` - 运行 Vitest
 
 ### 包管理
-- 使用 `pnpm` 作为包管理器（版本 10.20.0）
+- 使用 `pnpm` 作为包管理器（本地由 `mise.toml` 固定主版本 `11`；`package.json` 故意不设 `packageManager` 字段）
 - 所有命令都应使用 `pnpm` 而不是 `npm`
+- **CI（`.github/workflows/deploy.yml`）通过 `package-manager: pnpm@<版本>` 显式固定 pnpm 版本**——升级 pnpm 时需与 mise.toml 同步
+- `pnpm-workspace.yaml` 里的 `allowBuilds` 白名单批准了 esbuild / sharp 的安装脚本；pnpm 11 对未批准构建脚本会直接报 `ERR_PNPM_IGNORED_BUILDS` 使 install 失败，新增带安装脚本的依赖时需同步加白
 
 > ⚠️ 旧版本提到过 `pnpm i18n:sync` 等命令，**这些脚本当前并不存在于 package.json**。本项目只用 Astro 原生 i18n 配置（见下文），不依赖任何 i18n 脚本。新增/修改页面无需手动同步。
 
