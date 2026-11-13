@@ -2,11 +2,11 @@
 
 此文件为 AI 代码助手（Codex / Claude / 其它 agents）在此代码库中工作时提供指导。读完本文档应能快速进入项目工作。
 
-> 文档事实均依据当前代码库核实（2026-06-18）。修改框架/内容结构后请同步更新本文档，避免再次过时。
+> 文档事实均依据当前代码库核实（2026-11-13）。修改框架/内容结构后请同步更新本文档，避免再次过时。
 
 ## 项目概述
 
-这是一个使用 Astro 5 构建的个人作品集网站，支持中文（主要）与英文（次要镜像）两种路由。网站展示博客文章、专栏、项目和技术栈信息，采用现代化响应式设计，部署为静态文件。
+这是一个使用 Astro 7 构建的个人作品集网站，支持中文（主要）与英文（次要镜像）两种路由。网站展示博客文章、专栏、项目和技术栈信息，采用现代化响应式设计，部署为静态文件。
 
 ## 开发命令
 
@@ -19,6 +19,7 @@
 
 ### 包管理
 - 使用 `pnpm` 作为包管理器（本地由 `mise.toml` 固定主版本 `11`；`package.json` 故意不设 `packageManager` 字段）
+- Node 版本：本地 Node 24（Astro 7 要求 Node >= 22.23.4）
 - 所有命令都应使用 `pnpm` 而不是 `npm`
 - **CI（`.github/workflows/deploy.yml`）通过 `package-manager: pnpm@<版本>` 显式固定 pnpm 版本**——升级 pnpm 时需与 mise.toml 同步
 - `pnpm-workspace.yaml` 里的 `allowBuilds` 白名单批准了 esbuild / sharp 的安装脚本；pnpm 11 对未批准构建脚本会直接报 `ERR_PNPM_IGNORED_BUILDS` 使 install 失败，新增带安装脚本的依赖时需同步加白
@@ -28,12 +29,14 @@
 ## 架构
 
 ### 框架技术栈
-- **Astro 5** - 采用岛屿架构的静态站点生成器（`output: 'static'`）
+- **Astro 7** - 采用岛屿架构的静态站点生成器（`output: 'static'`）
 - **Vue 3** - 通过 `@astrojs/vue` 用于交互式组件（主题切换、导航等）
 - **TailwindCSS 4** - 通过 `@tailwindcss/vite` 集成，带 typography 插件
-- **TypeScript** - 整个项目的类型安全
+- **TypeScript 6** - 整个项目的类型安全（`@astrojs/check` 的 peer 范围是 `^5 || ^6`，暂不升 TS 7）
 - **KaTeX** - 数学公式渲染（`remark-math` + `rehype-katex`，见"内容写作约定"）
 - **Mermaid** - 图表渲染（`astro-mermaid` 集成）
+- **Markdown 处理器**：Astro 7 默认用 Sätteri；本站依赖 remark/rehype 插件，因此在 `astro.config.mjs` 显式配置 `markdown.processor: unified(...)`（来自 `@astrojs/markdown-remark`）。新增 remark/rehype 插件时加到 `unified()` 的 options，而不是已废弃的 `markdown.remarkPlugins` 字段。
+- **空白压缩**：显式 `compressHTML: true` 关闭 Astro 7 默认的 JSX 式空白裁剪；`'jsx'` 会吞掉内联元素间空格（如 “GitHub 邮箱” 变 “GitHub邮箱”）。
 
 ### 国际化（实际状态）
 - **实现方式**：Astro 原生 i18n（`astro.config.mjs` 里的 `i18n` 配置块），**不是**第三方 `astro-i18n` 包。
