@@ -1,37 +1,84 @@
-# nginx 配置文件主要分两种，主配置文件放在 /etc/nginx/nginx.conf 中，子配置文件放在 etc/nginx/conf.d 目录下
+# ginlon.site —— Astro 静态站点（astro.config.mjs：output: 'static'，trailingSlash: 'never'）
+#
+# 服务器上的位置：/etc/nginx/conf.d/ginlon.site.conf
+# 生效方式：nginx -t && systemctl reload nginx
+#
+# 这是签发证书后的最终配置。首次部署分三步（证书还不存在时直接装本文件，nginx 会起不来）：
+#   1. 先用 HTTP 把站点跑起来做自检：取「HTTPS 主站」那个 server 块，把两行 listen 443 ssl 改成
+#      listen 80 / listen [::]:80，删掉三行 ssl_*，server_name 改成 "www.ginlon.site ginlon.site"，
+#      其余两个 server 块先不启用。此时 http://<服务器IP>/ 即可访问。
+#   2. 域名解析指向服务器后签发证书：
+#        certbot certonly --webroot -w /var/www/ginlon.site --cert-name ginlon.site \
+#          -d www.ginlon.site -d ginlon.site
+#   3. 换成本文件的完整内容，再 nginx -t && systemctl reload nginx。
+#
+# 之后续期由 certbot 的定时任务自动走 webroot 验证，不需要停 nginx；
+# .github/workflows/deploy-server.yml 同步站点文件时会保留 .well-known/ 目录。
+
+# HTTP：只放行 ACME 验证文件，其余一律跳转到 HTTPS 的 www
 server {
-    listen       8080;
-    listen  [::]:8080;
+    listen 80;
+    listen [::]:80;
+    server_name www.ginlon.site ginlon.site;
 
-    gzip on;
-    gzip_comp_level 6;
-    gzip_min_length 1k;
-    gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
-    gzip_vary on;
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/ginlon.site;
+        default_type text/plain;
+    }
 
+    location / {
+        return 301 https://www.ginlon.site$request_uri;
+    }
+}
+
+# HTTPS 裸域：统一跳到 www（站点唯一的规范域名，见 astro.config.mjs 的 site）
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name ginlon.site;
+
+    ssl_certificate     /etc/letsencrypt/live/ginlon.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ginlon.site/privkey.pem;
+
+    return 301 https://www.ginlon.site$request_uri;
+}
+
+# HTTPS 主站
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
     server_name www.ginlon.site;
 
-    # path 根据前缀匹配，只要 url 以 / 开头，都会匹配这个路由
-    location /index.html {
-        alias /var/www/blog.com/index.html;
-        # 禁用缓存
-        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    root /var/www/ginlon.site;
+
+    ssl_certificate     /etc/letsencrypt/live/ginlon.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ginlon.site/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # nginx 1.18 自带的 mime.types 没有 woff2 / ttf（KaTeX 字体）；在 server 里写 types 会清空继承来的表，所以要重新 include
+    include /etc/nginx/mime.types;
+    types {
+        font/woff2 woff2;
+        font/ttf  ttf;
     }
-    #location ~*.(css|js|png|jpg|jpeg|gif|gz|svg|mp4|ogg|ogv|webm|htc|xml|woff)$ {
-    #   # 关闭访问日志
-#       access_log off;
-        # 缓存 30 天
-#       add_header Cache-Control "public, max-age=30*24*3600";
 
-    #}
+    error_page 404 /404.html;
+
+    gzip on;
+    gzip_vary on;
+    gzip_comp_level 6;
+    gzip_min_length 1k;
+    gzip_types text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml;
+
+    # trailingSlash: 'never' 时页面文件是 about/index.html，而站内链接都是 /about。
+    # nginx 默认会把 /about 301 成 /about/，这里让它直接命中 $uri/index.html。
     location / {
-        alias /var/www/blog.com/;
+        try_files $uri $uri/index.html =404;
+    }
 
-        index index.html index.htm;
-
-        # 条件匹配
-        if ($request_filename ~* ^.*?\.(jpg|png|jpeg)$){
-                add_header Cache-Control "public, max-age=30*24*3600";
-        }
+    # 构建产物的文件名带内容哈希，可以永久缓存
+    location /_astro/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
     }
 }

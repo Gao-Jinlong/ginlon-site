@@ -1,0 +1,74 @@
+name: Deploy to server
+
+# push 到 main 后构建站点，再把 dist/ 经 SSH/rsync 同步到自己的服务器。
+# 与 deploy.yml（GitHub Pages）互不影响：两边都可用时会同时发布，
+# 等域名解析切到服务器并确认稳定后，删除 deploy.yml 并关闭 Pages 即可。
+#
+# 需要在仓库 Settings → Secrets and variables → Actions 里配置
+# （必填项缺任意一个时，部署步骤会跳过而不是报错）：
+#   DEPLOY_SSH_PRIVATE_KEY  必填，部署专用 SSH 私钥全文（单独生成一把无口令的 ed25519，不要复用个人私钥）
+#   DEPLOY_SSH_KNOWN_HOSTS  必填，服务器主机公钥，取值为 ssh-keyscan -p <端口> <主机> 的输出
+#   DEPLOY_HOST             必填，服务器 IP 或域名（与 ssh-keyscan 时使用的主机写法保持一致）
+#   DEPLOY_USER             必填，SSH 用户名
+#   DEPLOY_PATH             必填，服务器上的站点目录，必须专属于本站（同步会删除目录内的多余文件）
+#   DEPLOY_PORT             选填，SSH 端口，默认 22
+
+on:
+  push:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 同一时刻只跑一次部署：新触发的排队等待，不取消进行中的发布
+concurrency:
+  group: deploy-server
+  cancel-in-progress: false
+
+env:
+  HAS_DEPLOY_SECRETS: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY != '' && secrets.DEPLOY_SSH_KNOWN_HOSTS != '' && secrets.DEPLOY_HOST != '' && secrets.DEPLOY_USER != '' && secrets.DEPLOY_PATH != '' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v5
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          # 与 deploy.yml 的 package-manager 保持一致，升级 pnpm 时两处同步（并同步 mise.toml）。
+          version: 11.5.2
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          # 与本地开发环境一致
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build site
+        run: pnpm build
+      - name: Deploy to server
+        if: env.HAS_DEPLOY_SECRETS == 'true'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          # BatchMode：认证或主机校验失败就直接报错，不挂起等待输入
+          SSH_OPTS="-i $HOME/.ssh/deploy_key -p $DEPLOY_PORT -o IdentitiesOnly=yes -o BatchMode=yes"
+          ssh $SSH_OPTS "$DEPLOY_USER@$DEPLOY_HOST" "mkdir -p '$DEPLOY_PATH'"
+          # --delete 清掉旧的内容哈希文件；.well-known 留给 certbot 续期验证用
+          # --no-owner --no-group：接收端以 root 同步时，-a 会把 runner 的数字 UID 原样带到服务器上，文件属主变得无从对应
+          rsync -az --no-owner --no-group --delete --exclude='.well-known/' -e "ssh $SSH_OPTS" dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
