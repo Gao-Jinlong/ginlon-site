@@ -150,7 +150,7 @@
 - **手工发布**（本机 Git Bash 没有 rsync）：`pnpm build` 后 `tar -C dist -czf - . | ssh aliyun2c2g 'tar -C <暂存目录> -xzf -'` 传到服务器，再在服务器上 `rsync -a --delete` 到站点目录；落盘后把属主改回 root（Windows 端 tar 会带上本机的数字 UID）。
 - **nginx 要点**：`trailingSlash: 'never'` 下页面文件是 `about/index.html` 而站内链接是 `/about`，必须 `try_files $uri $uri/index.html =404`（否则每个页面都多一次 301）；`error_page 404 /404.html`；`/_astro/` 文件名带内容哈希，可 `immutable` 永久缓存；nginx 1.18 的 `mime.types` 没有 woff2/ttf，要在 server 块里补，且补的时候必须重新 `include` mime.types。
 - **HTTPS**：证书 SAN 含 `www.ginlon.site` + `ginlon.site`，路径 `/etc/letsencrypt/live/ginlon.site/`，snap certbot 以 webroot 方式签发；`renew_hook`（reload nginx）已配置且 `certbot renew --dry-run` 通过，续期由 snap 定时器自动完成；同步站点文件时要保留 `.well-known/`。服务器上留有两份配置：`/root/ginlon.site.conf.final`（最终 HTTPS 版）与 `/root/ginlon.site.conf.http-only.bak`（HTTP 兜底版），切换就是 `cp` 后 `nginx -t && systemctl reload nginx`。
-- **迁移进度**（2026-11-24）：DNS 已切换（`www` 与 `@` 都是 A 记录指向服务器）；证书已签发、HTTPS 配置就绪并经服务器本机验证，因安全组尚未放行 443，线上暂运行 HTTP 兜底配置。待办：安全组放行 443 → 换回 final 配置 → 配置 Secrets 启用 CI 发布（部署密钥已备好）→ 确认稳定后删除 `deploy.yml` 并关闭 GitHub Pages。
+- **迁移进度**（2026-11-24 迁移完成）：DNS 已切换（`www` 与 `@` 都是 A 记录指向服务器），证书已签发，安全组已放行 443，线上运行 `ginlon.site.nginx` 对应的最终 HTTPS 配置，HTTP→HTTPS 与裸域→www 跳转均已从外网验证。待办：在 GitHub 配置 `DEPLOY_*` Secrets 启用自动发布（部署专用密钥已备好）→ 稳定运行一段时间后删除 `deploy.yml` 并关闭 GitHub Pages。
 
 ## 重要注意事项
 
