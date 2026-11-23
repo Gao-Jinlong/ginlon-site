@@ -2,16 +2,19 @@
 import ThemeToggleButton from './ThemeToggleButton.astro';
 
 const navLinks = [
-  { href: '/', label: '首页' },
-  { href: '/writing', label: '写作' },
-  { href: '/columns', label: '专栏' },
+  { href: '/', label: '首页', matchPrefixes: ['/'] },
+  { href: '/writing', label: '写作', matchPrefixes: ['/writing', '/blogs'] },
+  { href: '/columns', label: '专栏', matchPrefixes: ['/columns'] },
 ];
 
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const isActive = (href: string) => {
-  const normalizedHref = href.replace(/\/+$/, '') || '/';
-  return normalizedHref === pathname;
-};
+/* 首页精确匹配，其余栏目按前缀匹配：博客文章页仍高亮「写作」 */
+const isActive = (prefixes: string[]) =>
+  prefixes.some((prefix) => {
+    const normalized = prefix.replace(/\/+$/, '') || '/';
+    if (normalized === '/') return pathname === '/';
+    return pathname === normalized || pathname.startsWith(`${normalized}/`);
+  });
 ---
 
 <header class="site-header">
@@ -28,7 +31,7 @@ const isActive = (href: string) => {
                   href={item.href}
                   class:list={[
                     'site-nav-link',
-                    isActive(item.href) && 'site-nav-link-active',
+                    isActive(item.matchPrefixes) && 'site-nav-link-active',
                   ]}
                 >
                   {item.label}
@@ -48,7 +51,7 @@ const isActive = (href: string) => {
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: var(--z-header);
     background: var(--page-bg);
   }
 
@@ -96,10 +99,18 @@ const isActive = (href: string) => {
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1;
+    /* 负 margin 抵消 padding，保证 ≥24px 点击区且视觉位置不变 */
+    padding: 6px 2px;
+    margin: -6px -2px;
     transition: color 150ms ease;
   }
 
-  .site-nav-link:hover,
+  @media (hover: hover) {
+    .site-nav-link:hover {
+      color: var(--accent);
+    }
+  }
+
   .site-nav-link-active {
     color: var(--accent);
   }

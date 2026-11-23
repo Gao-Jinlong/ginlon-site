@@ -52,13 +52,18 @@ const year = new Date().getFullYear();
     text-decoration: none;
     color: var(--text-muted);
     transition: color 150ms ease;
+    /* 负 margin 抵消 padding，保证点击区且视觉位置不变 */
+    padding: 6px 2px;
+    margin: -6px -2px;
   }
 
-  .site-footer-link:hover {
-    color: var(--text-strong);
+  @media (hover: hover) {
+    .site-footer-link:hover {
+      color: var(--text-strong);
+    }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 720px) {
     .site-footer-bar {
       flex-direction: column;
       align-items: flex-start;

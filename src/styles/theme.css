@@ -1,26 +1,33 @@
 @layer base {
   :root {
-    /* 色彩 token —— 1:1 映射 designs/design.pen variables */
-    --accent: #2e8b5e;
-    --accent-hover: #24744e;
-    --accent-deep: #1e3322;
-    --accent-soft: #2e8b5e1f;
-    --accent-warm: #a45e3b;
+    /* 色彩 token —— 源自 designs/design.pen「极简静默」。
+       2026-11 可访问性修订：accent / text-muted 加深至 WCAG AA（≥4.5:1），
+       新增 --accent-contrast（实底按钮文字色）与 --status-*（状态徽章）。 */
+    --accent: #24744e;
+    --accent-hover: #1d5f40;
+    --accent-soft: #24744e1f;
+    --accent-contrast: #ffffff;
 
     --page-bg: #faf8f3;
     --surface: #ffffff;
     --surface-tint: #f1f4ec;
     --surface-hover: #f1f4ec;
-    --surface-pressed: #e7ede3;
     --surface-ink: #1e3322;
-    --tag-bg: #2e8b5e1f;
+    --tag-bg: #24744e1f;
 
     --text-strong: #1a1f1c;
-    --text-muted: #6b756f;
+    --text-muted: #5f6963;
     --hairline: #1a1f1c14;
 
-    /* 阴影（正式 token，非垫片） */
+    /* 状态徽章（进行中 / 已完结） */
+    --status-warn-bg: #fef3c7;
+    --status-warn-text: #92400e;
+    --status-ok-bg: #d1fae5;
+    --status-ok-text: #065f46;
+
+    /* 阴影 */
     --shadow-soft: 0 8px 24px rgba(26, 31, 28, 0.08);
+    --shadow-raised: 0 8px 24px rgba(26, 31, 28, 0.12);
 
     /* 字体 token */
     --font-serif:
@@ -43,21 +50,33 @@
     --sp-6: 64px;
     --sp-7: 96px;
     --sp-8: 128px;
+
+    /* 圆角刻度 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-pill: 999px;
+
+    /* 层级 */
+    --z-aside: 10;
+    --z-header: 20;
+    --z-fab: 30;
+    --z-popup: 30;
+    --z-skip: 40;
+    --z-drawer: 50;
   }
 
   :root[data-theme='dark'],
   .dark {
     --accent: #7fd0a6;
     --accent-hover: #96ddb8;
-    --accent-deep: #d9f2dd;
     --accent-soft: #7fd0a626;
-    --accent-warm: #e3a17f;
+    --accent-contrast: #131714;
 
     --page-bg: #131714;
     --surface: #1a201c;
     --surface-tint: #1e2720;
     --surface-hover: #202a23;
-    --surface-pressed: #263329;
     --surface-ink: #e8ede9;
     --tag-bg: #7fd0a626;
 
@@ -65,6 +84,12 @@
     --text-muted: #9ca8a1;
     --hairline: #e8ede91a;
 
+    --status-warn-bg: #e3a17f29;
+    --status-warn-text: #e8b394;
+    --status-ok-bg: #7fd0a626;
+    --status-ok-text: #a9e3c3;
+
     --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
 }

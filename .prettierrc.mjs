@@ -1,6 +1,6 @@
 /** @type {import("prettier").Options} */
 const prettierConfig = {
-  plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
+  plugins: ['prettier-plugin-astro'],
   overrides: [
     {
       files: '*.{md,mdx}',

@@ -80,7 +80,17 @@
 .article-body pre.mermaid {
   background: transparent;
   color: inherit;
-  overflow: visible;
+  /* 兜底横向滚动：astro-mermaid 未渲染/渲染失败时源码不撑破版面 */
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* KaTeX 展示公式：长公式横向滚动而非溢出视口（320px 亦然） */
+.katex-display {
+  margin-block: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 2px;
 }
 
 .article-body pre code {
@@ -148,5 +158,61 @@
   .article-body {
     font-size: 16px;
     line-height: 1.9;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   文章页共享布局（blogs/[slug].astro 与 columns/[slug]/[article].astro 共用，
+   原先在两页 scoped style 中逐字重复）
+--------------------------------------------------------------------------- */
+
+.article-rule {
+  height: 1px;
+  border: 0;
+  background: var(--hairline);
+  margin: 0;
+  max-width: var(--reading-width);
+  margin-inline: auto;
+}
+
+.reading-center {
+  max-width: var(--reading-width);
+  margin-inline: auto;
+  padding-block: 32px 56px;
+}
+
+/* 文章内容布局：正文 680px 以页面中线居中。
+   目录栏（ArticleAside）≥1024px 固定悬挂在正文右缘外，不占布局、不挤压正文。 */
+
+pre.mermaid {
+  cursor: zoom-in;
+  transition: background-color 0.15s ease;
+}
+
+@media (hover: hover) {
+  pre.mermaid:hover {
+    background-color: rgba(125, 125, 125, 0.08);
+  }
+
+  [data-theme='dark'] pre.mermaid:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.mermaid-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.article-body-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
+  text-align: right;
+}
+
+@media (max-width: 720px) {
+  .reading-center {
+    padding-block: 24px 36px;
   }
 }

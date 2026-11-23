@@ -56,35 +56,32 @@ const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
 </aside>
 
 <style>
+  /* 默认隐藏：<1024px 用移动端目录抽屉（ArticleTocDrawer） */
   .article-aside {
     display: none;
   }
 
+  /* ≥1024px：悬挂在居中正文右侧的固定导引栏。
+     正文始终以页面中线居中；本栏用视口定位贴在正文右缘外 24px，
+     不占布局、不挤压正文。宽度随视口收窄自动收缩（最窄约 132px）。 */
   @media (min-width: 1024px) {
     .article-aside {
       display: flex;
       flex-direction: column;
       gap: 18px;
       position: fixed;
-      top: 120px;
-      /* 定位在 1000px Content 右外侧：视口中线 + 半个内容宽 + 间距 */
-      left: calc(50% + 500px + 24px);
-      width: 220px;
-      max-height: calc(100vh - 160px);
+      top: 96px;
+      /* 视口中线 + 半个正文宽（680/2=340）+ 间距 24 */
+      left: calc(50% + var(--reading-width) / 2 + 24px);
+      width: min(220px, calc(50vw - 380px));
+      max-height: calc(100vh - 120px);
       overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 20px 18px;
       border: 1px solid var(--accent-soft);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       background: var(--surface-tint);
-      box-shadow: var(--shadow-soft);
-      z-index: 10;
-    }
-
-    /* 窄于约 1500px 时右外侧空间不足，隐藏避免压住正文 */
-    @media (max-width: 1499px) {
-      .article-aside {
-        display: none;
-      }
+      z-index: var(--z-aside);
     }
   }
 
@@ -111,8 +108,10 @@ const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
     text-decoration: none;
   }
 
-  .aside-column-name:hover {
-    color: var(--accent);
+  @media (hover: hover) {
+    .aside-column-name:hover {
+      color: var(--accent);
+    }
   }
 
   .aside-column-list,
@@ -145,12 +144,17 @@ const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
     transition: color 150ms ease;
   }
 
+  /* 当前项只用颜色标记，不改字重，避免文字宽度变化引起抖动 */
   .aside-column-link.is-current,
-  .aside-column-link:hover,
-  .aside-toc-link:hover,
   .aside-toc-link.is-active {
     color: var(--accent);
-    font-weight: 600;
+  }
+
+  @media (hover: hover) {
+    .aside-column-link:hover,
+    .aside-toc-link:hover {
+      color: var(--accent);
+    }
   }
 
   .aside-toc-depth-3 { padding-left: 12px; }

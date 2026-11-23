@@ -20,10 +20,11 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
       class="toc-fab"
       aria-expanded="false"
       aria-controls="article-toc-drawer"
+      aria-haspopup="dialog"
       aria-label={buttonLabel}
       type="button"
     >
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="8" y1="6" x2="21" y2="6"></line>
         <line x1="8" y1="12" x2="21" y2="12"></line>
         <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -33,7 +34,14 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
       </svg>
     </button>
 
-    <div id="article-toc-drawer" class="toc-drawer" hidden>
+    <div
+      id="article-toc-drawer"
+      class="toc-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label={buttonLabel}
+      hidden
+    >
       <div class="toc-drawer-header">
         <span class="meta">目录</span>
         <button class="toc-drawer-close" aria-label="关闭目录" type="button">×</button>
@@ -64,21 +72,52 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
     const openDrawer = () => {
       toggle.setAttribute('aria-expanded', 'true');
       drawer.hidden = false;
+      /* 焦点进入弹层，键盘与读屏用户可直接操作目录 */
+      const firstLink = drawer.querySelector<HTMLElement>('a, button');
+      firstLink?.focus();
     };
-    const closeDrawer = () => {
+
+    const closeDrawer = (restoreFocus = true) => {
       toggle.setAttribute('aria-expanded', 'false');
       drawer.hidden = true;
+      if (restoreFocus) toggle.focus();
     };
 
     toggle.addEventListener('click', () => {
       const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      expanded ? closeDrawer() : openDrawer();
+      expanded ? closeDrawer(false) : openDrawer();
     });
 
-    closeBtn?.addEventListener('click', closeDrawer);
+    closeBtn?.addEventListener('click', () => closeDrawer());
+
+    drawer.addEventListener('keydown', (event) => {
+      if ((event as KeyboardEvent).key === 'Escape') {
+        event.stopPropagation();
+        closeDrawer();
+      }
+    });
+
+    /* 简单焦点圈定：Tab 在抽屉内循环，不落到页面背景 */
+    drawer.addEventListener('keydown', (event) => {
+      if ((event as KeyboardEvent).key !== 'Tab') return;
+      const focusables = Array.from(
+        drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+      );
+      const first = focusables.at(0);
+      const last = focusables.at(-1);
+      if (!first || !last) return;
+      const active = document.activeElement as HTMLElement | null;
+      if (event.shiftKey && (active === first || !drawer.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
 
     drawer.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', closeDrawer);
+      link.addEventListener('click', () => closeDrawer(false));
     });
   });
 </script>
@@ -91,19 +130,25 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
   .toc-fab {
     position: fixed;
     right: 20px;
-    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     width: 56px;
     height: 56px;
     border: none;
-    border-radius: 28px;
+    border-radius: 50%;
     background: var(--accent);
-    color: #ffffff;
+    color: var(--accent-contrast);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 18px rgba(26, 31, 28, 0.25);
-    z-index: 40;
+    box-shadow: var(--shadow-raised);
+    z-index: var(--z-fab);
+  }
+
+  @media (hover: hover) {
+    .toc-fab:hover {
+      background: var(--accent-hover);
+    }
   }
 
   .toc-drawer {
@@ -113,12 +158,13 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
     bottom: 0;
     max-height: 70vh;
     overflow-y: auto;
-    padding: 16px 24px 24px;
+    overscroll-behavior: contain;
+    padding: 16px 24px calc(24px + env(safe-area-inset-bottom, 0px));
     background: var(--surface);
     border-top: 1px solid var(--hairline);
-    border-radius: 16px 16px 0 0;
-    box-shadow: 0 -8px 24px rgba(26, 31, 28, 0.15);
-    z-index: 50;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-raised);
+    z-index: var(--z-drawer);
   }
 
   .toc-drawer-header {
@@ -164,7 +210,12 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
     text-decoration: none;
   }
 
-  .toc-drawer-link:hover,
+  @media (hover: hover) {
+    .toc-drawer-link:hover {
+      color: var(--accent);
+    }
+  }
+
   .toc-drawer-link.is-active {
     color: var(--accent);
   }

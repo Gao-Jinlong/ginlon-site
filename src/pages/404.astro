@@ -1,0 +1,102 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const pageMeta = {
+  title: '页面未找到 | Ginlon',
+  description: '你访问的页面不存在或已被移动。',
+  robots: 'noindex, follow',
+};
+---
+
+<SiteLayout pageMeta={pageMeta}>
+  <section class="not-found">
+    <p class="nf-code" aria-hidden="true">404</p>
+    <h1 class="nf-title">页面未找到</h1>
+    <p class="nf-desc">你访问的页面不存在，或已被移动。</p>
+    <div class="nf-actions">
+      <a href="/" class="nf-link nf-link-solid">返回首页</a>
+      <a href="/writing" class="nf-link">浏览文章</a>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .not-found {
+    max-width: var(--reading-width);
+    margin-inline: auto;
+    padding: calc(72px + var(--sp-6)) var(--shell-pad) 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .nf-code {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(4rem, 2.5rem + 6vw, 6rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--hairline);
+    user-select: none;
+  }
+
+  .nf-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+
+  .nf-desc {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  .nf-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .nf-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+
+  .nf-link-solid {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  @media (hover: hover) {
+    .nf-link:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .nf-link-solid:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+  }
+</style>

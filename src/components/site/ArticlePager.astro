@@ -8,7 +8,7 @@ const { prev, next } = Astro.props;
 ---
 
 {(prev || next) && (
-  <nav class="article-pager shell" aria-label="文章导航">
+  <nav class="article-pager" aria-label="上一篇 / 下一篇">
     {prev && (
       <a href={prev.slug.startsWith('/') ? prev.slug : `/blogs/${prev.slug}`} class="pager-item pager-prev">
         <span class="pager-direction meta">上一篇</span>
@@ -29,6 +29,8 @@ const { prev, next } = Astro.props;
     display: flex;
     justify-content: space-between;
     gap: 24px;
+    max-width: var(--reading-width);
+    margin-inline: auto;
     padding-block: 40px;
   }
 
@@ -58,8 +60,10 @@ const { prev, next } = Astro.props;
     transition: color 150ms ease;
   }
 
-  .pager-item:hover .pager-title {
-    color: var(--accent);
+  @media (hover: hover) {
+    .pager-item:hover .pager-title {
+      color: var(--accent);
+    }
   }
 
   @media (max-width: 720px) {

@@ -3,7 +3,7 @@ import { ArrowUp } from 'lucide-astro';
 ---
 
 <button type="button" class="back-to-top" aria-label="回到顶部" data-back-to-top hidden>
-  <ArrowUp size={20} />
+  <ArrowUp size={20} aria-hidden="true" />
 </button>
 
 <script>
@@ -19,7 +19,9 @@ import { ArrowUp } from 'lucide-astro';
     };
 
     btn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      /* 减少动效偏好：直接跳转，不做平滑滚动 */
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -35,19 +37,19 @@ import { ArrowUp } from 'lucide-astro';
   .back-to-top {
     position: fixed;
     right: 24px;
-    bottom: 24px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     width: 44px;
     height: 44px;
     border: none;
-    border-radius: 22px;
+    border-radius: 50%;
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow-soft);
-    z-index: 30;
+    z-index: var(--z-fab);
     transition: background-color 150ms ease, opacity 150ms ease;
   }
 
@@ -55,15 +57,17 @@ import { ArrowUp } from 'lucide-astro';
     display: none;
   }
 
-  .back-to-top:hover {
-    background: var(--accent-hover);
+  @media (hover: hover) {
+    .back-to-top:hover {
+      background: var(--accent-hover);
+    }
   }
 
   /* 移动端：与 TOC 抽屉浮钮（right:20 bottom:20，56px）错开，堆叠在其上方 */
   @media (max-width: 720px) {
     .back-to-top {
       right: 22px;
-      bottom: 88px;
+      bottom: calc(88px + env(safe-area-inset-bottom, 0px));
     }
   }
 </style>

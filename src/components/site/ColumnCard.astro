@@ -18,13 +18,13 @@ const statusLabel = column.status === 'ongoing' ? '持续更新' : '已完结';
   </span>
 
   <div class="column-card-info">
-    <h3 class="column-card-title">{column.title}</h3>
+    <h2 class="column-card-title">{column.title}</h2>
     <p class="column-card-desc">{column.description}</p>
   </div>
 
   <span class="column-enter">
     进入专栏
-    <ArrowRight size={15} />
+    <ArrowRight size={15} aria-hidden="true" />
   </span>
 </a>
 
@@ -36,15 +36,17 @@ const statusLabel = column.status === 'ongoing' ? '持续更新' : '已完结';
     gap: 18px;
     padding: 24px;
     border: 1px solid var(--hairline);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--surface);
     text-decoration: none;
     transition: border-color 150ms ease, background-color 150ms ease;
   }
 
-  .column-card:hover {
-    background: var(--surface-hover);
-    border-color: var(--accent);
+  @media (hover: hover) {
+    .column-card:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
   }
 
   .column-status {
@@ -52,7 +54,7 @@ const statusLabel = column.status === 'ongoing' ? '持续更新' : '已完结';
     align-items: center;
     gap: 6px;
     padding: 5px 9px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--tag-bg);
     color: var(--accent);
     font-family: var(--font-sans);
@@ -84,8 +86,10 @@ const statusLabel = column.status === 'ongoing' ? '持续更新' : '已完结';
     transition: color 150ms ease;
   }
 
-  .column-card:hover .column-card-title {
-    color: var(--accent);
+  @media (hover: hover) {
+    .column-card:hover .column-card-title {
+      color: var(--accent);
+    }
   }
 
   .column-card-desc {
@@ -105,17 +109,19 @@ const statusLabel = column.status === 'ongoing' ? '持续更新' : '已完结';
     align-items: center;
     gap: 8px;
     padding: 11px 14px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast);
     font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 500;
     transition: background-color 150ms ease;
   }
 
-  .column-card:hover .column-enter {
-    background: var(--accent-hover);
+  @media (hover: hover) {
+    .column-card:hover .column-enter {
+      background: var(--accent-hover);
+    }
   }
 
   @media (max-width: 720px) {

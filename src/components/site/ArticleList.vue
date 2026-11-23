@@ -9,12 +9,15 @@
           type="button"
           class="tag-trigger"
           :aria-expanded="dropdownOpen"
-          aria-haspopup="listbox"
+          aria-haspopup="true"
+          aria-controls="tag-filter-popup"
           @click="dropdownOpen = !dropdownOpen"
+          @keydown.escape="closeDropdown"
         >
           <span class="tag-trigger-label">{{ currentTagLabel }}</span>
           <svg
             class="tag-trigger-icon"
+            aria-hidden="true"
             width="15"
             height="15"
             viewBox="0 0 24 24"
@@ -28,12 +31,12 @@
           </svg>
         </button>
 
-        <div v-if="dropdownOpen" class="tag-popup" role="listbox">
+        <div v-if="dropdownOpen" id="tag-filter-popup" class="tag-popup">
           <button
             type="button"
             class="tag-option"
             :class="{ 'tag-option-active': !currentTag }"
-            role="option"
+            :aria-pressed="!currentTag"
             @click="handleTagClick('')"
           >
             <span>全部文章</span>
@@ -45,7 +48,7 @@
             type="button"
             class="tag-option"
             :class="{ 'tag-option-active': currentTag === tag.slug }"
-            role="option"
+            :aria-pressed="currentTag === tag.slug"
             @click="handleTagClick(tag.slug)"
           >
             <span>#{{ tag.name }}</span>
@@ -59,35 +62,33 @@
     <div class="archive shell">
       <hr class="hairline" />
       <article v-for="item in filteredArticles" :key="item.permalink" class="archive-row">
-        <a :href="item.permalink" class="archive-main">
-          <time class="archive-date meta" :datetime="item.publishedAt">
-            {{ formatDate(item.publishedAt) }}
-          </time>
-          <div class="archive-body">
-            <h3 class="archive-title">{{ item.title }}</h3>
+        <time class="archive-date meta" :datetime="item.publishedAt">
+          {{ formatDate(item.publishedAt) }}
+        </time>
+        <div class="archive-body">
+          <a :href="item.permalink" class="archive-link">
+            <h2 class="archive-title">{{ item.title }}</h2>
             <p v-if="item.summary" class="archive-summary">{{ item.summary }}</p>
-            <div class="archive-meta">
-              <span
-                v-if="item.source === 'column' && item.columnSlug"
-                class="archive-source"
-              >
-                <a
-                  :href="`/columns/${item.columnSlug}`"
-                  @click.stop
-                >专栏 · {{ item.columnTitle }}</a>
+          </a>
+          <div v-if="item.source === 'column' || item.tags.length > 0" class="archive-meta">
+            <a
+              v-if="item.source === 'column' && item.columnSlug"
+              :href="`/columns/${item.columnSlug}`"
+              class="archive-source"
+            >
+              专栏 · {{ item.columnTitle }}
+            </a>
+            <span v-if="item.tags.length > 0" class="archive-tags">
+              <span v-for="(tag, index) in item.tags" :key="tag" class="archive-tag">
+                #{{ tag }}
               </span>
-              <span v-if="item.tags.length > 0" class="archive-tags">
-                <span v-for="(tag, index) in item.tags" :key="tag" class="archive-tag">
-                  #{{ tag }}
-                </span>
-              </span>
-            </div>
+            </span>
           </div>
-        </a>
-        <hr class="hairline" />
+        </div>
+        <hr class="hairline archive-rule" />
       </article>
 
-      <p v-show="filteredArticles.length === 0" class="empty-state">
+      <p v-show="filteredArticles.length === 0" class="empty-state" role="status">
         没有匹配的文章，试试切换到"全部文章"。
       </p>
     </div>
@@ -166,8 +167,14 @@ const filteredArticles = computed(() => {
   return props.articles.filter((article) => article.tagSlugs.includes(currentTag.value));
 });
 
+/* 用访问者本地时区取日期，避免 toISOString 的 UTC 偏移把晚间文章算成前一天 */
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toISOString().slice(0, 10);
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return dateStr.slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 function handleTagClick(tag: string) {
@@ -178,6 +185,11 @@ function handleTagClick(tag: string) {
   currentTag.value = tag;
   dropdownOpen.value = false;
   updateDescription();
+}
+
+function closeDropdown() {
+  dropdownOpen.value = false;
+  document.querySelector<HTMLElement>('.tag-trigger')?.focus();
 }
 
 function updateDescription() {
@@ -237,6 +249,7 @@ onUnmounted(() => {
 
 .count {
   margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 /* 标签下拉 */
@@ -253,7 +266,7 @@ onUnmounted(() => {
   gap: 8px;
   padding: 10px 14px;
   border: 1px solid var(--hairline);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: var(--surface);
   color: var(--text-strong);
   font-family: var(--font-sans);
@@ -262,13 +275,30 @@ onUnmounted(() => {
   transition: border-color 150ms ease;
 }
 
-.tag-trigger:hover {
-  border-color: var(--accent);
+@media (hover: hover) {
+  .tag-trigger:hover {
+    border-color: var(--accent);
+  }
 }
 
 .tag-trigger-icon {
   color: var(--text-muted);
   flex-shrink: 0;
+  transition: transform 150ms ease;
+}
+
+.open .tag-trigger-icon {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-trigger-icon {
+    transition: none;
+  }
+
+  .open .tag-trigger-icon {
+    transform: none;
+  }
 }
 
 .tag-popup {
@@ -282,12 +312,13 @@ onUnmounted(() => {
   padding: 8px;
   background: var(--surface);
   border: 1px solid var(--hairline);
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(26, 31, 28, 0.12);
-  z-index: 30;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-raised);
+  z-index: var(--z-popup);
   /* 常规下拉约 9 项可见；矮视口下用视口兜底避免溢出屏幕 */
   max-height: min(340px, calc(100vh - 220px));
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .tag-option {
@@ -297,7 +328,7 @@ onUnmounted(() => {
   gap: 8px;
   padding: 9px 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
@@ -307,8 +338,10 @@ onUnmounted(() => {
   transition: background-color 150ms ease, color 150ms ease;
 }
 
-.tag-option:hover {
-  color: var(--text-strong);
+@media (hover: hover) {
+  .tag-option:hover {
+    color: var(--text-strong);
+  }
 }
 
 .tag-option-active {
@@ -318,6 +351,7 @@ onUnmounted(() => {
 
 .tag-count {
   font-size: 12px;
+  font-variant-numeric: tabular-nums;
   opacity: 0.7;
 }
 
@@ -327,25 +361,29 @@ onUnmounted(() => {
 }
 
 .archive-row {
-  display: block;
-}
-
-.archive-main {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 32px;
+  grid-template-columns: 120px minmax(0, 1fr);
+  column-gap: 32px;
+  row-gap: 8px;
   align-items: baseline;
   padding-block: 28px;
-  text-decoration: none;
+}
+
+.archive-rule {
+  grid-column: 1 / -1;
 }
 
 .archive-date {
-  margin: 0;
   white-space: nowrap;
 }
 
 .archive-body {
   min-width: 0;
+}
+
+.archive-link {
+  display: block;
+  text-decoration: none;
 }
 
 .archive-title {
@@ -358,12 +396,14 @@ onUnmounted(() => {
   transition: color 150ms ease;
 }
 
-.archive-main:hover .archive-title {
-  color: var(--accent);
+@media (hover: hover) {
+  .archive-row:hover .archive-title {
+    color: var(--accent);
+  }
 }
 
 .archive-summary {
-  margin: 0 0 8px;
+  margin: 0;
   font-family: var(--font-serif);
   font-size: 15px;
   line-height: 1.7;
@@ -375,17 +415,20 @@ onUnmounted(() => {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 16px;
+  margin-top: 8px;
   font-family: var(--font-sans);
   font-size: 12px;
 }
 
-.archive-source a {
+.archive-source {
   color: var(--accent);
   text-decoration: none;
 }
 
-.archive-source a:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .archive-source:hover {
+    text-decoration: underline;
+  }
 }
 
 .archive-tags {
@@ -423,9 +466,9 @@ onUnmounted(() => {
     padding-bottom: 36px;
   }
 
-  .archive-main {
+  .archive-row {
     grid-template-columns: 1fr;
-    gap: 8px;
+    row-gap: 8px;
     padding-block: 20px;
   }
 }

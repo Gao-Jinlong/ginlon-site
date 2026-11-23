@@ -33,9 +33,13 @@ const pageMeta = {
   <Content>
     <section class="hero">
       <img
-        src="https://bucket.ginlon.site/avatar_512.png"
+        src="https://gravatar.com/avatar/cd5878de1abed51ad8d91f354427a98647e470547b2dc1c714a43f76d7b8d025?v=1754772938000&size=512&d=initials"
         alt="Ginlon"
         class="hero-avatar"
+        width="512"
+        height="512"
+        fetchpriority="high"
+        decoding="async"
       />
       <div class="hero-text">
         <p class="hero-eyebrow">关于我</p>
@@ -60,7 +64,10 @@ const pageMeta = {
         {
           selectedWriting.map((article) => (
             <a class="writing-row" href={`/blogs/${article.data.permalink}`}>
-              <time class="writing-date meta">
+              <time
+                class="writing-date meta"
+                datetime={dayjs(article.data.createdAt).format('YYYY-MM-DD')}
+              >
                 {dayjs(article.data.createdAt).format('YYYY-MM-DD')}
               </time>
               <div class="writing-main">
@@ -194,8 +201,10 @@ const pageMeta = {
     transition: color 150ms ease;
   }
 
-  .writing-row:hover .writing-title {
-    color: var(--accent);
+  @media (hover: hover) {
+    .writing-row:hover .writing-title {
+      color: var(--accent);
+    }
   }
 
   .writing-summary {

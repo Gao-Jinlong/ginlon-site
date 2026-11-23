@@ -40,7 +40,26 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- 主题预先应用：首绘前读取本地存储（无则跟随系统偏好），避免深色用户闪白 -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('site-theme');
+          var theme =
+            stored === 'dark' || stored === 'light'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          var root = document.documentElement;
+          root.dataset.theme = theme;
+          root.classList.toggle('dark', theme === 'dark');
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf8f3" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131714" />
 
     <ClientRouter />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -76,29 +95,7 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
     <meta name="twitter:description" content={resolvedMeta.description} />
     {resolvedMeta.ogImage && <meta name="twitter:image" content={resolvedMeta.ogImage} />}
 
-    <!-- KaTeX auto-render -->
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/contrib/auto-render.min.js"
-      integrity="sha384-eOVlD+hIQ2C7h87SPhKqGLM7fXpMHqRrCqQzLdD16l4d8rL5JhH7S9K0y7TGLh"
-      crossorigin="anonymous"
-    ></script>
-    <script defer is:inline>
-      // KaTeX auto-render on DOMContentLoaded
-      document.addEventListener('DOMContentLoaded', function() {
-        if (window.renderMathInElement) {
-          renderMathInElement(document.body, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false},
-              {left: '\\[', right: '\\]', display: true}
-            ],
-            throwOnError: false
-          });
-        }
-      });
-    </script>
+    <!-- 数学公式已在构建期由 remark-math + rehype-katex 渲染，无需客户端 auto-render -->
 
     <!-- Google Analytics (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-TD35ZQXL2E"></script>
@@ -171,10 +168,10 @@ const resolvedMeta = mergePageMeta(defaultMeta, {
     position: absolute;
     left: 0.75rem;
     top: -4rem;
-    z-index: 40;
-    border-radius: 0.5rem;
+    z-index: var(--z-skip);
+    border-radius: var(--radius-md);
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast);
     padding: 0.55rem 0.75rem;
     text-decoration: none;
   }

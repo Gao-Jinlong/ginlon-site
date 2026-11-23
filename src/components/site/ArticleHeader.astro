@@ -50,12 +50,12 @@ const {
 
     <div class="article-meta">
       <span class="article-meta-item">
-        <Calendar size={14} />
+        <Calendar size={14} aria-hidden="true" />
         <time datetime={publishedAtIso}>{publishedLabel}</time>
       </span>
       {lastModifiedLabel && (
         <span class="article-meta-item">
-          <RefreshCw size={14} />
+          <RefreshCw size={14} aria-hidden="true" />
           <span>更新于 <time datetime={lastModifiedIso}>{lastModifiedLabel}</time></span>
         </span>
       )}
@@ -110,8 +110,10 @@ const {
     text-decoration: none;
   }
 
-  .article-column-link:hover {
-    text-decoration: underline;
+  @media (hover: hover) {
+    .article-column-link:hover {
+      text-decoration: underline;
+    }
   }
 
   .article-tag {
@@ -160,7 +162,7 @@ const {
     width: 100%;
     max-height: 34rem;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
   }
 
   @media (max-width: 720px) {

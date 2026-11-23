@@ -18,7 +18,6 @@
     "astro": "^6.0.8",
     "astro-mermaid": "^2.0.1",
     "dayjs": "^1.11.20",
-    "gsap": "^3.14.2",
     "katex": "^0.16.45",
     "lodash-es": "^4.17.23",
     "lucide-astro": "^0.556.0",
@@ -33,15 +32,11 @@
   },
   "devDependencies": {
     "@shikijs/twoslash": "^4.0.2",
-    "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.13",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^25.5.0",
     "esbuild": "^0.27.4",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.2.2",
     "vitest": "^3.2.4"
   }
 }

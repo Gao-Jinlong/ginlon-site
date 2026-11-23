@@ -85,7 +85,7 @@ const pageMeta = {
     gap: 1.5rem;
     border: 1px solid var(--hairline);
     background: var(--surface);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 1.5rem;
     box-shadow: var(--shadow-soft);
     margin-bottom: 1.5rem;
@@ -128,28 +128,29 @@ const pageMeta = {
 
   .column-badge {
     padding: 0.15rem 0.6rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-weight: 600;
     font-size: 0.75rem;
   }
 
   .badge-ongoing {
-    background: #fef3c7;
-    color: #92400e;
+    background: var(--status-warn-bg);
+    color: var(--status-warn-text);
   }
 
   .badge-completed {
-    background: #d1fae5;
-    color: #065f46;
+    background: var(--status-ok-bg);
+    color: var(--status-ok-text);
   }
 
   .column-meta-text {
     color: var(--text-muted);
     font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .column-hero-cover {
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     max-height: 16rem;
   }
@@ -188,15 +189,21 @@ const pageMeta = {
     gap: 0.75rem;
     padding: 0.85rem 1rem;
     border: 1px solid var(--hairline);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--surface);
     text-decoration: none;
     transition: border-color 150ms ease, background-color 150ms ease;
   }
 
-  .column-article-item:hover {
-    border-color: var(--accent);
-    background: var(--accent-soft);
+  @media (hover: hover) {
+    .column-article-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .column-article-item:hover .column-article-title {
+      color: var(--accent);
+    }
   }
 
   .column-article-index {
@@ -207,9 +214,10 @@ const pageMeta = {
     height: 1.8rem;
     border-radius: 50%;
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-contrast);
     font-size: 0.82rem;
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
     flex-shrink: 0;
   }
 
@@ -227,13 +235,10 @@ const pageMeta = {
     line-height: 1.4;
   }
 
-  .column-article-item:hover .column-article-title {
-    color: var(--accent);
-  }
-
   .column-article-meta {
     color: var(--text-muted);
     font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .column-article-arrow {
@@ -244,7 +249,7 @@ const pageMeta = {
 
   .column-empty {
     border: 1px solid var(--hairline);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 2rem;
     text-align: center;
     color: var(--text-muted);
@@ -258,7 +263,7 @@ const pageMeta = {
     }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 720px) {
     .column-hero {
       padding: 1rem;
     }
