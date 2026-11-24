@@ -7,7 +7,17 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <hr class="hairline site-footer-divider" />
   <div class="site-footer-bar shell">
-    <p class="site-footer-copy meta">© {year} Ginlon</p>
+    <p class="site-footer-copy meta">
+      © {year} Ginlon
+      <a
+        href="https://beian.miit.gov.cn/"
+        target="_blank"
+        rel="noreferrer"
+        class="site-footer-record"
+      >
+        · {siteConfig.recordNumber}
+      </a>
+    </p>
     <div class="site-footer-links">
       {
         siteConfig.contactLinks.map((link) => (
@@ -48,7 +58,8 @@ const year = new Date().getFullYear();
     gap: 24px;
   }
 
-  .site-footer-link {
+  .site-footer-link,
+  .site-footer-record {
     text-decoration: none;
     color: var(--text-muted);
     transition: color 150ms ease;
@@ -58,7 +69,8 @@ const year = new Date().getFullYear();
   }
 
   @media (hover: hover) {
-    .site-footer-link:hover {
+    .site-footer-link:hover,
+    .site-footer-record:hover {
       color: var(--text-strong);
     }
   }
